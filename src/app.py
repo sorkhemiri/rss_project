@@ -1,6 +1,6 @@
 from settings import env_config
 from fastapi import FastAPI
-# from router import main_router
+from router import main_router
 from starlette.middleware.cors import CORSMiddleware
 import http.cookies
 
@@ -14,7 +14,7 @@ app.add_middleware(
     allow_headers=['*']
 )
 
-# app.include_router(main_router)
+app.include_router(main_router)
 
 
 if env_config.debug and __name__ == "__main__":
