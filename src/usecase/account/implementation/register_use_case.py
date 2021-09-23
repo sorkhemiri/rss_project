@@ -17,7 +17,7 @@ class RegisterUseCase(UseCaseInterface):
     def process_request(self, request_dict: dict):
         try:
             data = RegisterValidator(**request_dict)
-            if not UserRepository.check_username_unique(username=data.username):
+            if UserRepository.check_username_exist(username=data.username):
                 raise UseCaseException(message="username already exists", error_code=status.VALIDATION_ERROR)
             if not fullmatch(pattern="[a-zA-Z0-9_]{4}", string=data.username):
                 raise UseCaseException(message="username not valid", error_code=status.VALIDATION_ERROR)

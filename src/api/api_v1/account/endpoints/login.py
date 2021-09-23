@@ -10,8 +10,8 @@ router = APIRouter()
 
 
 class RequestData(BaseModel):
-    user_name: Optional[str] = None
-    password: Optional[str] = None
+    user_name: str
+    password: str
 
 
 @router.post("/login", tags=["user_login", "auth"])
