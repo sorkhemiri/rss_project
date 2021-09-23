@@ -18,3 +18,7 @@ class UserRepository:
     @classmethod
     def get_user_id_by_username(cls, username: str) -> int:
         pass
+
+    @classmethod
+    def check_user_exist(cls, user_id: int) -> bool:
+        pass
