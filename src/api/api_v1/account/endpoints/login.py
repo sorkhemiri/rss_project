@@ -10,7 +10,7 @@ router = APIRouter()
 
 
 class RequestData(BaseModel):
-    user_name: str
+    username: str
     password: str
 
 

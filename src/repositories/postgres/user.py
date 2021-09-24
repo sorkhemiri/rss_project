@@ -3,6 +3,7 @@ from pony import orm
 from entities import User
 from models import User as UserDB, db
 from utils.functions import make_password
+from utils.exceptions import RepositoryException
 
 
 class UserRepository:
@@ -29,17 +30,27 @@ class UserRepository:
     def check_password(cls, username: str, password: str) -> bool:
         password_hash = make_password(password=password)
         with orm.db_session:
-            users = db.select("select username from User where username = $username limit 1")
-            user = users[0]
-            if password_hash == user.password:
+            passwords = db.select("select password from User where username = $username limit 1")
+            if not passwords:
+                raise RepositoryException(message="user password not set")
+            db_password = passwords[0]
+            if password_hash == db_password:
                 return True
         return False
 
 
     @classmethod
     def get_user_id_by_username(cls, username: str) -> int:
-        pass
+        with orm.db_session:
+            ids = db.select("select id from User where username = $username limit 1")
+            if not ids:
+                raise RepositoryException(message="user not found")
+            user_id = ids[0]
+            return user_id
 
     @classmethod
     def check_user_exist(cls, user_id: int) -> bool:
-        pass
+        with orm.db_session:
+            if db.exists("select id from User where id = $user_id"):
+                return True
+            return False
