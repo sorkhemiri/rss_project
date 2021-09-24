@@ -7,5 +7,5 @@ class User(BaseModel):
     id: Optional[int] = None
     first_name: Optional[str] = None
     last_name: Optional[str] = None
-    user_name: Optional[str] = None
+    username: Optional[str] = None
     password: Optional[str] = None

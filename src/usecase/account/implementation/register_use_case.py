@@ -19,17 +19,15 @@ class RegisterUseCase(UseCaseInterface):
             data = RegisterValidator(**request_dict)
             if UserRepository.check_username_exist(username=data.username):
                 raise UseCaseException(message="username already exists", error_code=status.VALIDATION_ERROR)
-            if not fullmatch(pattern="[a-zA-Z0-9_]{4}", string=data.username):
+            if not fullmatch(pattern="[a-zA-Z0-9_]{4,}", string=data.username):
                 raise UseCaseException(message="username not valid", error_code=status.VALIDATION_ERROR)
             user = User()
-            user.user_name = data.username
+            user.username = data.username
             user.first_name = data.first_name
             user.last_name = data.last_name
             user.password = data.password
             created_user = UserRepository.create(model=user)
-            user.password = None
-            user.id = created_user.id
-            return JSONResponse(content={"user": user.dict(exclude_defaults=True)}, status_code=HTTP_200_OK)
+            return JSONResponse(content={"user": created_user.dict(exclude_defaults=True)}, status_code=HTTP_200_OK)
         except ValidationError as err:
             raise UseCaseException(json.loads(err.json()), error_code=2)
         except UseCaseException as err:
