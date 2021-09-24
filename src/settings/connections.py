@@ -3,7 +3,7 @@ from typing import Optional
 from psycopg2.pool import ThreadedConnectionPool
 from psycopg2.extras import DictCursor
 from redis import BlockingConnectionPool, StrictRedis
-from setup.config import env_config
+from settings.config import env_config
 
 
 class RedisConnection:
