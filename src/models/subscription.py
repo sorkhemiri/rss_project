@@ -8,4 +8,4 @@ from .base import db
 class Subscription(db.Entity):
     source = Optional("RSSSource", reverse="subscriptions")
     user = Optional("User", reverse="subscriptions")
-    is_deleted = Optional(sql_default=False)
+    is_deleted = Optional(bool, sql_default=False)
