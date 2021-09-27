@@ -10,8 +10,9 @@ class UserAuthenticate:
         user_id_with_prefix = cls.PREFIX + "user_id:" + str(user_id)
         RedisConnection.set_value(token_with_prefix, user_id, exp=15770000)
         old_token = RedisConnection.get_value(user_id_with_prefix)
-        old_token_with_prefix = cls.PREFIX + "token:" + old_token
-        RedisConnection.delete_key(old_token_with_prefix)
+        if old_token:
+            old_token_with_prefix = cls.PREFIX + "token:" + old_token
+            RedisConnection.delete_key(old_token_with_prefix)
         RedisConnection.set_value(user_id_with_prefix, token, exp=15770000)
 
     @classmethod

@@ -8,8 +8,8 @@ class Config(BaseSettings):
     # redis host
     redis_host: str = "127.0.0.1"
     redis_port: int = 6379
-    redis_user: str = "default"
-    redis_password: str = "password"
+    redis_user: str = None
+    redis_password: str = None
     # postgres host
     postgres_user = "postgres"
     postgres_password = "password"
