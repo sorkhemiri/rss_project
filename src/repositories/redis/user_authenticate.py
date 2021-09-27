@@ -26,6 +26,8 @@ class UserAuthenticate:
 
     @classmethod
     def is_authenticated(cls, token: str):
-        token_with_prefix = cls.PREFIX + token
+        token_with_prefix = cls.PREFIX + "token:" + token
         user_id = RedisConnection.get_value(token_with_prefix)
+        if user_id:
+            user_id = user_id.decode("utf-8")
         return user_id

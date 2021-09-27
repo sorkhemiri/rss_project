@@ -4,4 +4,8 @@ from pydantic import BaseModel
 
 
 class RSSSource(BaseModel):
-    name: Optional[str] = None
+    id: Optional[int] = None
+    title: Optional[str] = None
+    description: Optional[str] = None
+    link: Optional[str] = None
+

@@ -11,7 +11,8 @@ class UserRepository:
     @classmethod
     def check_username_exist(cls, username: str) -> bool:
         with orm.db_session:
-            if db.exists("select id from User where username = $username"):
+            if db.exists("select id from User where username = $username "
+                         "where (is_deleted is null or is_deleted = FALSE)"):
                 return True
             return False
 
@@ -30,7 +31,9 @@ class UserRepository:
     def check_password(cls, username: str, password: str) -> bool:
         password_hash = make_password(password=password)
         with orm.db_session:
-            passwords = db.select("select password from User where username = $username limit 1")
+            passwords = db.select("select password from User "
+                                  "where username = $username "
+                                  "and (is_deleted is null or is_deleted = FALSE) limit 1")
             if not passwords:
                 raise RepositoryException(message="user password not set")
             db_password = passwords[0]
@@ -38,11 +41,12 @@ class UserRepository:
                 return True
         return False
 
-
     @classmethod
     def get_user_id_by_username(cls, username: str) -> int:
         with orm.db_session:
-            ids = db.select("select id from User where username = $username limit 1")
+            ids = db.select("select id from User "
+                            "where username = $username "
+                            "and (is_deleted is null or is_deleted = FALSE) limit 1")
             if not ids:
                 raise RepositoryException(message="user not found")
             user_id = ids[0]
@@ -51,6 +55,8 @@ class UserRepository:
     @classmethod
     def check_user_exist(cls, user_id: int) -> bool:
         with orm.db_session:
-            if db.exists("select id from User where id = $user_id"):
+            if db.exists("select id from User "
+                         "where id = $user_id "
+                         "and (is_deleted is null or is_deleted = FALSE)"):
                 return True
             return False
