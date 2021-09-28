@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 from psycopg2.pool import ThreadedConnectionPool
 from psycopg2.extras import DictCursor
@@ -64,6 +64,20 @@ class RedisConnection:
         values_list = [item.decode("utf-8") for item in values_list]
         return values_list
 
+    @classmethod
+    def add_values_to_set(cls, key, values: List[tuple], exp: Optional[int] = None):
+        cls.get_connection()
+        for item in values:
+            cls._connection.zadd(key, mapping=item)
+        if exp:
+            cls._connection.expire(key, time=exp)
+
+    @classmethod
+    def get_set_values_range(cls, key: str, start: int, end: int):
+        cls.get_connection()
+        values_list = cls._connection.zrange(key, start=start, end=end)
+        values_list = [item.decode("utf-8") for item in values_list]
+        return values_list
 
 # class Postgres:
 #     _connection = None
