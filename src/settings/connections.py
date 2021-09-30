@@ -79,9 +79,14 @@ class RedisConnection:
     @classmethod
     def get_set_values_range(cls, key: str, start: int, end: int):
         cls.get_connection()
-        values_list = cls._connection.zrange(key, start=start, end=end)
-        values_list = [item.decode("utf-8") for item in values_list]
-        return values_list
+        values_list = cls._connection.zrange(key, start=start, end=end, withscores=True)
+        normal_values_list = []
+        for value in values_list:
+            rss_id = value[0].decode("utf-8")
+            score = int(value[1])
+            value_set = (rss_id, score)
+            normal_values_list.append(value_set)
+        return normal_values_list
 
 # class Postgres:
 #     _connection = None

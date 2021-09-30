@@ -5,6 +5,7 @@ from pony import orm
 from entities import RSSSource
 from models import RSSSource as RSSSourceDB
 from models import db
+from utils.exceptions import RepositoryException
 
 
 class RSSSourceRepository:
@@ -61,3 +62,15 @@ class RSSSourceRepository:
                          " id = $source_id and (is_deleted is null or is_deleted = FALSE)"):
                 return True
             return False
+
+    @classmethod
+    def get_sources_key(cls, source_id: int) -> str:
+        with orm.db_session:
+            rss_source_keys = db.select("select key from RSSSource where"
+                                       " id = $source_id "
+                                       "and (is_deleted is null or is_deleted = FALSE) limit 1")
+            if rss_source_keys:
+                rss_source_key = rss_source_keys[0]
+                return rss_source_key
+            else:
+                raise RepositoryException(message="source not found")
