@@ -11,8 +11,8 @@ class UserRepository:
     @classmethod
     def check_username_exist(cls, username: str) -> bool:
         with orm.db_session:
-            if db.exists("select id from User where username = $username "
-                         "where (is_deleted is null or is_deleted = FALSE)"):
+            if db.exists("""select id from User 
+            where username = $username and (is_deleted is null or is_deleted = FALSE)"""):
                 return True
             return False
 

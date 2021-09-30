@@ -15,6 +15,7 @@ class RSSSourceRepository:
             {
                 "title": "ورزش سه | آخرین اخبار",
                 "link": "http://varzesh3.com/rss/all",
+                "key": "varzesh3",
                 "description": "آخرين اخبار ورزشی",
             }
         ]
@@ -35,6 +36,22 @@ class RSSSourceRepository:
                           description=item[2]
                           ) for item in rss_source_data
                                    ]
+            return rss_source_entities
+
+    @classmethod
+    def get_sources(cls) -> List[RSSSource]:
+        with orm.db_session:
+            rss_source_data = db.select(
+                "select id, title, description, link, key"
+                " from RSSSource where (is_deleted is null or is_deleted = FALSE)")
+            rss_source_entities = [
+                RSSSource(id=item[0],
+                          title=item[1],
+                          description=item[2],
+                          link=item[3],
+                          key=item[4],
+                          ) for item in rss_source_data
+            ]
             return rss_source_entities
 
     @classmethod

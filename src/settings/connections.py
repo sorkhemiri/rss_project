@@ -26,7 +26,10 @@ class RedisConnection:
     @classmethod
     def get_value(cls, key):
         cls.get_connection()
-        return cls._connection.get(key)
+        value = cls._connection.get(key)
+        if value:
+            value = value.decode("utf-8")
+        return value
 
     @classmethod
     def exists_key(cls, key):
@@ -52,10 +55,11 @@ class RedisConnection:
 
     @classmethod
     def push_values(cls, key, values: list, exp: Optional[int] = None):
-        cls.get_connection()
-        cls._connection.lpush(key, *values)
-        if exp:
-            cls._connection.expire(key, time=exp)
+        if values:
+            cls.get_connection()
+            cls._connection.lpush(key, *values)
+            if exp:
+                cls._connection.expire(key, time=exp)
 
     @classmethod
     def get_all_list_values(cls, key: str):
@@ -65,7 +69,7 @@ class RedisConnection:
         return values_list
 
     @classmethod
-    def add_values_to_set(cls, key, values: List[tuple], exp: Optional[int] = None):
+    def add_values_to_set(cls, key: str, values: List[dict], exp: Optional[int] = None):
         cls.get_connection()
         for item in values:
             cls._connection.zadd(key, mapping=item)

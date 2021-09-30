@@ -21,7 +21,7 @@ class SubscribeRSSSourceUseCase(UseCaseInterface):
             subscription = Subscription()
             subscription.user = data.user
             subscription.source = RSSSource(id=data.source_id)
-            SubscriptionRepository.create(subscription=subscription)
+            SubscriptionRepository.create(model=subscription)
             return JSONResponse(content={"result": "user subscribed successfully"}, status_code=HTTP_200_OK)
         except ValidationError as err:
             raise UseCaseException(json.loads(err.json()), error_code=2)
