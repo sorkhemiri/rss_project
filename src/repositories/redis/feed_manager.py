@@ -43,6 +43,13 @@ class FeedManager:
         return values
 
     @classmethod
+    def get_channel_all(cls, key: str):
+        user_feed_prefix = cls.PREFIX + "global:channel:" + key
+        values = RedisConnection.get_set_values_range(
+            key=user_feed_prefix, start=0, end=-1)
+        return values
+
+    @classmethod
     def delete_from_feed(cls, user_id: int, values: List[str]):
         user_feed_prefix = cls.PREFIX + "global:user:" + f"{user_id}"
         values = RedisConnection.remove_values_from_set(

@@ -24,7 +24,7 @@ class UnsubscribeRSSSourceUseCase(UseCaseInterface):
             subscription.source = RSSSource(id=data.source_id)
             SubscriptionRepository.delete(model=subscription)
             source_key = RSSSourceRepository.get_sources_key(source_id=data.source_id)
-            values = FeedManager.get_channel(key=source_key, page=1, limit=1000)
+            values = FeedManager.get_channel_all(key=source_key)
             rss_ids = [item[0] for item in values]
             FeedManager.delete_from_feed(user_id=data.user.id, values=rss_ids)
             return JSONResponse(content={"result": "user unsubscribed successfully"}, status_code=HTTP_200_OK)
