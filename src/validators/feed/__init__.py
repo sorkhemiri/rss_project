@@ -1,2 +1,3 @@
 from .subscribe_rss_source_validator import SubscribeRSSSourceValidator
 from .unsubscribe_rss_source_validator import UnsubscribeRSSSourceValidator
+from .rss_list_validator import RSSListValidator
