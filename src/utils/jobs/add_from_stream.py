@@ -15,6 +15,7 @@ def add_from_stream():
         feed = feedparser.parse(source.link)
         rss_ids = FeedMemory.get_memory(key=source.key, date=datetime.now())
         stored_rss_ids = []
+        stored_post_ids = []
         for item in feed["entries"]:
             if source.key == "varzesh3":
                 link = item.link
@@ -31,8 +32,9 @@ def add_from_stream():
                 pub_date = datetime.strptime(pub_date_str, "%Y-%m-%dT%H:%M:%S")
                 rss.pub_date = pub_date
                 created_rss = RSSRepository.create(model=rss)
+                stored_post_ids.append(created_rss.id)
                 stored_rss_ids.append(rss_id)
-        fan_out(key=source.key, rss_ids=stored_rss_ids)
+        fan_out(key=source.key, rss_ids=stored_post_ids)
         FeedMemory.add_to_memory(key=source.key, post_ids=stored_rss_ids, date=datetime.now())
 
 

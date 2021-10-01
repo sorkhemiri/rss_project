@@ -1,7 +1,8 @@
 from pony import orm
 
 from entities import RSS
-from models import RSS as RSSDB, RSSSource as RSSSourceDB
+from models import RSS as RSSDB, RSSSource as RSSSourceDB, db
+from utils.exceptions import RepositoryException
 
 
 class RSSRepository:

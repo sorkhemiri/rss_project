@@ -40,3 +40,10 @@ class FeedManager:
         values = RedisConnection.get_set_values_range(
             key=user_feed_prefix, start=from_item, end=to_item)
         return values
+
+    @classmethod
+    def delete_from_feed(cls, user_id: int, values: List[str]):
+        user_feed_prefix = cls.PREFIX + "global:user:" + f"{user_id}"
+        values = RedisConnection.remove_values_from_set(
+            key=user_feed_prefix, values=values)
+        return values
