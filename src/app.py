@@ -21,9 +21,7 @@ app.include_router(main_router)
 
 db.bind(provider='sqlite', filename='db.sqlite3', create_db=True)
 db.generate_mapping(create_tables=True)
-# from repositories.postgres import RSSSourceRepository
-#
-# RSSSourceRepository.create_rss_sources()
+
 
 if env_config.debug and __name__ == "__main__":
     import uvicorn
