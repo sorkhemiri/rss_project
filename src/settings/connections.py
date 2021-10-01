@@ -97,7 +97,8 @@ class RedisConnection:
     def remove_values_from_list(cls, key: str, values: List[str]):
         if values:
             cls.get_connection()
-            cls._connection.lrem(key, *values)
+            for item in values:
+                cls._connection.lrem(key, 0, item)
 
 # class Postgres:
 #     _connection = None

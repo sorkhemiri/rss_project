@@ -18,7 +18,7 @@ class RSSListUseCase(UseCaseInterface):
             user_feed = FeedManager.get_feed(user_id=data.user.id, page=data.page, limit=data.limit)
             unseen_feed = FeedManager.get_unseen(user_id=data.user.id)
             rss_ids = [int(item[0]) for item in user_feed]
-            seen_posts = [item for item in unseen_feed if item in rss_ids]
+            seen_posts = [item for item in unseen_feed if int(item) in rss_ids]
             FeedManager.remove_from_unseen(user_id=data.user.id, post_ids=seen_posts)
             rss_list = RSSRepository.get_list(rss_ids=rss_ids)
             rss_list_data = []
