@@ -33,3 +33,18 @@ class LikeRepository:
             orm.commit()
             model.id = like_db.id
             return model
+
+    @classmethod
+    def delete(cls, model: Like):
+        if not model.user and not model.user.id:
+            raise RepositoryException(message="user id must be provided", error_code=status.DOES_NOT_EXIST_ERROR)
+        if not model.rss and not model.rss.id:
+            RepositoryException(message="rss id must be provided", error_code=status.DOES_NOT_EXIST_ERROR)
+            rss_id = model.rss.id
+            user_id = model.user.id
+            like_data = db.select("select id from Like "
+                                 "where rss = $rss_id and user = $user_id"
+                                 " and (is_deleted is null or is_deleted = FALSE)")
+            if like_data:
+                like_id = like_data[0]
+                LikeDB[like_id].set(is_deleted=True)
