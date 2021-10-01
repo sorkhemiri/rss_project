@@ -22,10 +22,11 @@ class SubscribeRSSSourceUseCase(UseCaseInterface):
             subscription = Subscription()
             subscription.user = data.user
             subscription.source = RSSSource(id=data.source_id)
-            SubscriptionRepository.create(model=subscription)
-            source_key = RSSSourceRepository.get_sources_key(source_id=data.source_id)
-            values = FeedManager.get_channel(key=source_key, page=1, limit=1000)
-            FeedManager.add_to_feed(user_id=data.user.id, feed=values)
+            if not SubscriptionRepository.check_subscription_exist(model=subscription):
+                SubscriptionRepository.create(model=subscription)
+                source_key = RSSSourceRepository.get_sources_key(source_id=data.source_id)
+                values = FeedManager.get_channel(key=source_key, page=1, limit=1000)
+                FeedManager.add_to_feed(user_id=data.user.id, feed=values)
             return JSONResponse(content={"result": "user subscribed successfully"}, status_code=HTTP_200_OK)
         except ValidationError as err:
             raise UseCaseException(json.loads(err.json()), error_code=2)
