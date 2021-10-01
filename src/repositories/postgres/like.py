@@ -12,12 +12,13 @@ class LikeRepository:
             raise RepositoryException(message="user id must be provided", error_code=status.DOES_NOT_EXIST_ERROR)
         if not model.rss and not model.rss.id:
             RepositoryException(message="rss id must be provided", error_code=status.DOES_NOT_EXIST_ERROR)
-        like_data = db.select("select id from Like "
-                             "where rss=$model.rss.id and user=$model.user.id"
-                             "and (is_deleted is null or is_deleted = FALSE)")
-        if like_data:
-            return True
-        return False
+        with orm.db_session:
+            like_data = db.select("select id from Like "
+                                 "where rss=$model.rss.id and user=$model.user.id "
+                                 "and (is_deleted is null or is_deleted = FALSE)")
+            if like_data:
+                return True
+            return False
 
     @classmethod
     def create(cls, model: Like) -> Like:
@@ -40,8 +41,9 @@ class LikeRepository:
             raise RepositoryException(message="user id must be provided", error_code=status.DOES_NOT_EXIST_ERROR)
         if not model.rss and not model.rss.id:
             RepositoryException(message="rss id must be provided", error_code=status.DOES_NOT_EXIST_ERROR)
-            rss_id = model.rss.id
-            user_id = model.user.id
+        rss_id = model.rss.id
+        user_id = model.user.id
+        with orm.db_session:
             like_data = db.select("select id from Like "
                                  "where rss = $rss_id and user = $user_id"
                                  " and (is_deleted is null or is_deleted = FALSE)")
