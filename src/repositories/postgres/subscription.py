@@ -17,10 +17,11 @@ class SubscriptionRepository:
                 source = RSSSourceDB[model.source.id]
                 model_data["source"] = source
             if model.user:
-                user = UserDB[model.source.id]
+                user = UserDB[model.user.id]
                 model_data["user"] = user
             subscription_db = SubscriptionDB(**model_data)
             orm.commit()
+            model.id = subscription_db.id
             return model
 
     @classmethod
