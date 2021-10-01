@@ -61,7 +61,7 @@ class SubscriptionRepository:
             if not model.user or not model.user.id:
                 raise RepositoryException(message="source id must be provided", error_code=status.DOES_NOT_EXIST_ERROR)
             sub_data = db.select("select id from Subscription "
-                      "where source=$model.source.id and user=$model.user.id"
+                      "where source=$model.source.id and user=$model.user.id "
                       "and (is_deleted is null or is_deleted = FALSE)")
             if sub_data:
                 return True
