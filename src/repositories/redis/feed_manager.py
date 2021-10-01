@@ -55,3 +55,15 @@ class FeedManager:
         values = RedisConnection.remove_values_from_set(
             key=user_feed_prefix, values=values)
         return values
+
+    @classmethod
+    def get_unseen(cls, user_id: int):
+        user_unseen_prefix = cls.PREFIX + "user:" + f"{user_id}:" + "unseen"
+        values = RedisConnection.get_all_list_values(key=user_unseen_prefix)
+        return values
+
+    @classmethod
+    def remove_from_unseen(cls, user_id: int, post_ids: list):
+        user_unseen_prefix = cls.PREFIX + "user:" + f"{user_id}:" + "unseen"
+        RedisConnection.remove_values_from_list(
+            key=user_unseen_prefix, values=post_ids)

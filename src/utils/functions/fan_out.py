@@ -15,3 +15,4 @@ def fan_out(key: str, rss_ids: List[int]):
     subscribers = SubscriptionRepository.get_channel_subscriber_by_key(key=key)
     for subscriber in subscribers:
         FeedManager.add_to_feed(user_id=subscriber.user.id, feed=data_values)
+        FeedManager.add_to_unseen(user_id=subscriber.user.id, post_ids=rss_ids)

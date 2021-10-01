@@ -93,6 +93,11 @@ class RedisConnection:
         cls.get_connection()
         cls._connection.zrem(key, *values)
 
+    @classmethod
+    def remove_values_from_list(cls, key: str, values: List[str]):
+        cls.get_connection()
+        cls._connection.lrem(key, *values)
+
 # class Postgres:
 #     _connection = None
 #     pool = ThreadedConnectionPool(
