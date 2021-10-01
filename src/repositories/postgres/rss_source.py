@@ -11,19 +11,12 @@ from utils.exceptions import RepositoryException
 class RSSSourceRepository:
 
     @classmethod
-    def create_rss_sources(cls):
-        rss_source_data = [
-            {
-                "title": "ورزش سه | آخرین اخبار",
-                "link": "http://varzesh3.com/rss/all",
-                "key": "varzesh3",
-                "description": "آخرين اخبار ورزشی",
-            }
-        ]
+    def create(cls, model: RSSSource):
         with orm.db_session:
-            for item in rss_source_data:
-                source_db = RSSSourceDB(**item)
-                orm.commit()
+            model_data = model.dict(exclude_defaults=True)
+            source_db = RSSSourceDB(**model_data)
+            orm.commit()
+            model.id = source_db.id
 
     @classmethod
     def get_list(cls) -> List[RSSSource]:
