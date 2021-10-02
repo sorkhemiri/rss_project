@@ -12,4 +12,5 @@ rss_source_data = [
         ]
 source_entities = [RSSSource(**item) for item in rss_source_data]
 for source in source_entities:
-    RSSSourceRepository.create(model=source)
+    if not RSSSourceRepository.check_source_key_exists(key=source.key):
+        RSSSourceRepository.create(model=source)

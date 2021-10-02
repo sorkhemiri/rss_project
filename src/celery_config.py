@@ -27,7 +27,7 @@ CELERY_CONFIG = {
     "beat_schedule": {
         'stream-job': {
             'task': 'utils.jobs.add_from_stream.add_from_stream',
-            'schedule': 2,
+            'schedule': 60 * 2,
         },
     }
 }

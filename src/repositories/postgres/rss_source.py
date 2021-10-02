@@ -57,6 +57,14 @@ class RSSSourceRepository:
             return False
 
     @classmethod
+    def check_source_key_exists(cls, key: str) -> bool:
+        with orm.db_session:
+            if db.exists("select id from RSSSource where"
+                         " key = $key and (is_deleted is null or is_deleted = FALSE)"):
+                return True
+            return False
+
+    @classmethod
     def get_sources_key(cls, source_id: int) -> str:
         with orm.db_session:
             rss_source_keys = db.select("select key from RSSSource where"

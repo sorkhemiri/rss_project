@@ -1,4 +1,5 @@
 from datetime import datetime
+import logging
 
 import feedparser
 
@@ -22,10 +23,13 @@ def add_from_stream():
         stored_post_ids = []
         for item in feed["entries"]:
             if source.key == "varzesh3":
+                logging.info("source with key varzesh3 init")
                 link = item.link
                 link = link.replace("http://www.varzesh3.com/news/", "")
                 rss_id = link.split("/")[0]
+                logging.info(f"rss_id --{rss_id}-- got in stream")
                 if rss_id in rss_ids:
+                    logging.info(f"rss_id --{rss_id}-- abort")
                     continue
                 rss = RSS()
                 rss.link = item.link
@@ -37,6 +41,7 @@ def add_from_stream():
                 rss.pub_date = pub_date
                 created_rss = RSSRepository.create(model=rss)
                 stored_post_ids.append(created_rss.id)
+                logging.info(f"rss_id --{rss_id}-- saved")
                 stored_rss_ids.append(rss_id)
         fan_out(key=source.key, rss_ids=stored_post_ids)
         FeedMemory.add_to_memory(key=source.key, post_ids=stored_rss_ids, date=datetime.now())
