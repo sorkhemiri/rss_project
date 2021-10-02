@@ -19,7 +19,13 @@ app.add_middleware(
 app.include_router(main_router)
 
 
-db.bind(provider='sqlite', filename='db.sqlite3', create_db=True)
+db.bind(
+    provider='postgres',
+    user=env_config.postgres_user,
+    password=env_config.postgres_password,
+    host=env_config.postgres_host,
+    port=env_config.postgres_port,
+    database=env_config.postgres_db)
 db.generate_mapping(create_tables=True)
 
 
