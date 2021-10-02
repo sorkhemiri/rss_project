@@ -1,0 +1,299 @@
+{
+	"info": {
+		"_postman_id": "f1dd3e1c-6998-4cac-a5b4-de76b31e8d41",
+		"name": "rss_app",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "account",
+			"item": [
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"mahdi\",\n    \"password\": \"123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/v1.0/account/login/",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1.0",
+								"account",
+								"login",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"mahdi\",\n    \"password\": \"123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/v1.0/account/register",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1.0",
+								"account",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "feed",
+			"item": [
+				{
+					"name": "rss sources list",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1bmlxdWVfdG9rZW4iOiJhMTYzOTU2Yi1kYzc4LTQ5YTQtOGU2OC0wNWY5NTFhNGZmODIifQ.xC7aP1IhEkCacSYGoNRn-IsPtTSO1Xob0i5fYOTD4YI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/v1.0/feed/sources/",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1.0",
+								"feed",
+								"sources",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "subscribe source",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1bmlxdWVfdG9rZW4iOiJhMTYzOTU2Yi1kYzc4LTQ5YTQtOGU2OC0wNWY5NTFhNGZmODIifQ.xC7aP1IhEkCacSYGoNRn-IsPtTSO1Xob0i5fYOTD4YI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/v1.0/feed/source/1/subscribe/",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1.0",
+								"feed",
+								"source",
+								"1",
+								"subscribe",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "unsubscribe source",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1bmlxdWVfdG9rZW4iOiJhMTYzOTU2Yi1kYzc4LTQ5YTQtOGU2OC0wNWY5NTFhNGZmODIifQ.xC7aP1IhEkCacSYGoNRn-IsPtTSO1Xob0i5fYOTD4YI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/v1.0/feed/source/1/unsubscribe/",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1.0",
+								"feed",
+								"source",
+								"1",
+								"unsubscribe",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "rss list",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1bmlxdWVfdG9rZW4iOiJmNWM0YjQ0ZC0wNTU2LTRmNDEtOGY1MS00NTgwZWNhMGQ0OGIifQ.xoTRlPezs44PNq2mXdfhkRWkesWSFu8jsYavSd3nVCM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/v1.0/feed/rss/?page=1&limit=5",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1.0",
+								"feed",
+								"rss",
+								""
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "like rss",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1bmlxdWVfdG9rZW4iOiJhMTYzOTU2Yi1kYzc4LTQ5YTQtOGU2OC0wNWY5NTFhNGZmODIifQ.xC7aP1IhEkCacSYGoNRn-IsPtTSO1Xob0i5fYOTD4YI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/v1.0/feed/rss/1/like/",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1.0",
+								"feed",
+								"rss",
+								"1",
+								"like",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "unlike rss",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1bmlxdWVfdG9rZW4iOiJhMTYzOTU2Yi1kYzc4LTQ5YTQtOGU2OC0wNWY5NTFhNGZmODIifQ.xC7aP1IhEkCacSYGoNRn-IsPtTSO1Xob0i5fYOTD4YI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/v1.0/feed/rss/1/unlike/",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1.0",
+								"feed",
+								"rss",
+								"1",
+								"unlike",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
