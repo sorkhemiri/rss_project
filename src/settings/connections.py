@@ -111,30 +111,3 @@ class RedisConnection:
         cls.get_connection()
         num = cls._connection.zcard(key)
         return num
-
-# class Postgres:
-#     _connection = None
-#     pool = ThreadedConnectionPool(
-#         minconn=1,
-#         maxconn=5,
-#         user=env_config.postgres_user,
-#         password=env_config.postgres_password,
-#         host=env_config.postgres_host,
-#         port=env_config.postgres_port,
-#         database=env_config.postgres_db,
-#     )
-#
-#     @classmethod
-#     def get_connection(cls):
-#         if not cls._connection or cls._connection.closed:
-#             connection = cls.pool.getconn()
-#             connection.autocommit = False
-#             cls._connection = connection
-#         return cls._connection
-#
-#     @classmethod
-#     def get_dict_cursor(cls):
-#         cls.get_connection()
-#         cur = cls._connection.cursor(cursor_factory=DictCursor)
-#         # cur.execute("SET TIME ZONE 'Asia/Tehran';")
-#         return cur
