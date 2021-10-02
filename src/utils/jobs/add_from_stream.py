@@ -38,10 +38,3 @@ def add_from_stream():
                 stored_rss_ids.append(rss_id)
         fan_out(key=source.key, rss_ids=stored_post_ids)
         FeedMemory.add_to_memory(key=source.key, post_ids=stored_rss_ids, date=datetime.now())
-
-
-
-
-
-
-add_from_stream()
