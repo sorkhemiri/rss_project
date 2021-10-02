@@ -100,6 +100,18 @@ class RedisConnection:
             for item in values:
                 cls._connection.lrem(key, 0, item)
 
+    @classmethod
+    def list_items_count(cls, key: str):
+        cls.get_connection()
+        num = cls._connection.scard(key)
+        return num
+
+    @classmethod
+    def set_items_count(cls, key: str):
+        cls.get_connection()
+        num = cls._connection.zcard(key)
+        return num
+
 # class Postgres:
 #     _connection = None
 #     pool = ThreadedConnectionPool(

@@ -27,8 +27,9 @@ class FeedManager:
     @classmethod
     def get_feed(cls, user_id: int, page: int = 1, limit: int = 10):
         user_feed_prefix = cls.PREFIX + "global:user:" + f"{user_id}"
-        from_item = ((page - 1) * limit)
-        to_item = (page * limit) - 1
+        num = RedisConnection.set_items_count(key=user_feed_prefix)
+        from_item = num - (limit * page) if num - (limit * page) - 1 > 0 else 0
+        to_item = num - (limit * (page - 1)) - 1 if num - (limit * (page - 1)) > 0 else 0
         values = RedisConnection.get_set_values_range(
             key=user_feed_prefix, start=from_item, end=to_item)
         return values
@@ -36,8 +37,9 @@ class FeedManager:
     @classmethod
     def get_channel(cls, key: str, page: int = 1, limit: int = 10):
         user_feed_prefix = cls.PREFIX + "global:channel:" + key
-        from_item = ((page - 1) * limit)
-        to_item = (page * limit) - 1
+        num = RedisConnection.set_items_count(key=user_feed_prefix)
+        from_item = num - (limit * page) if num - (limit * page) - 1 > 0 else 0
+        to_item = num - (limit * (page - 1)) - 1 if num - (limit * (page - 1)) > 0 else 0
         values = RedisConnection.get_set_values_range(
             key=user_feed_prefix, start=from_item, end=to_item)
         return values
