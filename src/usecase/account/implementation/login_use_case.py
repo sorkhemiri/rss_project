@@ -1,6 +1,6 @@
 from uuid import uuid4
 
-import orjson as json
+import json
 import jwt
 from pydantic import ValidationError
 from starlette.responses import JSONResponse
