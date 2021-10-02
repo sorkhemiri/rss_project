@@ -8,8 +8,10 @@ from repositories.postgres import RSSSourceRepository, RSSRepository
 from repositories.redis import FeedMemory
 from utils.decorators.retry import retry
 from utils.functions import fan_out
+from celery_app import celery_app
 
 
+@celery_app.task
 @retry(times=3, wait=5)
 def add_from_stream():
     sources = RSSSourceRepository.get_sources()

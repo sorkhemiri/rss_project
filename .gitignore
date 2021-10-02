@@ -142,3 +142,4 @@ cython_debug/
 
 #Mr Dev
 postgres_data
+celerybeat-schedule.db
