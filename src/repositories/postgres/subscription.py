@@ -4,7 +4,7 @@ from pony import orm
 from pony.orm import raw_sql
 
 from entities import Subscription, User
-from models import Subscription as SubscriptionDB, db, RSSSource as RSSSourceDB, User as UserDB
+from models import Subscription as SubscriptionDB, RSSSource as RSSSourceDB, User as UserDB
 from exceptions import RepositoryException, error_status
 
 

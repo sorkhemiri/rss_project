@@ -3,7 +3,7 @@ from typing import List
 from pony import orm
 
 from entities import RSS, RSSSource
-from models import RSS as RSSDB, RSSSource as RSSSourceDB, db
+from models import RSS as RSSDB, RSSSource as RSSSourceDB
 from exceptions import RepositoryException
 
 

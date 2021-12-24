@@ -1,5 +1,4 @@
 from tortoise import Tortoise, run_async
-from tortoise.backends.base.client import Capabilities
 
 from settings import env_config
 
@@ -29,6 +28,7 @@ async def init():
                     }
                 },
             }
+    print(db_config)
     await Tortoise.init(config=db_config)
     # Generate the schema
 

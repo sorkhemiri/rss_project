@@ -42,7 +42,8 @@ class RegisterUseCase(UseCaseInterface):
             user.last_name = last_name
             user.password = password
             created_user = self.user_repository.create(model=user)
-            return JSONResponse(content={"user": created_user.dict(exclude_defaults=True)}, status_code=HTTP_200_OK)
+            return {"user": created_user.dict(exclude_defaults=True),
+                    "http_status_code": 200}
         except ValidationError as err:
             raise UseCaseException(json.loads(err.json()), error_code=2)
         except UseCaseException as err:

@@ -34,17 +34,11 @@ class LoginUseCase(UseCaseInterface):
             password = data.password
             if not self.user_repository.check_username_exist(username=username):
                 raise UseCaseException(message="User not found", error_code=error_status.DOES_NOT_EXIST_ERROR)
-            if not self.user_repository.check_password(username=username, password=username):
+            if not self.user_repository.check_password(username=username, password=password):
                 raise UseCaseException(message="Password incorrect", error_code=error_status.DOES_NOT_EXIST_ERROR)
-            user_id = self.user_repository.get_user_id_by_username(username=password)
-            unique_token = str(uuid4())
-            token = jwt.encode(
-                {"user_id": user_id, "unique_token": unique_token},
-                env_config.SECRET_KEY,
-                algorithm="HS256",
-            )
-            self.user_auth_repository.login(user_id)
-            return JSONResponse(content={"token": token}, status_code=HTTP_200_OK)
+            user_id = self.user_repository.get_uid_by_username(username=username)
+            data = self.user_auth_repository.login(uid=user_id)
+            return {"result": data, "http_status_code": 200}
         except ValidationError as err:
             raise UseCaseException(json.loads(err.json()), error_code=2)
         except UseCaseException as err:

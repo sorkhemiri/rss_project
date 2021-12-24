@@ -131,16 +131,15 @@ class Postgres:
                 host=env_config.postgres_host,
                 port=env_config.postgres_port,
                 database=env_config.postgres_db,
+                minconn=1,
                 maxconn=env_config.postgres_max_connections,
                 **keepalive_kwargs)
 
     @classmethod
     def get_connection(cls):
-        if not cls._connection or cls._connection.closed:
-            connection = cls._pool.getconn()
-            connection.autocommit = True
-            cls._connection = connection
-        return cls._connection
+        connection = cls._pool.getconn()
+        connection.autocommit = True
+        return connection
 
     @classmethod
     def check_table_exist(cls, table_name: str):

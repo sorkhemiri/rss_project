@@ -1,4 +1,5 @@
 from typing import Optional
+from uuid import UUID
 
 from interfaces.user_auth_repository_interface import UserAuthRepositoryInterface
 from settings.connections import RedisConnection
@@ -13,7 +14,8 @@ class UserAuthRepository(UserAuthRepositoryInterface):
     REFRESH_PREFIX = PREFIX + "refresh:"
 
     @classmethod
-    def login(cls, uid: str) -> dict:
+    def login(cls, uid: UUID) -> dict:
+        uid = str(uid)
         cls.logout(uid)
         access_token_prefix = cls.ACCESS_PREFIX + "token:"
         access_user_prefix = cls.ACCESS_PREFIX + "user:"

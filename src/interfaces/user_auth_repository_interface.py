@@ -1,5 +1,6 @@
 import abc
 from typing import Optional
+from uuid import UUID
 
 from .repository import RepositoryInterface
 
@@ -8,7 +9,7 @@ class UserAuthRepositoryInterface(RepositoryInterface):
 
     @classmethod
     @abc.abstractmethod
-    def login(cls, uid: str) -> dict:
+    def login(cls, uid: UUID) -> dict:
         pass
 
     @classmethod

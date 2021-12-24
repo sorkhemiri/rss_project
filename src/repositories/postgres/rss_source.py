@@ -4,7 +4,6 @@ from pony import orm
 
 from entities import RSSSource
 from models import RSSSource as RSSSourceDB
-from models import db
 from exceptions import RepositoryException
 
 

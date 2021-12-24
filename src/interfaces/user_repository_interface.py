@@ -23,7 +23,7 @@ class UserRepositoryInterface(RepositoryInterface):
 
     @classmethod
     @abc.abstractmethod
-    def get_user_id_by_username(cls, username: str) -> int:
+    def get_uid_by_username(cls, username: str) -> int:
         pass
 
     @classmethod

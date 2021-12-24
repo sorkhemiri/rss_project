@@ -25,6 +25,7 @@ async def generate_schemas():
             }
         },
     }
+    print(db_config)
     await Tortoise.init(config=db_config)
     await Tortoise.generate_schemas()
 

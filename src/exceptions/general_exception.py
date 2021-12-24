@@ -4,7 +4,7 @@ import inspect
 from exceptions import error_status
 
 
-class GeneralException(Exception):
+class GeneralException(Exception, metaclass=abc.ABCMeta):
     CODE_REFERENCE = None
 
     def __init__(self, message: str, error_code: int = error_status.GENERAL_ERROR):
