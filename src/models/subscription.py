@@ -1,11 +1,8 @@
-import datetime
+from tortoise import fields
 
-from pony.orm import Required, Optional
-
-from .base import db
+from .base import BaseModel
 
 
-class Subscription(db.Entity):
-    source = Optional("RSSSource", reverse="subscriptions")
-    user = Optional("User", reverse="subscriptions")
-    is_deleted = Optional(bool, sql_default=False)
+class Subscription(BaseModel):
+    source = fields.ForeignKeyField('models.RSSSource', related_name='subscriptions', null=True, on_delete=fields.CASCADE)
+    user = fields.ForeignKeyField('models.User', related_name='subscriptions', null=True, on_delete=fields.CASCADE)

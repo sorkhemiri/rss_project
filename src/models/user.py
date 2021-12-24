@@ -1,16 +1,13 @@
-from pony.orm import Required, Optional, Set
+from tortoise import fields
 
-from .base import db
+from .base import BaseModel
 
 
-class User(db.Entity):
-    first_name = Optional(str, max_len=100)
-    last_name = Optional(str, max_len=100)
-    username = Required(str, max_len=200, unique=True)
-    password = Required(str, max_len=500)
-    is_deleted = Optional(bool, sql_default=False)
-    subscriptions = Set("Subscription", reverse="user")
-    likes = Set("Like", reverse="user")
+class User(BaseModel):
+    first_name = fields.CharField(max_length=100)
+    last_name = fields.CharField(max_length=100)
+    username = fields.CharField(max_length=100, unique=True, required=True, index=True)
+    password = fields.CharField(max_length=600, required=True)
 
     def __str__(self):
         return self.username

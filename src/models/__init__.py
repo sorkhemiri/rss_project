@@ -1,4 +1,3 @@
-from .base import db
 from .user import User
 from .rss import RSS
 from .rss_source import RSSSource

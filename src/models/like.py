@@ -1,14 +1,8 @@
-import datetime
+from tortoise import fields
 
-from pony.orm import Required, Optional
-
-from .base import db
+from .base import BaseModel
 
 
-class Like(db.Entity):
-    rss = Optional("RSS", reverse="likes")
-    user = Required("User", reverse="likes")
-    is_deleted = Optional(bool, sql_default=False)
-
-    def __str__(self):
-        return self.title
+class Like(BaseModel):
+    rss = fields.ForeignKeyField('models.RSS', related_name='likes', null=True, on_delete=fields.CASCADE)
+    user = fields.ForeignKeyField('models.User', related_name='likes', null=True, on_delete=fields.CASCADE)
