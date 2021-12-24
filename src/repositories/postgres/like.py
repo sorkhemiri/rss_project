@@ -2,7 +2,7 @@ from pony import orm
 
 from entities import Like
 from models import db, User as UserDB, RSS as RSSDB, Like as LikeDB
-from utils.exceptions import RepositoryException, status
+from exceptions import RepositoryException, error_status
 
 
 class LikeRepository:

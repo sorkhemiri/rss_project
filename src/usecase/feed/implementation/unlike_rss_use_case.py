@@ -7,7 +7,7 @@ from entities import Like, RSS
 from repositories.postgres import LikeRepository
 from usecase.interface import UseCaseInterface
 
-from utils.exceptions import UseCaseException
+from exceptions import UseCaseException
 from validators.feed import UnlikeRSSValidator
 
 

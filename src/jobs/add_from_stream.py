@@ -7,8 +7,8 @@ from app import db
 from entities import RSS
 from repositories.postgres import RSSSourceRepository, RSSRepository
 from repositories.redis import FeedMemory
-from utils.decorators.retry import retry
-from utils.functions import fan_out
+from decorators import retry
+from utils import fan_out
 from celery_app import celery_app
 
 

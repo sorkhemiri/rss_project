@@ -16,6 +16,7 @@ class Config(BaseSettings):
     postgres_db = "core_db"
     postgres_host = "127.0.0.1"
     postgres_port = 5432
+    postgres_max_connections = 5
 
     class Config:
         case_sensitive = False

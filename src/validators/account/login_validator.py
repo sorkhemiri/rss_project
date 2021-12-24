@@ -1,6 +1,8 @@
 from pydantic import BaseModel
 
+from interfaces.validator import ValidatorInterface
 
-class LoginValidator(BaseModel):
+
+class LoginValidator(ValidatorInterface):
     username: str
     password: str

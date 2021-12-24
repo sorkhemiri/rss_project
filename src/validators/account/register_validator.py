@@ -1,9 +1,9 @@
 from typing import Optional
 
-from pydantic import BaseModel
+from interfaces.validator import ValidatorInterface
 
 
-class RegisterValidator(BaseModel):
+class RegisterValidator(ValidatorInterface):
     username: str
     password: str
     first_name: Optional[str] = None

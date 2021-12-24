@@ -29,9 +29,9 @@ services:
         volumes:
             - ./postgres_data:/var/lib/postgresql/data/
         environment:
-            - POSTGRES_USER=admin
-            - POSTGRES_PASSWORD=5RLHLM"ACmQvtEne&%
-            - POSTGRES_DB=core_db
+            - POSTGRES_USER=db
+            - POSTGRES_PASSWORD=somanylies
+            - POSTGRES_DB=db
         ports:
           - 5432:5432
 

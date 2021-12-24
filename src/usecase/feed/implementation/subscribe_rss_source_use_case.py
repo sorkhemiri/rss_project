@@ -9,7 +9,7 @@ from repositories.postgres import SubscriptionRepository
 from repositories.redis import FeedManager
 from usecase.interface import UseCaseInterface
 
-from utils.exceptions import UseCaseException, status
+from exceptions import UseCaseException, error_status
 from validators.feed import SubscribeRSSSourceValidator
 
 

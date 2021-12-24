@@ -1,21 +1,23 @@
-from typing import Optional
+from typing import Optional, Type
 
 from fastapi import HTTPException
 from starlette.requests import Request
 from starlette.status import HTTP_401_UNAUTHORIZED
 
 from entities import User
-from repositories.postgres import UserRepository
-from repositories.redis import UserAuthenticate
+from interfaces.user_auth_repository_interface import UserAuthRepositoryInterface
+from interfaces.user_repository_interface import UserRepositoryInterface
 
 
-def check_authentication(request: Request) -> Optional[User]:
+def check_authentication(request: Request,
+                         user_repository: Type[UserRepositoryInterface],
+                         user_auth_repository: Type[UserAuthRepositoryInterface]) -> Optional[User]:
     auth_bearer_token = request.headers.get("Authorization")
     if auth_bearer_token:
         auth_token = auth_bearer_token.replace("Bearer ", "")
-        user_id = UserAuthenticate.is_authenticated(token=auth_token)
+        user_id = user_auth_repository.authenticated(access_token=auth_token)
         if user_id:
-            if not UserRepository.check_user_exist(user_id=user_id):
+            if not user_repository.check_user_exist(user_id=user_id):
                 raise HTTPException(
                     status_code=HTTP_401_UNAUTHORIZED,
                     detail="User Data Not Valid")

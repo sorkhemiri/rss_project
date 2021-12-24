@@ -4,7 +4,6 @@ from router import main_router
 from starlette.middleware.cors import CORSMiddleware
 import http.cookies
 
-from models import db
 
 http.cookies._is_legal_key = lambda _: True
 
@@ -19,17 +18,7 @@ app.add_middleware(
 app.include_router(main_router)
 
 
-db.bind(
-    provider='postgres',
-    user=env_config.postgres_user,
-    password=env_config.postgres_password,
-    host=env_config.postgres_host,
-    port=env_config.postgres_port,
-    database=env_config.postgres_db)
-db.generate_mapping(create_tables=True)
-
-
 if env_config.debug and __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app, host="0.0.0.0", port=8000, debug=True)
+    uvicorn.run(app, host="0.0.0.0", port=3000, debug=True)

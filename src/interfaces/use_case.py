@@ -1,5 +1,6 @@
 import abc
-from exceptions import GeneralException
+
+from interfaces.exception import GeneralException
 
 
 class UseCaseInterface(metaclass=abc.ABCMeta):
@@ -12,5 +13,5 @@ class UseCaseInterface(metaclass=abc.ABCMeta):
             raise ex
 
     @abc.abstractmethod
-    def process_request(self, request_dict: dict):
+    def process_request(self, request_dict: dict) -> dict:
         pass

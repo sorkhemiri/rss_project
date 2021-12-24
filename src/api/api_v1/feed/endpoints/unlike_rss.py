@@ -3,7 +3,7 @@ from starlette.requests import Request
 
 from entities import User
 from usecase.feed.implementation import UnlikeRSSUseCase
-from utils.auth import check_authentication
+from utils import check_authentication
 
 router = APIRouter()
 

@@ -8,29 +8,35 @@ CONNECTION_ERROR = 6
 
 class GeneralError:
     error_code = 1
-    message = "general error"
+    message = "GENERAL ERROR"
+    status_code = 400
 
 
 class ValidationError:
     error_code = 2
-    message = "validation error"
+    message = "VALIDATION ERROR"
+    status_code = 400
 
 
 class AuthorizationError:
     error_code = 3
-    message = "authorization error"
+    message = "AUTHORIZATION ERROR"
+    status_code = 401
 
 
 class DoesNotExistError:
     error_code = 4
-    message = "does not exist error"
+    message = "DOES NOT EXIST ERROR"
+    status_code = 404
 
 
 class LogicalError:
     error_code = 5
-    message = "logical error"
+    message = "LOGICAL ERROR"
+    status_code = 400
 
 
 class ConnectingError:
     error_code = 6
-    message = "connecting error"
+    message = "CONNECTING ERROR"
+    status_code = 400

@@ -9,7 +9,7 @@ from repositories.postgres import SubscriptionRepository
 from repositories.redis import FeedManager
 from usecase.interface import UseCaseInterface
 
-from utils.exceptions import UseCaseException, status
+from exceptions import UseCaseException, error_status
 from validators.feed import UnsubscribeRSSSourceValidator
 
 
@@ -18,7 +18,7 @@ class UnsubscribeRSSSourceUseCase(UseCaseInterface):
         try:
             data = UnsubscribeRSSSourceValidator(**request_dict)
             if not RSSSourceRepository.check_source_exists(data.source_id):
-                raise UseCaseException(message="source not found", error_code=status.DOES_NOT_EXIST_ERROR)
+                raise UseCaseException(message="source not found", error_code=error_status.DOES_NOT_EXIST_ERROR)
             subscription = Subscription()
             subscription.user = data.user
             subscription.source = RSSSource(id=data.source_id)

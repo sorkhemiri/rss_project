@@ -1,8 +1,7 @@
 from typing import Optional, List
 
-from psycopg2.pool import ThreadedConnectionPool
-from psycopg2.extras import DictCursor
 from redis import BlockingConnectionPool, StrictRedis
+from psycopg2.pool import SimpleConnectionPool
 from settings.config import env_config
 
 
@@ -111,3 +110,49 @@ class RedisConnection:
         cls.get_connection()
         num = cls._connection.zcard(key)
         return num
+
+    @classmethod
+    def get_expire_time(cls, key: str):
+        cls.get_connection()
+        expire_time = cls._connection.ttl(key)
+        return expire_time
+
+
+class Postgres:
+    keepalive_kwargs = {
+        "keepalives": 1,
+        "keepalives_idle": 5,
+        "keepalives_interval": 1,
+        "keepalives_count": 5,
+    }
+    _pool = SimpleConnectionPool(
+                user=env_config.postgres_user,
+                password=env_config.postgres_password,
+                host=env_config.postgres_host,
+                port=env_config.postgres_port,
+                database=env_config.postgres_db,
+                maxconn=env_config.postgres_max_connections,
+                **keepalive_kwargs)
+
+    @classmethod
+    def get_connection(cls):
+        if not cls._connection or cls._connection.closed:
+            connection = cls._pool.getconn()
+            connection.autocommit = True
+            cls._connection = connection
+        return cls._connection
+
+    @classmethod
+    def check_table_exist(cls, table_name: str):
+        query = """
+        SELECT EXISTS (
+        SELECT FROM information_schema.tables
+        WHERE  table_name   = %(table_name)s
+        );
+        """
+
+        connection = cls.get_connection()
+        cur = connection.cursor()
+        cur.execute(query)
+        result = cur.fetchone()
+        return result

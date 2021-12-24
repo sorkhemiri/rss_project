@@ -4,7 +4,7 @@ from starlette.requests import Request
 from usecase.feed.implementation import SubscribeRSSSourceUseCase
 
 from entities import User
-from utils.auth import check_authentication
+from utils import check_authentication
 
 router = APIRouter()
 

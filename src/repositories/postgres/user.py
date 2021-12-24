@@ -1,12 +1,13 @@
 from pony import orm
 
 from entities import User
+from interfaces.user_repository_interface import UserRepositoryInterface
 from models import User as UserDB, db
-from utils.functions import make_password
-from utils.exceptions import RepositoryException
+from utils import make_password
+from exceptions import RepositoryException
 
 
-class UserRepository:
+class UserRepository(UserRepositoryInterface):
 
     @classmethod
     def check_username_exist(cls, username: str) -> bool:

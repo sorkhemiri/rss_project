@@ -6,7 +6,7 @@ from starlette.status import HTTP_200_OK
 from repositories.postgres import RSSSourceRepository
 from usecase.interface import UseCaseInterface
 
-from utils.exceptions import UseCaseException, status
+from exceptions import UseCaseException, error_status
 
 
 class RSSSourcesListUseCase(UseCaseInterface):

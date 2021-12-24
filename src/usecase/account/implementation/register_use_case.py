@@ -1,32 +1,47 @@
 from re import fullmatch
 
 import json
+from typing import Type
+
 from pydantic import ValidationError
 from starlette.responses import JSONResponse
 from starlette.status import HTTP_200_OK
 
 from entities import User
-from repositories.postgres import UserRepository
+from interfaces.validator import ValidatorInterface
+from interfaces.user_repository_interface import UserRepositoryInterface
 from usecase.interface import UseCaseInterface
 
-from utils.exceptions import UseCaseException, status
-from validators.account import RegisterValidator
+from exceptions import UseCaseException, error_status
 
 
 class RegisterUseCase(UseCaseInterface):
+
+    def __init__(
+            self,
+            validator: Type[ValidatorInterface],
+            user_repository: Type[UserRepositoryInterface],
+    ):
+        self.validator = validator
+        self.user_repository = user_repository
+
     def process_request(self, request_dict: dict):
         try:
-            data = RegisterValidator(**request_dict)
-            if UserRepository.check_username_exist(username=data.username):
-                raise UseCaseException(message="username already exists", error_code=status.VALIDATION_ERROR)
-            if not fullmatch(pattern="[a-zA-Z0-9_]{4,}", string=data.username):
-                raise UseCaseException(message="username not valid", error_code=status.VALIDATION_ERROR)
+            data = data = self.validator(**request_dict)
+            username = data.username
+            first_name = data.first_name
+            last_name = data.last_name
+            password = data.password
+            if self.user_repository.check_username_exist(username=username):
+                raise UseCaseException(message="username already exists", error_code=error_status.VALIDATION_ERROR)
+            if not fullmatch(pattern="[a-zA-Z0-9_]{4,}", string=username):
+                raise UseCaseException(message="username not valid", error_code=error_status.VALIDATION_ERROR)
             user = User()
-            user.username = data.username
-            user.first_name = data.first_name
-            user.last_name = data.last_name
-            user.password = data.password
-            created_user = UserRepository.create(model=user)
+            user.username = username
+            user.first_name = first_name
+            user.last_name = last_name
+            user.password = password
+            created_user = self.user_repository.create(model=user)
             return JSONResponse(content={"user": created_user.dict(exclude_defaults=True)}, status_code=HTTP_200_OK)
         except ValidationError as err:
             raise UseCaseException(json.loads(err.json()), error_code=2)

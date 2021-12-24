@@ -4,7 +4,9 @@ from fastapi import APIRouter
 from pydantic import BaseModel
 from starlette.requests import Request
 
+from repositories.postgres import UserRepository
 from usecase.account.implementation import RegisterUseCase
+from validators.account import RegisterValidator
 
 router = APIRouter()
 
@@ -18,6 +20,10 @@ class RequestData(BaseModel):
 
 @router.post("/register", tags=["user_register", "auth"])
 def register(request: Request, request_data: RequestData):
-    data = request_data.dict()
-    use_case = RegisterUseCase()
-    return use_case.execute(request_model=data)
+    request_data = request_data.dict()
+    use_case = RegisterUseCase(validator=RegisterValidator,
+                               user_repository=UserRepository)
+    data = use_case.execute(request_model=request_data or {})
+    status = data["http_status_code"]
+    del data["http_status_code"]
+    return data, status
