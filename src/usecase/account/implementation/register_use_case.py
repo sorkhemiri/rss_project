@@ -27,7 +27,7 @@ class RegisterUseCase(UseCaseInterface):
 
     def process_request(self, request_dict: dict):
         try:
-            data = data = self.validator(**request_dict)
+            data = self.validator(**request_dict)
             username = data.username
             first_name = data.first_name
             last_name = data.last_name
