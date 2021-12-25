@@ -28,6 +28,16 @@ class RSSSourceRepository(RSSSourceRepositoryInterface):
         return model
 
     @classmethod
+    def delete(cls, key: str):
+        query = """
+            DELETE FROM public.RSSSOURCE WHERE key=%s;
+            """
+        params = (key,)
+        conn = Postgres.get_connection()
+        with conn.cursor(cursor_factory=DictCursor) as curs:
+            curs.execute(query, params)
+
+    @classmethod
     def get_list(cls) -> List[RSSSource]:
         with orm.db_session:
             rss_source_data = db.select(

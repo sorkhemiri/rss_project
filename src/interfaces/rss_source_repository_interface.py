@@ -13,6 +13,11 @@ class RSSSourceRepositoryInterface(RepositoryInterface):
 
     @classmethod
     @abc.abstractmethod
+    def delete(cls, key: str) -> None:
+        pass
+
+    @classmethod
+    @abc.abstractmethod
     def get_list(cls) -> List[RSSSource]:
         pass
 

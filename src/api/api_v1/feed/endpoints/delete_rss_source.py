@@ -6,23 +6,20 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 from repositories.postgres import RSSSourceRepository
-from usecase.feed.implementation import CreateRSSSourceUseCase
-from validators.feed import CreateRSSSourceValidator
+from usecase.feed.implementation import DeleteRSSSourceUseCase
+from validators.feed import DeleteRSSSourceValidator
 
 router = APIRouter()
 
 
 class RequestData(BaseModel):
     key: str
-    title: str
-    description: Optional[str]
-    link: str
 
 
-@router.post("/source/create/", tags=["create-source", "feed"])
-def create_rss_source(request: Request, request_data: RequestData):
+@router.delete("/source/delete/", tags=["delete-source", "feed"])
+def delete_rss_source(request: Request, request_data: RequestData):
     request_data = request_data.dict()
-    use_case = CreateRSSSourceUseCase(validator=CreateRSSSourceValidator,
+    use_case = DeleteRSSSourceUseCase(validator=DeleteRSSSourceValidator,
                                       rss_source_repository=RSSSourceRepository)
     data = use_case.execute(request_model=request_data or {})
     status = data["http_status_code"]
