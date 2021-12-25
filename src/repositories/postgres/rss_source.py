@@ -1,28 +1,38 @@
 from typing import List
 
 from pony import orm
+from psycopg2.extras import DictCursor
 
 from entities import RSSSource
-from models import RSSSource as RSSSourceDB
 from exceptions import RepositoryException
+from interfaces.rss_source_repository_interface import RSSSourceRepositoryInterface
+from settings.connections import Postgres
 
 
-class RSSSourceRepository:
+class RSSSourceRepository(RSSSourceRepositoryInterface):
 
     @classmethod
     def create(cls, model: RSSSource):
-        with orm.db_session:
-            model_data = model.dict(exclude_defaults=True)
-            source_db = RSSSourceDB(**model_data)
-            orm.commit()
-            model.id = source_db.id
+        query = """
+        INSERT INTO public.RSSSOURCE (key, title, description, link)
+        VALUES (%s, %s, %s, %s);
+        """
+        key = model.key
+        title = model.title
+        description = model.description if model.description else ''
+        link = model.link
+        params = (key, title, description, link)
+        conn = Postgres.get_connection()
+        with conn.cursor(cursor_factory=DictCursor) as curs:
+            curs.execute(query, params)
+        return model
 
     @classmethod
     def get_list(cls) -> List[RSSSource]:
         with orm.db_session:
             rss_source_data = db.select(
                 "select id, title, description"
-                " from RSSSource where (is_deleted is null or is_deleted = FALSE)")
+                " from public.RSSSource where (is_deleted is null or is_deleted = FALSE)")
             rss_source_entities = [
                 RSSSource(id=item[0],
                           title=item[1],
@@ -57,11 +67,18 @@ class RSSSourceRepository:
 
     @classmethod
     def check_source_key_exists(cls, key: str) -> bool:
-        with orm.db_session:
-            if db.exists("select id from RSSSource where"
-                         " key = $key and (is_deleted is null or is_deleted = FALSE)"):
-                return True
-            return False
+        query = """
+                   select id from RSSSource where
+                   key = %s
+                """
+        params = (key,)
+        conn = Postgres.get_connection()
+        with conn.cursor(cursor_factory=DictCursor) as curs:
+            curs.execute(query, params)
+            result = curs.fetchone()
+        if result:
+            return True
+        return False
 
     @classmethod
     def get_sources_key(cls, source_id: int) -> str:

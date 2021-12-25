@@ -3,3 +3,4 @@ from .unsubscribe_rss_source_validator import UnsubscribeRSSSourceValidator
 from .rss_list_validator import RSSListValidator
 from .like_rss_validator import LikeRSSValidator
 from .unlike_rss_validator import UnlikeRSSValidator
+from .create_rss_source_validator import CreateRSSSourceValidator
