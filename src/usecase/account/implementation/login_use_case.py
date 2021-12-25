@@ -37,8 +37,8 @@ class LoginUseCase(UseCaseInterface):
             if not self.user_repository.check_password(username=username, password=password):
                 raise UseCaseException(message="Password incorrect", error_code=error_status.DOES_NOT_EXIST_ERROR)
             user_id = self.user_repository.get_uid_by_username(username=username)
-            data = self.user_auth_repository.login(uid=user_id)
-            return {"result": data, "http_status_code": 200}
+            result = self.user_auth_repository.login(uid=user_id)
+            return {"result": result, "http_status_code": 200}
         except ValidationError as err:
             raise UseCaseException(json.loads(err.json()), error_code=2)
         except UseCaseException as err:
