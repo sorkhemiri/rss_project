@@ -1,8 +1,8 @@
 from pony import orm
+from psycopg2.extras import DictCursor
 
 from entities import Like
 from interfaces.like_repository_interface import LikeRepositoryInterface
-from models import User as UserDB, RSS as RSSDB, Like as LikeDB
 from exceptions import RepositoryException, error_status
 from settings.connections import Postgres
 
@@ -14,19 +14,31 @@ class LikeRepository(LikeRepositoryInterface):
             raise RepositoryException(message="user id must be provided", error_code=error_status.DOES_NOT_EXIST_ERROR)
         if not model.rss and not model.rss.id:
             RepositoryException(message="rss id must be provided", error_code=error_status.DOES_NOT_EXIST_ERROR)
-        with orm.db_session:
-            query = """select id from Like where rss_id=%(model.rss.id)d and user_id=%(model.user.id)d"""
-            conn = Postgres.get_connection()
-            with conn.cursor() as curs:
-                curs.execute(query)
-                result = curs.fetchone()
-            if result:
-                return True
-            return False
+        rss_id = model.rss.id
+        user_id = model.user.id
+        query = """select id from Like where rss_id=%s and user_id=%s"""
+        params = (rss_id, user_id)
+        conn = Postgres.get_connection()
+        with conn.cursor() as curs:
+            curs.execute(query, params)
+            result = curs.fetchone()
+        if result:
+            return True
+        return False
 
     @classmethod
     def create(cls, model: Like) -> Like:
-        pass
+        query = """
+                INSERT INTO public.LIKE (rss_id, user_id)
+                VALUES (%s, %s);
+                """
+        rss_id = model.rss.id
+        user_id = model.user.id
+        params = (rss_id, user_id)
+        conn = Postgres.get_connection()
+        with conn.cursor(cursor_factory=DictCursor) as curs:
+            curs.execute(query, params)
+        return model
 
     @classmethod
     def delete(cls, model: Like):
