@@ -23,11 +23,6 @@ class RSSSourceRepositoryInterface(RepositoryInterface):
 
     @classmethod
     @abc.abstractmethod
-    def get_sources(cls) -> List[RSSSource]:
-        pass
-
-    @classmethod
-    @abc.abstractmethod
     def check_source_exists(cls, key: str) -> bool:
         pass
 
