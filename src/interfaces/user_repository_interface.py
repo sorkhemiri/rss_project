@@ -1,4 +1,5 @@
 import abc
+from uuid import UUID
 
 from entities import User
 from .repository import RepositoryInterface
@@ -28,5 +29,10 @@ class UserRepositoryInterface(RepositoryInterface):
 
     @classmethod
     @abc.abstractmethod
-    def check_user_exist(cls, user_id: int) -> bool:
+    def check_user_exist(cls, uid: UUID) -> bool:
+        pass
+
+    @classmethod
+    @abc.abstractmethod
+    def get_user_id_by_uid(cls, uid: UUID) -> int:
         pass

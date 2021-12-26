@@ -75,11 +75,13 @@ class UserAuthRepository(UserAuthRepositoryInterface):
             RedisConnection.delete_key(refresh_token_key)
 
     @classmethod
-    def authenticated(cls, access_token: str) -> Optional[str]:
+    def authenticated(cls, access_token: str) -> Optional[UUID]:
         access_token_prefix = cls.ACCESS_PREFIX + "token:"
         access_token_key = access_token_prefix + access_token
         uid = RedisConnection.get_value(access_token_key)
-        return uid
+        if uid:
+            return UUID(uid)
+        return None
 
     @classmethod
     def get_authentication_data(cls, uid: str) -> Optional[dict]:

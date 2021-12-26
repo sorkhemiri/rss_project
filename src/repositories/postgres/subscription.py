@@ -2,27 +2,34 @@ from typing import List
 
 from pony import orm
 from pony.orm import raw_sql
+from psycopg2.extras import DictCursor
 
 from entities import Subscription, User
+from interfaces.subscription_repository_interface import SubscriptionRepositoryInterface
 from models import Subscription as SubscriptionDB, RSSSource as RSSSourceDB, User as UserDB
 from exceptions import RepositoryException, error_status
+from settings.connections import Postgres
 
 
-class SubscriptionRepository:
+class SubscriptionRepository(SubscriptionRepositoryInterface):
     @classmethod
     def create(cls, model: Subscription) -> Subscription:
-        with orm.db_session:
-            model_data = {}
-            if model.source and model.source.id:
-                source = RSSSourceDB[model.source.id]
-                model_data["source"] = source
-            if model.user:
-                user = UserDB[model.user.id]
-                model_data["user"] = user
-            subscription_db = SubscriptionDB(**model_data)
-            orm.commit()
-            model.id = subscription_db.id
-            return model
+        if not (model.source and model.source.id):
+            raise RepositoryException(message="Source id must be provided", error_code=error_status.DOES_NOT_EXIST_ERROR)
+        if not(model.user and model.user.id):
+            raise RepositoryException(message="user id must be provided", error_code=error_status.DOES_NOT_EXIST_ERROR)
+
+        query = """
+                INSERT INTO public.RSSSOURCE (user_id, source_id)
+                VALUES (%s, %s);
+                """
+        user_id = model.user.id
+        source_id = model.source.id
+        params = (user_id, source_id)
+        conn = Postgres.get_connection()
+        with conn.cursor(cursor_factory=DictCursor) as curs:
+            curs.execute(query, params)
+        return model
 
     @classmethod
     def delete(cls, model: Subscription):
@@ -55,14 +62,17 @@ class SubscriptionRepository:
 
     @classmethod
     def check_subscription_exist(cls, model: Subscription) -> bool:
-        with orm.db_session:
-            if not model.user or not model.user.id:
-                raise RepositoryException(message="user id must be provided", error_code=status.DOES_NOT_EXIST_ERROR)
-            if not model.user or not model.user.id:
-                raise RepositoryException(message="source id must be provided", error_code=status.DOES_NOT_EXIST_ERROR)
-            sub_data = db.select("select id from Subscription "
-                      "where source=$model.source.id and user=$model.user.id "
-                      "and (is_deleted is null or is_deleted = FALSE)")
-            if sub_data:
+        if not model.user or not model.user.id:
+            raise RepositoryException(message="user id must be provided", error_code=error_status.DOES_NOT_EXIST_ERROR)
+        if not model.source or not model.source.id:
+            raise RepositoryException(message="source id must be provided", error_code=error_status.DOES_NOT_EXIST_ERROR)
+        query = """select id from public.Subscription
+                   where source_id=%s and user_id=%s"""
+        params = (model.source.id, model.user.id)
+        conn = Postgres.get_connection()
+        with conn.cursor(cursor_factory=DictCursor) as curs:
+            curs.execute(query, params)
+            rss_source = curs.fetchone()
+            if rss_source:
                 return True
             return False

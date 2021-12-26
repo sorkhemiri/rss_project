@@ -57,14 +57,6 @@ class RSSSourceRepository(RSSSourceRepositoryInterface):
             return rss_source_entities
 
     @classmethod
-    def check_source_exists(cls, source_id: int) -> bool:
-        with orm.db_session:
-            if db.exists("select id from RSSSource where"
-                         " id = $source_id and (is_deleted is null or is_deleted = FALSE)"):
-                return True
-            return False
-
-    @classmethod
     def check_source_key_exists(cls, key: str) -> bool:
         query = """
                    select id from RSSSource where
@@ -90,3 +82,17 @@ class RSSSourceRepository(RSSSourceRepositoryInterface):
                 return rss_source_key
             else:
                 raise RepositoryException(message="source not found")
+
+    @classmethod
+    def get_sources_id_by_key(cls, source_key: str) -> int:
+        query = """
+                   select id from RSSSource where
+                   key = %s
+                """
+        params = (source_key,)
+        conn = Postgres.get_connection()
+        with conn.cursor(cursor_factory=DictCursor) as curs:
+            curs.execute(query, params)
+            result = curs.fetchone()
+            source_id = result.get("id")
+        return source_id

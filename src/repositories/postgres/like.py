@@ -1,12 +1,13 @@
 from pony import orm
 
 from entities import Like
+from interfaces.like_repository_interface import LikeRepositoryInterface
 from models import User as UserDB, RSS as RSSDB, Like as LikeDB
 from exceptions import RepositoryException, error_status
 from settings.connections import Postgres
 
 
-class LikeRepository:
+class LikeRepository(LikeRepositoryInterface):
     @classmethod
     def user_like_exist(cls, model: Like) -> bool:
         if not model.user and not model.user.id:

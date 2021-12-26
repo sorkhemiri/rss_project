@@ -19,7 +19,7 @@ class UserAuthRepositoryInterface(RepositoryInterface):
 
     @classmethod
     @abc.abstractmethod
-    def authenticated(cls, access_token: str) -> Optional[str]:
+    def authenticated(cls, access_token: str) -> Optional[UUID]:
         pass
 
     @classmethod

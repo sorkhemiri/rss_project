@@ -93,3 +93,15 @@ class UserRepository(UserRepositoryInterface):
         if db_uid == str(uid):
             return True
         return False
+
+    @classmethod
+    def get_user_id_by_uid(cls, uid: UUID) -> int:
+        query = """select id from public.User
+                   where uid = %s"""
+        params = (str(uid),)
+        conn = Postgres.get_connection()
+        with conn.cursor(cursor_factory=DictCursor) as curs:
+            curs.execute(query, params)
+            result = curs.fetchone()
+            db_id = result.get("id")
+        return db_id
