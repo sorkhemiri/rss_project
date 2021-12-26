@@ -33,19 +33,19 @@ class SubscriptionRepository(SubscriptionRepositoryInterface):
 
     @classmethod
     def delete(cls, model: Subscription):
-        with orm.db_session:
-            if not model.user or not model.user.id:
-                raise RepositoryException(message="user id must be provided", error_code=status.DOES_NOT_EXIST_ERROR)
-            if not model.user or not model.user.id:
-                raise RepositoryException(message="source id must be provided", error_code=status.DOES_NOT_EXIST_ERROR)
-            source_id = model.source.id
-            user_id = model.user.id
-            sub_data = db.select("select id from Subscription "
-                      "where source = $source_id and user = $user_id"
-                      " and (is_deleted is null or is_deleted = FALSE)")
-            if sub_data:
-                sub_id = sub_data[0]
-                SubscriptionDB[sub_id].set(is_deleted=True)
+        if not model.user or not model.user.id:
+            raise RepositoryException(message="user id must be provided", error_code=status.DOES_NOT_EXIST_ERROR)
+        if not model.source or not model.source.id:
+            raise RepositoryException(message="source id must be provided", error_code=status.DOES_NOT_EXIST_ERROR)
+        source_id = model.source.id
+        user_id = model.user.id
+        query = """
+        DELETE FROM public.RSSSOURCE WHERE source_id=%s and user_id=%s;
+        """
+        params = (user_id, source_id)
+        conn = Postgres.get_connection()
+        with conn.cursor(cursor_factory=DictCursor) as curs:
+            curs.execute(query, params)
 
     @classmethod
     def get_channel_subscriber_by_key(cls, key) -> List[Subscription]:
