@@ -38,33 +38,22 @@ class RSSSourceRepository(RSSSourceRepositoryInterface):
             curs.execute(query, params)
 
     @classmethod
-    def get_list(cls) -> List[RSSSource]:
-        with orm.db_session:
-            rss_source_data = db.select(
-                "select id, title, description"
-                " from public.RSSSource where (is_deleted is null or is_deleted = FALSE)")
+    def get_list(cls, offset: int = 0, limit: int = 10) -> List[RSSSource]:
+        query = """ select title, key, description, link
+                    from public.RSSSource offset %s limit %s"""
+        params = (offset, limit)
+        conn = Postgres.get_connection()
+        with conn.cursor(cursor_factory=DictCursor) as curs:
+            curs.execute(query, params)
+            rss_source_data = curs.fetchall()
             rss_source_entities = [
-                RSSSource(id=item[0],
-                          title=item[1],
-                          description=item[2]
+                RSSSource(
+                          title=item["title"],
+                          key=item["key"],
+                          description=item["description"],
+                          link=item["link"]
                           ) for item in rss_source_data
                                    ]
-            return rss_source_entities
-
-    @classmethod
-    def get_sources(cls) -> List[RSSSource]:
-        with orm.db_session:
-            rss_source_data = db.select(
-                "select id, title, description, link, key"
-                " from RSSSource where (is_deleted is null or is_deleted = FALSE)")
-            rss_source_entities = [
-                RSSSource(id=item[0],
-                          title=item[1],
-                          description=item[2],
-                          link=item[3],
-                          key=item[4],
-                          ) for item in rss_source_data
-            ]
             return rss_source_entities
 
     @classmethod

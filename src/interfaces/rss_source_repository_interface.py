@@ -18,7 +18,7 @@ class RSSSourceRepositoryInterface(RepositoryInterface):
 
     @classmethod
     @abc.abstractmethod
-    def get_list(cls) -> List[RSSSource]:
+    def get_list(cls, offset: int = 0, limit: int = 10) -> List[RSSSource]:
         pass
 
     @classmethod
