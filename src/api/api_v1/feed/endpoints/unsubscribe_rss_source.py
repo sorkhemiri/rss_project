@@ -15,8 +15,8 @@ router = APIRouter()
 auth_check = CheckAuthentication(user_repository=UserRepository, user_auth_repository=UserAuthRepository)
 
 
-@router.post("/source/{source_id}/unsubscribe/", tags=["source-unsubscribe", "feed"])
-def rss_source_unsubscribe(request: Request, source_key: int, user: User = Depends(auth_check)):
+@router.post("/source/{source_key}/unsubscribe/", tags=["source-unsubscribe", "feed"])
+def rss_source_unsubscribe(request: Request, source_key: str, user: User = Depends(auth_check)):
     request_data = {
         "source_key": source_key,
         "user": user,

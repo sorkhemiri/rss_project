@@ -37,7 +37,7 @@ class SubscribeRSSSourceUseCase(UseCaseInterface):
             source_id = self.rss_source_repository.get_sources_id_by_key(source_key=source_key)
             subscription = Subscription()
             subscription.user = user
-            subscription.source = RSSSource(key=source_id)
+            subscription.source = RSSSource(id=source_id)
             if not self.subscription_repository.check_subscription_exist(model=subscription):
                 self.subscription_repository.create(model=subscription)
                 values = self.feed_manager_repository.get_channel(key=source_key, page=1, limit=OLD_RSS_ADD_TO_FEED_WINDOW)

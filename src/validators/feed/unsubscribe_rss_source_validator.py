@@ -4,4 +4,4 @@ from entities import User
 
 class UnsubscribeRSSSourceValidator(ValidatorInterface):
     user: User
-    source_id: int
+    source_key: str

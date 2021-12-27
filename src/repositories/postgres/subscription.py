@@ -23,7 +23,7 @@ class SubscriptionRepository(SubscriptionRepositoryInterface):
             raise RepositoryException(message="user id must be provided", error_code=error_status.DOES_NOT_EXIST_ERROR)
 
         query = """
-                INSERT INTO public.RSSSOURCE (user_id, source_id)
+                INSERT INTO public.Subscription (user_id, source_id)
                 VALUES (%s, %s);
                 """
         user_id = model.user.id
@@ -44,7 +44,7 @@ class SubscriptionRepository(SubscriptionRepositoryInterface):
         source_id = model.source.id
         user_id = model.user.id
         query = """
-        DELETE FROM public.RSSSOURCE WHERE source_id=%s and user_id=%s;
+        DELETE FROM public.Subscription WHERE source_id=%s and user_id=%s;
         """
         params = (user_id, source_id)
         conn = Postgres.get_connection()
