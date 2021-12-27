@@ -7,20 +7,20 @@ from repositories.postgres import UserRepository, LikeRepository
 from repositories.redis import UserAuthRepository
 from usecase.feed.implementation import UnlikeRSSUseCase
 from dependencies import CheckAuthentication
-from validators.feed import SubscribeRSSSourceValidator
+from validators.feed import UnlikeRSSValidator
 
 router = APIRouter()
 
 auth_check = CheckAuthentication(user_repository=UserRepository, user_auth_repository=UserAuthRepository)
 
 
-@router.post("/rss/{rss_id}/unlike/", tags=["unlike-rss", "feed"])
+@router.delete("/rss/{rss_id}/unlike/", tags=["unlike-rss", "feed"])
 def rss_unlike(request: Request, rss_id: int, user: User = Depends(auth_check)):
     request_data = {
         "rss_id": rss_id,
         "user": user
     }
-    use_case = UnlikeRSSUseCase(validator=SubscribeRSSSourceValidator,
+    use_case = UnlikeRSSUseCase(validator=UnlikeRSSValidator,
                                 like_repository=LikeRepository)
     data = use_case.execute(request_model=request_data or {})
     status = data["http_status_code"]

@@ -55,12 +55,13 @@ class LikeRepository(LikeRepositoryInterface):
             RepositoryException(message="rss id must be provided", error_code=error_status.DOES_NOT_EXIST_ERROR)
         rss_id = model.rss.id
         user_id = model.user.id
-        query = query = """
+        query = """
         DELETE FROM public.LIKE WHERE rss_id=%s and user_id=%s;
         """
+        params = (rss_id, user_id)
         conn = Postgres.get_connection()
         with conn.cursor() as curs:
-            curs.execute(query)
+            curs.execute(query, params)
         Postgres.connection_putback(conn)
 
     @classmethod

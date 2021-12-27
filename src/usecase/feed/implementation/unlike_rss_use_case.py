@@ -32,9 +32,9 @@ class UnlikeRSSUseCase(UseCaseInterface):
             like = Like()
             like.user = user
             like.rss = RSS(id=rss_id)
-            if LikeRepository.user_like_exist(model=like):
-                LikeRepository.delete(model=like)
-            return JSONResponse(content={"result": "rss unliked"}, status_code=HTTP_200_OK)
+            if self.like_repository.user_like_exist(model=like):
+                self.like_repository.delete(model=like)
+            return {"result": "rss unliked", "http_status_code": 200}
         except ValidationError as err:
             raise UseCaseException(json.loads(err.json()), error_code=2)
         except UseCaseException as err:
