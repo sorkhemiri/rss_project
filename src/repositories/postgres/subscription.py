@@ -32,6 +32,7 @@ class SubscriptionRepository(SubscriptionRepositoryInterface):
         conn = Postgres.get_connection()
         with conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute(query, params)
+        Postgres.connection_putback(conn)
         return model
 
     @classmethod
@@ -49,6 +50,7 @@ class SubscriptionRepository(SubscriptionRepositoryInterface):
         conn = Postgres.get_connection()
         with conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute(query, params)
+        Postgres.connection_putback(conn)
 
     @classmethod
     def get_channel_subscriber_by_key(cls, key) -> List[Subscription]:
@@ -76,6 +78,7 @@ class SubscriptionRepository(SubscriptionRepositoryInterface):
         with conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute(query, params)
             rss_source = curs.fetchone()
-            if rss_source:
-                return True
-            return False
+        Postgres.connection_putback(conn)
+        if rss_source:
+            return True
+        return False

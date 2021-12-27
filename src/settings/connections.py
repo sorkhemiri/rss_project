@@ -148,6 +148,10 @@ class Postgres:
         return connection
 
     @classmethod
+    def connection_putback(cls, connection):
+        cls._pool.putconn(connection)
+
+    @classmethod
     def check_table_exist(cls, table_name: str):
         query = """
         SELECT EXISTS (

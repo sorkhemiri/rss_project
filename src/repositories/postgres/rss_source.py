@@ -28,6 +28,7 @@ class RSSSourceRepository(RSSSourceRepositoryInterface):
         conn = Postgres.get_connection()
         with conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute(query, params)
+        Postgres.connection_putback(conn)
         return model
 
     @classmethod
@@ -39,6 +40,7 @@ class RSSSourceRepository(RSSSourceRepositoryInterface):
         conn = Postgres.get_connection()
         with conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute(query, params)
+        Postgres.connection_putback(conn)
 
     @classmethod
     def get_list(cls, offset: int = 0, limit: int = 10) -> List[RSSSource]:
@@ -49,15 +51,16 @@ class RSSSourceRepository(RSSSourceRepositoryInterface):
         with conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute(query, params)
             rss_source_data = curs.fetchall()
-            rss_source_entities = [
-                RSSSource(
-                          title=item["title"],
-                          key=item["key"],
-                          description=item["description"],
-                          link=item["link"]
-                          ) for item in rss_source_data
-                                   ]
-            return rss_source_entities
+        Postgres.connection_putback(conn)
+        rss_source_entities = [
+            RSSSource(
+                      title=item["title"],
+                      key=item["key"],
+                      description=item["description"],
+                      link=item["link"]
+                      ) for item in rss_source_data
+                               ]
+        return rss_source_entities
 
     @classmethod
     def check_source_key_exists(cls, key: str) -> bool:
@@ -70,6 +73,7 @@ class RSSSourceRepository(RSSSourceRepositoryInterface):
         with conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute(query, params)
             result = curs.fetchone()
+        Postgres.connection_putback(conn)
         if result:
             return True
         return False
@@ -97,5 +101,6 @@ class RSSSourceRepository(RSSSourceRepositoryInterface):
         with conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute(query, params)
             result = curs.fetchone()
-            source_id = result.get("id")
+        Postgres.connection_putback(conn)
+        source_id = result.get("id")
         return source_id

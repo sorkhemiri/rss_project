@@ -25,6 +25,7 @@ class UserRepository(UserRepositoryInterface):
         with conn.cursor() as curs:
             curs.execute(query, params)
             result = curs.fetchone()
+        Postgres.connection_putback(conn)
         if result:
             return True
         return False
@@ -45,9 +46,10 @@ class UserRepository(UserRepositoryInterface):
         conn = Postgres.get_connection()
         with conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute(query, params)
-            model.password = None
-            model.uid = uid
-            return model
+        Postgres.connection_putback(conn)
+        model.password = None
+        model.uid = uid
+        return model
 
     @classmethod
     def check_password(cls, username: str, password: str) -> bool:
@@ -61,11 +63,12 @@ class UserRepository(UserRepositoryInterface):
         with conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute(query, params)
             result = curs.fetchone()
-            db_password = result.get("password")
-            if not db_password:
-                raise RepositoryException(message="user password not set")
-            if password_hash == db_password:
-                return True
+        Postgres.connection_putback(conn)
+        db_password = result.get("password")
+        if not db_password:
+            raise RepositoryException(message="user password not set")
+        if password_hash == db_password:
+            return True
         return False
 
     @classmethod
@@ -77,10 +80,11 @@ class UserRepository(UserRepositoryInterface):
         with conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute(query, params)
             result = curs.fetchone()
-            uid = result.get("uid")
-            if not uid:
-                raise RepositoryException(message="user not found")
-            return UUID(uid)
+        Postgres.connection_putback(conn)
+        uid = result.get("uid")
+        if not uid:
+            raise RepositoryException(message="user not found")
+        return UUID(uid)
 
     @classmethod
     def check_user_exist(cls, uid: UUID) -> bool:
@@ -92,7 +96,8 @@ class UserRepository(UserRepositoryInterface):
         with conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute(query, params)
             result = curs.fetchone()
-            db_uid = result.get("uid")
+        Postgres.connection_putback(conn)
+        db_uid = result.get("uid")
         if db_uid == str(uid):
             return True
         return False
@@ -106,7 +111,8 @@ class UserRepository(UserRepositoryInterface):
         with conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute(query, params)
             result = curs.fetchone()
-            db_id = result.get("id")
+        Postgres.connection_putback(conn)
+        db_id = result.get("id")
         return db_id
 
     @classmethod
@@ -118,7 +124,8 @@ class UserRepository(UserRepositoryInterface):
         with conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute(query, params)
             result = curs.fetchone()
-            db_id = result.get("id")
+        Postgres.connection_putback(conn)
+        db_id = result.get("id")
         if db_id:
             return True
         return False

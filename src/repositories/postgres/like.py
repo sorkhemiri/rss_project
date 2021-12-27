@@ -25,6 +25,7 @@ class LikeRepository(LikeRepositoryInterface):
         with conn.cursor() as curs:
             curs.execute(query, params)
             result = curs.fetchone()
+        Postgres.connection_putback(conn)
         if result:
             return True
         return False
@@ -41,6 +42,7 @@ class LikeRepository(LikeRepositoryInterface):
         conn = Postgres.get_connection()
         with conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute(query, params)
+        Postgres.connection_putback(conn)
         return model
 
     @classmethod
@@ -57,3 +59,4 @@ class LikeRepository(LikeRepositoryInterface):
         conn = Postgres.get_connection()
         with conn.cursor() as curs:
             curs.execute(query)
+        Postgres.connection_putback(conn)
