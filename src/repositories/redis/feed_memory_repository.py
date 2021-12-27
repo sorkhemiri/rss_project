@@ -1,9 +1,15 @@
 from datetime import datetime, timedelta
 
+from interfaces.feed_memory_repository_interface import FeedMemoryRepositoryInterface
 from settings.connections import RedisConnection
 
 
-class FeedMemory:
+class FeedMemoryRepository(FeedMemoryRepositoryInterface):
+    """
+    This repository remembers feed for a while to
+    avoid redundancy.
+    """
+
     PREFIX = "memory:feed:"
 
     @classmethod
@@ -27,11 +33,3 @@ class FeedMemory:
             values = RedisConnection.get_all_list_values(key)
             all_values.extend(values)
         return all_values
-
-    # @classmethod
-    # def get_feed(cls, user_id: int, page: int = 1, limit: int = 10):
-    #     user_feed_prefix = cls.PREFIX + "global:user:" + f"{user_id}"
-    #     from_item = ((page - 1) * limit)
-    #     to_item = (page * limit) - 1
-    #     RedisConnection.get_set_values_range(
-    #         key=user_feed_prefix, start=from_item, end=to_item)

@@ -1,10 +1,11 @@
 from datetime import datetime
 from typing import List
 
+from interfaces.feed_manager_repository_interface import FeedManagerRepositoryInterface
 from settings.connections import RedisConnection
 
 
-class FeedManager:
+class FeedManagerRepository(FeedManagerRepositoryInterface):
     PREFIX = "user:feed:"
 
     @classmethod

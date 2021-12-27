@@ -1,3 +1,3 @@
-from .feed_memory import FeedMemory
-from .feed_manager import FeedManager
+from .feed_memory_repository import FeedMemoryRepository
+from .feed_manager_repository import FeedManagerRepository
 from .user_auth import UserAuthRepository

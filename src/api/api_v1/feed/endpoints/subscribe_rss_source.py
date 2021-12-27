@@ -3,7 +3,7 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 from repositories.postgres import RSSSourceRepository, SubscriptionRepository, UserRepository
-from repositories.redis import UserAuthRepository
+from repositories.redis import UserAuthRepository, FeedManagerRepository
 from usecase.feed.implementation import SubscribeRSSSourceUseCase
 
 from entities import User
@@ -23,7 +23,8 @@ def rss_source_subscribe(request: Request, source_key: str, user: User = Depends
     }
     use_case = SubscribeRSSSourceUseCase(validator=SubscribeRSSSourceValidator,
                                          rss_source_repository=RSSSourceRepository,
-                                         subscription_repository=SubscriptionRepository)
+                                         subscription_repository=SubscriptionRepository,
+                                         feed_manager_repository=FeedManagerRepository)
     data = use_case.execute(request_model=request_data or {})
     status = data["http_status_code"]
     del data["http_status_code"]
