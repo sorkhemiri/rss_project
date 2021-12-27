@@ -21,7 +21,7 @@ class LikeRepository(LikeRepositoryInterface):
             RepositoryException(message="rss id must be provided", error_code=error_status.DOES_NOT_EXIST_ERROR)
         rss_id = model.rss.id
         user_id = model.user.id
-        query = """select id from Like where rss_id=%s and user_id=%s"""
+        query = """select id from public.Like where rss_id=%s and user_id=%s"""
         params = (rss_id, user_id)
         conn = Postgres.get_connection()
         with conn.cursor() as curs:

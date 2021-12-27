@@ -1,8 +1,8 @@
-from pydantic import BaseModel
+from interfaces.validator import ValidatorInterface
 
 from entities import User
 
 
-class LikeRSSValidator(BaseModel):
+class LikeRSSValidator(ValidatorInterface):
     rss_id: int
     user: User

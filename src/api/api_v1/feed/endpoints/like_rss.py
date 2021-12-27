@@ -7,7 +7,7 @@ from repositories.postgres import UserRepository, LikeRepository
 from repositories.redis import UserAuthRepository
 from usecase.feed.implementation import LikeRSSUseCase
 from dependencies import CheckAuthentication
-from validators.feed import SubscribeRSSSourceValidator
+from validators.feed import LikeRSSValidator
 
 router = APIRouter()
 
@@ -20,7 +20,7 @@ def rss_like(request: Request, rss_id: int, user: User = Depends(auth_check)):
         "rss_id": rss_id,
         "user": user
     }
-    use_case = LikeRSSUseCase(validator=SubscribeRSSSourceValidator,
+    use_case = LikeRSSUseCase(validator=LikeRSSValidator,
                               like_repository=LikeRepository)
     data = use_case.execute(request_model=request_data or {})
     status = data["http_status_code"]

@@ -32,8 +32,8 @@ class LikeRSSUseCase(UseCaseInterface):
             like = Like()
             like.user = user
             like.rss = RSS(id=rss_id)
-            if not LikeRepository.user_like_exist(model=like):
-                LikeRepository.create(model=like)
+            if not self.like_repository.user_like_exist(model=like):
+                self.like_repository.create(model=like)
             return {"result": "rss liked", "http_status_code": 200}
         except ValidationError as err:
             raise UseCaseException(json.loads(err.json()), error_code=2)
