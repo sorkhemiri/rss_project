@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from pony import orm
 from psycopg2.extras import DictCursor
@@ -52,15 +52,17 @@ class RSSSourceRepository(RSSSourceRepositoryInterface):
             curs.execute(query, params)
             rss_source_data = curs.fetchall()
         Postgres.connection_putback(conn)
-        rss_source_entities = [
-            RSSSource(
-                      title=item["title"],
-                      key=item["key"],
-                      description=item["description"],
-                      link=item["link"]
-                      ) for item in rss_source_data
-                               ]
-        return rss_source_entities
+        if rss_source_data:
+            rss_source_entities = [
+                RSSSource(
+                          title=item["title"],
+                          key=item["key"],
+                          description=item["description"],
+                          link=item["link"]
+                          ) for item in rss_source_data
+                                   ]
+            return rss_source_entities
+        return []
 
     @classmethod
     def check_source_key_exists(cls, key: str) -> bool:
@@ -91,7 +93,7 @@ class RSSSourceRepository(RSSSourceRepositoryInterface):
                 raise RepositoryException(message="source not found")
 
     @classmethod
-    def get_sources_id_by_key(cls, source_key: str) -> int:
+    def get_sources_id_by_key(cls, source_key: str) -> Optional[int]:
         query = """
                    select id from RSSSource where
                    key = %s
@@ -102,5 +104,7 @@ class RSSSourceRepository(RSSSourceRepositoryInterface):
             curs.execute(query, params)
             result = curs.fetchone()
         Postgres.connection_putback(conn)
-        source_id = result.get("id")
-        return source_id
+        if result:
+            source_id = result.get("id")
+            return source_id
+        return None

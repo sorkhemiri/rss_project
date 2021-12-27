@@ -1,3 +1,4 @@
+from typing import Optional
 from uuid import uuid4, UUID
 
 from psycopg2.extras import DictCursor
@@ -64,15 +65,16 @@ class UserRepository(UserRepositoryInterface):
             curs.execute(query, params)
             result = curs.fetchone()
         Postgres.connection_putback(conn)
-        db_password = result.get("password")
-        if not db_password:
-            raise RepositoryException(message="user password not set")
-        if password_hash == db_password:
-            return True
+        if result:
+            db_password = result.get("password")
+            if not db_password:
+                raise RepositoryException(message="user password not set")
+            if password_hash == db_password:
+                return True
         return False
 
     @classmethod
-    def get_uid_by_username(cls, username: str) -> UUID:
+    def get_uid_by_username(cls, username: str) -> Optional[UUID]:
         query = """select uid from public.User
                    where username = %s limit 1"""
         params = (username,)
@@ -81,29 +83,33 @@ class UserRepository(UserRepositoryInterface):
             curs.execute(query, params)
             result = curs.fetchone()
         Postgres.connection_putback(conn)
-        uid = result.get("uid")
-        if not uid:
-            raise RepositoryException(message="user not found")
-        return UUID(uid)
+        if result:
+            uid = result.get("uid")
+            if not uid:
+                raise RepositoryException(message="user not found")
+            return UUID(uid)
+        return None
 
     @classmethod
     def check_user_exist(cls, uid: UUID) -> bool:
-        query = """select uid from public.User
+        query = """
+                   select uid from public.User
                    where uid = %s
-                   and (is_deleted is null or is_deleted = FALSE)"""
+                """
         params = (str(uid),)
         conn = Postgres.get_connection()
         with conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute(query, params)
             result = curs.fetchone()
         Postgres.connection_putback(conn)
-        db_uid = result.get("uid")
-        if db_uid == str(uid):
-            return True
+        if result:
+            db_uid = result.get("uid")
+            if db_uid == str(uid):
+                return True
         return False
 
     @classmethod
-    def get_user_id_by_uid(cls, uid: UUID) -> int:
+    def get_user_id_by_uid(cls, uid: UUID) -> Optional[int]:
         query = """select id from public.User
                    where uid = %s"""
         params = (str(uid),)
@@ -112,20 +118,23 @@ class UserRepository(UserRepositoryInterface):
             curs.execute(query, params)
             result = curs.fetchone()
         Postgres.connection_putback(conn)
-        db_id = result.get("id")
-        return db_id
+        if result:
+            db_id = result.get("id")
+            return db_id
+        return None
 
     @classmethod
     def is_admin(cls, uid: UUID) -> bool:
         query = """select id from public.User
-                       where uid = %s and is_admin = 1"""
+                       where uid = %s and is_admin = TRUE"""
         params = (str(uid),)
         conn = Postgres.get_connection()
         with conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute(query, params)
             result = curs.fetchone()
         Postgres.connection_putback(conn)
-        db_id = result.get("id")
-        if db_id:
-            return True
+        if result:
+            db_id = result.get("id")
+            if db_id:
+                return True
         return False
