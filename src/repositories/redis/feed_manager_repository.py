@@ -6,6 +6,11 @@ from settings.connections import RedisConnection
 
 
 class FeedManagerRepository(FeedManagerRepositoryInterface):
+    """
+    Main Feed Manager
+    responsible user feed and managing add and
+    remove feed before subscription and unsubscription.
+    """
     PREFIX = "user:feed:"
 
     @classmethod

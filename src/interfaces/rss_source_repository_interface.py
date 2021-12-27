@@ -6,6 +6,9 @@ from .repository import RepositoryInterface
 
 
 class RSSSourceRepositoryInterface(RepositoryInterface):
+    """
+    RSSSource table related functionality
+    """
     @classmethod
     @abc.abstractmethod
     def create(cls, model: RSSSource) -> RSSSource:

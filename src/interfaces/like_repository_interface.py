@@ -5,6 +5,9 @@ from .repository import RepositoryInterface
 
 
 class LikeRepositoryInterface(RepositoryInterface):
+    """
+    Like table related functionality
+    """
 
     @classmethod
     @abc.abstractmethod

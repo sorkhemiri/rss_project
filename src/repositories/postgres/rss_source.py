@@ -10,6 +10,9 @@ from settings.connections import Postgres
 
 
 class RSSSourceRepository(RSSSourceRepositoryInterface):
+    """
+    RSSSource table related functionality
+    """
 
     @classmethod
     def create(cls, model: RSSSource):

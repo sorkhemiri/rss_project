@@ -12,6 +12,9 @@ from settings.connections import Postgres
 
 
 class SubscriptionRepository(SubscriptionRepositoryInterface):
+    """
+    Subscription table related functionality
+    """
     @classmethod
     def create(cls, model: Subscription) -> Subscription:
         if not (model.source and model.source.id):

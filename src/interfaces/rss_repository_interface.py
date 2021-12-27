@@ -6,6 +6,9 @@ from .repository import RepositoryInterface
 
 
 class RSSRepositoryInterface(RepositoryInterface):
+    """
+    RSS table related functionality
+    """
 
     @classmethod
     @abc.abstractmethod

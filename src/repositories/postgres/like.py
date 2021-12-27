@@ -8,6 +8,9 @@ from settings.connections import Postgres
 
 
 class LikeRepository(LikeRepositoryInterface):
+    """
+    Like table related functionality
+    """
     @classmethod
     def user_like_exist(cls, model: Like) -> bool:
         if not model.user and not model.user.id:

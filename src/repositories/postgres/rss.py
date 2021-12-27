@@ -9,7 +9,9 @@ from exceptions import RepositoryException
 
 
 class RSSRepository(RSSRepositoryInterface):
-
+    """
+    RSS table related functionality
+    """
     @classmethod
     def create(cls, model: RSS) -> RSS:
         with orm.db_session:

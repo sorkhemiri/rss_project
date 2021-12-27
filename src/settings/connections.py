@@ -6,6 +6,9 @@ from settings.config import env_config
 
 
 class RedisConnection:
+    """
+    redis connection manager.
+    """
     _connection: Optional[StrictRedis] = None
     pool = BlockingConnectionPool(
         max_connections=5,
@@ -119,6 +122,9 @@ class RedisConnection:
 
 
 class Postgres:
+    """
+    postgres connection manager.
+    """
     keepalive_kwargs = {
         "keepalives": 1,
         "keepalives_idle": 5,

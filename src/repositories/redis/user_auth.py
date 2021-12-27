@@ -9,6 +9,9 @@ from utils import make_random_hex, calculate_expiration_interval
 
 
 class UserAuthRepository(UserAuthRepositoryInterface):
+    """
+    User Authentication related functionality
+    """
     PREFIX = "user:auth:"
     ACCESS_PREFIX = PREFIX + "access:"
     REFRESH_PREFIX = PREFIX + "refresh:"

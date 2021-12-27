@@ -12,6 +12,9 @@ from exceptions import RepositoryException
 
 
 class UserRepository(UserRepositoryInterface):
+    """
+    User table related functionality
+    """
 
     @classmethod
     def check_username_exist(cls, username: str) -> bool:

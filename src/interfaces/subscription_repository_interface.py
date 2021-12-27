@@ -6,6 +6,9 @@ from .repository import RepositoryInterface
 
 
 class SubscriptionRepositoryInterface(RepositoryInterface):
+    """
+    Subscription table related functionality
+    """
     @classmethod
     @abc.abstractmethod
     def create(cls, model: Subscription) -> Subscription:

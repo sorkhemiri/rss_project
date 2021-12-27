@@ -6,6 +6,9 @@ from .repository import RepositoryInterface
 
 
 class UserAuthRepositoryInterface(RepositoryInterface):
+    """
+    User Authentication related functionality
+    """
 
     @classmethod
     @abc.abstractmethod

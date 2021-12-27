@@ -6,6 +6,9 @@ from .repository import RepositoryInterface
 
 
 class UserRepositoryInterface(RepositoryInterface):
+    """
+    User table related functionality
+    """
 
     @classmethod
     @abc.abstractmethod

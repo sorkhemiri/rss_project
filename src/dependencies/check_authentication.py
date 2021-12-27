@@ -10,6 +10,9 @@ from interfaces.user_repository_interface import UserRepositoryInterface
 
 
 class CheckAuthentication:
+    """
+    Authentication Check Dependency.
+    """
     def __init__(
             self,
             user_repository: Type[UserRepositoryInterface],
