@@ -26,8 +26,8 @@ class FeedMemoryRepository(FeedMemoryRepositoryInterface):
         days_to_keys = days
         while days_to_keys:
             key_date = date - timedelta(days=days_to_keys)
-            user_feed_prefix = cls.PREFIX + f"{key}:{key_date.strftime('%Y-%m-%d')}"
-            keys.append(user_feed_prefix)
+            source_feed_prefix = cls.PREFIX + f"{key}:{key_date.strftime('%Y-%m-%d')}"
+            keys.append(source_feed_prefix)
             days_to_keys -= 1
         all_values = []
         for key in keys:

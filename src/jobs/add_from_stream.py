@@ -1,4 +1,5 @@
 import logging
+import re
 
 import feedparser
 
@@ -34,33 +35,34 @@ def fan_out(key: str, rss_ids: List[int], feed_manager_repository: Type[FeedMana
 @celery_app.task
 @retry(times=3, wait=5)
 def add_from_stream():
-    sources = RSSSourceRepository.get_list()
+    sources = RSSSourceRepository.get_sources()
     for source in sources:
         feed = feedparser.parse(source.link)
         rss_ids = FeedMemoryRepository.get_memory(key=source.key, date=datetime.now())
         stored_rss_ids = []
-        stored_post_ids = []
+        stored_db_ids = []
         for item in feed["entries"]:
-            if source.key == "varzesh3":
-                logging.info("source with key varzesh3 init")
-                link = item.link
-                link = link.replace("http://www.varzesh3.com/news/", "")
-                rss_id = link.split("/")[0]
-                logging.info(f"rss_id --{rss_id}-- got in stream")
-                if rss_id in rss_ids:
-                    logging.info(f"rss_id --{rss_id}-- abort")
-                    continue
-                rss = RSS()
-                rss.link = item.link
-                rss.title = item.title
-                rss.source = source
-                rss.description = item.summary
-                pub_date_str = item.published
-                pub_date = datetime.strptime(pub_date_str, "%Y-%m-%dT%H:%M:%S")
-                rss.pub_date = pub_date
-                created_rss = RSSRepository.create(model=rss)
-                stored_post_ids.append(created_rss.id)
-                logging.info(f"rss_id --{rss_id}-- saved")
-                stored_rss_ids.append(rss_id)
-        fan_out(key=source.key, rss_ids=stored_post_ids, feed_manager_repository=FeedManagerRepository)
+            logging.info(f"source with key {source.key} init")
+            link = item.link
+            rss_id_patterns = re.findall(pattern="/[0-9]+/", string=link)
+            rss_id = rss_id_patterns.pop().replace("/", "") if rss_id_patterns else None
+            logging.info(f"rss_id --{rss_id}-- got in stream")
+            if rss_id in rss_ids:
+                logging.info(f"rss_id --{rss_id}-- abort")
+                continue
+            rss = RSS()
+            rss.link = item.link
+            rss.title = item.title
+            rss.source = source
+            rss.description = item.summary
+            pub_date_str = item.published
+            pub_date = datetime.strptime(pub_date_str, "%Y-%m-%dT%H:%M:%S")
+            rss.pub_date = pub_date
+            created_rss = RSSRepository.create(model=rss)
+            stored_db_ids.append(created_rss.id)
+            logging.info(f"rss_id --{rss_id}-- saved")
+            stored_rss_ids.append(rss_id)
+        fan_out(key=source.key, rss_ids=stored_db_ids, feed_manager_repository=FeedManagerRepository)
         FeedMemoryRepository.add_to_memory(key=source.key, post_ids=stored_rss_ids, date=datetime.now())
+
+add_from_stream()

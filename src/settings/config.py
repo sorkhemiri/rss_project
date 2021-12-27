@@ -1,4 +1,8 @@
+import os
+
 from pydantic import BaseSettings
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 class Config(BaseSettings):
@@ -20,7 +24,7 @@ class Config(BaseSettings):
 
     class Config:
         case_sensitive = False
-        env_file = "../.env"
+        env_file = os.path.join(BASE_DIR, ".env")
         env_file_encoding = "utf-8"
 
 

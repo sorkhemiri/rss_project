@@ -65,6 +65,29 @@ class RSSSourceRepository(RSSSourceRepositoryInterface):
         return []
 
     @classmethod
+    def get_sources(cls, offset: int = 0, limit: int = 10) -> List[RSSSource]:
+        query = """ select title, key, description, link, id
+                        from public.RSSSource offset %s limit %s"""
+        params = (offset, limit)
+        conn = Postgres.get_connection()
+        with conn.cursor(cursor_factory=DictCursor) as curs:
+            curs.execute(query, params)
+            rss_source_data = curs.fetchall()
+        Postgres.connection_putback(conn)
+        if rss_source_data:
+            rss_source_entities = [
+                RSSSource(
+                    id=item["id"],
+                    title=item["title"],
+                    key=item["key"],
+                    description=item["description"],
+                    link=item["link"]
+                ) for item in rss_source_data
+            ]
+            return rss_source_entities
+        return []
+
+    @classmethod
     def check_source_key_exists(cls, key: str) -> bool:
         query = """
                    select id from RSSSource where
