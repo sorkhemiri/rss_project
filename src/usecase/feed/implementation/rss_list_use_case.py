@@ -1,26 +1,39 @@
 import json
+from typing import Type
+
 from pydantic import ValidationError
 from starlette.responses import JSONResponse
 from starlette.status import HTTP_200_OK
 
-from repositories.postgres import RSSRepository
+from interfaces.rss_repository_interface import RSSRepositoryInterface
+from interfaces.validator import ValidatorInterface
 from repositories.redis import FeedManager
 from usecase.interface import UseCaseInterface
 
 from exceptions import UseCaseException, error_status
-from validators.feed import RSSListValidator
 
 
 class RSSListUseCase(UseCaseInterface):
+    def __init__(
+            self,
+            validator: Type[ValidatorInterface],
+            rss_repository: Type[RSSRepositoryInterface],
+    ):
+        self.validator = validator
+        self.rss_repository = rss_repository
+
     def process_request(self, request_dict: dict):
         try:
-            data = RSSListValidator(**request_dict)
-            user_feed = FeedManager.get_feed(user_id=data.user.id, page=data.page, limit=data.limit)
-            unseen_feed = FeedManager.get_unseen(user_id=data.user.id)
+            data = self.validator(**request_dict)
+            user = data.user
+            page = data.page
+            limit = data.limit
+            user_feed = FeedManager.get_feed(user_id=user.id, page=page, limit=limit)
+            unseen_feed = FeedManager.get_unseen(user_id=user.id)
             rss_ids = [int(item[0]) for item in user_feed]
             seen_posts = [item for item in unseen_feed if int(item) in rss_ids]
-            FeedManager.remove_from_unseen(user_id=data.user.id, post_ids=seen_posts)
-            rss_list = RSSRepository.get_list(rss_ids=rss_ids)
+            FeedManager.remove_from_unseen(user_id=user.id, post_ids=seen_posts)
+            rss_list = self.rss_repository.get_list(rss_ids=rss_ids)
             rss_list_data = []
             for item in rss_list:
                 item_data = item.dict(exclude_defaults=True)

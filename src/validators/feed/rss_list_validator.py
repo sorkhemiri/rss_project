@@ -1,9 +1,10 @@
-from pydantic import BaseModel, validator
+from pydantic import validator
 
 from entities import User
+from interfaces.validator import ValidatorInterface
 
 
-class RSSListValidator(BaseModel):
+class RSSListValidator(ValidatorInterface):
     user: User
     page: int = 1
     limit: int = 10
