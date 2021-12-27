@@ -8,3 +8,4 @@ from .create_rss_source_use_case import CreateRSSSourceUseCase
 from .delete_rss_source_use_case import DeleteRSSSourceUseCase
 from .get_rss_source_feed_use_case import GetRSSSourceFeedUseCase
 from .user_subscriptions_list_use_case import UserSubscriptionsListUseCase
+from .user_likes_list_use_case import UserLikesListUseCase
