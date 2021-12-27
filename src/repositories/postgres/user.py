@@ -108,3 +108,17 @@ class UserRepository(UserRepositoryInterface):
             result = curs.fetchone()
             db_id = result.get("id")
         return db_id
+
+    @classmethod
+    def is_admin(cls, uid: UUID) -> bool:
+        query = """select id from public.User
+                       where uid = %s and is_admin = 1"""
+        params = (str(uid),)
+        conn = Postgres.get_connection()
+        with conn.cursor(cursor_factory=DictCursor) as curs:
+            curs.execute(query, params)
+            result = curs.fetchone()
+            db_id = result.get("id")
+        if db_id:
+            return True
+        return False

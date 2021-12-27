@@ -39,3 +39,8 @@ class UserRepositoryInterface(RepositoryInterface):
     @abc.abstractmethod
     def get_user_id_by_uid(cls, uid: UUID) -> int:
         pass
+
+    @classmethod
+    @abc.abstractmethod
+    def is_admin(cls, uid: UUID) -> bool:
+        pass

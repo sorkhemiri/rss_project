@@ -11,6 +11,7 @@ class User(BaseModel):
     uid = fields.UUIDField(default=uuid4)
     username = fields.CharField(max_length=100, unique=True, required=True, index=True)
     password = fields.CharField(max_length=600, required=True)
+    is_admin = fields.BooleanField(default=False)
 
     def __str__(self):
         return self.username
