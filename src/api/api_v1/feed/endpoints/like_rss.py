@@ -15,7 +15,7 @@ auth_check = CheckAuthentication(user_repository=UserRepository, user_auth_repos
 
 
 @router.post("/rss/{rss_id}/like/", tags=["like-rss", "feed"])
-def rss_list(request: Request, rss_id: int, user: User = Depends(auth_check)):
+def rss_like(request: Request, rss_id: int, user: User = Depends(auth_check)):
     request_data = {
         "rss_id": rss_id,
         "user": user
