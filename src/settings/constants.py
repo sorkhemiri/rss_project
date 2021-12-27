@@ -4,3 +4,5 @@ REFRESH_TOKEN_LENGTH: int = 32
 REFRESH_TOKEN_EXPIRATION_INTERVAL: int = 28800
 # number of old RSS transfer to user feed after subscription
 OLD_RSS_ADD_TO_FEED_WINDOW: int = 10000
+# feed remember time to avoid redundancy
+FEED_STORE_TIME_OUT = 86400
