@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date
 from typing import Optional
 
 from pydantic import BaseModel
@@ -12,4 +12,10 @@ class RSS(BaseModel):
     link: Optional[str] = None
     description: Optional[str] = None
     source: Optional[RSSSource] = None
-    pub_date: Optional[datetime] = None
+    pub_date: Optional[date] = None
+
+    def dict(self, *args, **kwargs):
+        data = super(RSS, self).dict(*args, **kwargs)
+        if data.get("pub_date"):
+            data["pub_date"] = data["pub_date"].strftime("%Y-%m-%d")
+        return data

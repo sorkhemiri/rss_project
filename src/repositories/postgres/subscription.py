@@ -54,16 +54,25 @@ class SubscriptionRepository(SubscriptionRepositoryInterface):
 
     @classmethod
     def get_channel_subscriber_by_key(cls, key) -> List[Subscription]:
-        with orm.db_session:
-            sub_data = db.select(
-                "select user"
-                " from Subscription as s"
-                " left join RSSSource as rs on rs.id = s.source"
-                " where rs.key = $key and (s.is_deleted is null or s.is_deleted = FALSE)")
+
+        query = """
+                   select user_id
+                   from Subscription as s
+                   left join RSSSource as rs on rs.id = s.source_id
+                   where rs.key = %s
+                """
+        params = (key,)
+        conn = Postgres.get_connection()
+        with conn.cursor(cursor_factory=DictCursor) as curs:
+            curs.execute(query, params)
+            result = curs.fetchall()
+        Postgres.connection_putback(conn)
+        if result:
             sub_entities = [
-                Subscription(user=User(id=item)) for item in sub_data
+                Subscription(user=User(id=item["user_id"])) for item in result
             ]
             return sub_entities
+        return []
 
     @classmethod
     def check_subscription_exist(cls, model: Subscription) -> bool:

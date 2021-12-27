@@ -39,22 +39,29 @@ class RSSRepository(RSSRepositoryInterface):
 
     @classmethod
     def get_list(cls, rss_ids: List[int]):
-        with orm.db_session:
-            rss_ids_str = str(rss_ids).replace("[", "(").replace("]", ")")
-
-            rss_data = db.select("select id, title, link, description, source, pub_date from RSS "
-                                  "where id in {} "
-                                  "and (is_deleted is null or is_deleted = FALSE)".format(rss_ids_str))
+        rss_ids_tuple = tuple(rss_ids)
+        query = """
+                   select id, title, link, description, source_id, pub_date from RSS
+                   where id in %s
+                """
+        params = (rss_ids_tuple,)
+        conn = Postgres.get_connection()
+        with conn.cursor(cursor_factory=DictCursor) as curs:
+            curs.execute(query, params)
+            result = curs.fetchall()
+        Postgres.connection_putback(conn)
+        if result:
             rss_list = [
                 RSS(
-                    id=item[0],
-                    title=item[1],
-                    link=item[2],
-                    description=item[3],
-                    source=RSSSource(id=item[4]),
-                    pub_date=item[5]
+                    id=item["id"],
+                    title=item["title"],
+                    link=item["link"],
+                    description=item["description"],
+                    source=RSSSource(id=item["source_id"]),
+                    pub_date=item["pub_date"]
                 )
                 for item in
-                rss_data
+                result
             ]
             return rss_list
+        return []

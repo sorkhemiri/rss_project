@@ -6,3 +6,4 @@ from .unlike_rss_validator import UnlikeRSSValidator
 from .create_rss_source_validator import CreateRSSSourceValidator
 from .delete_rss_source_validator import DeleteRSSSourceValidator
 from .rss_source_list_validator import RSSSourceListValidator
+from .get_rss_source_feed_validator import GetRSSSourceFeedValidator
