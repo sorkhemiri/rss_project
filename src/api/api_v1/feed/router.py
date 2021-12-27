@@ -8,6 +8,7 @@ from api.api_v1.feed.endpoints.unlike_rss import router as unlike_rss_router
 from api.api_v1.feed.endpoints.create_rss_source import router as create_rss_source_router
 from api.api_v1.feed.endpoints.delete_rss_source import router as delete_rss_source_router
 from api.api_v1.feed.endpoints.source_feed import router as source_feed_router
+from api.api_v1.feed.endpoints.user_subscriptions import router as user_subscriptions_router
 
 
 router = APIRouter()
@@ -21,3 +22,4 @@ router.include_router(user_feed_router)
 router.include_router(like_rss_router)
 router.include_router(unlike_rss_router)
 router.include_router(source_feed_router)
+router.include_router(user_subscriptions_router)

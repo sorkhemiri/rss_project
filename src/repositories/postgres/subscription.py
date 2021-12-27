@@ -4,7 +4,7 @@ from pony import orm
 from pony.orm import raw_sql
 from psycopg2.extras import DictCursor
 
-from entities import Subscription, User
+from entities import Subscription, User, RSSSource
 from interfaces.subscription_repository_interface import SubscriptionRepositoryInterface
 from models import Subscription as SubscriptionDB, RSSSource as RSSSourceDB, User as UserDB
 from exceptions import RepositoryException, error_status
@@ -91,3 +91,24 @@ class SubscriptionRepository(SubscriptionRepositoryInterface):
         if rss_source:
             return True
         return False
+
+    @classmethod
+    def get_user_subscriptions_list(cls, user_id: int, offset: int = 0, limit: int = 10) -> List[Subscription]:
+        query = """
+                    select rs.title as title, rs.key as key
+                    from Subscription as s
+                    left join RSSSource as rs on rs.id = s.source_id
+                    where s.user_id = %s limit %s offset %s
+                """
+        params = (user_id, limit, offset)
+        conn = Postgres.get_connection()
+        with conn.cursor(cursor_factory=DictCursor) as curs:
+            curs.execute(query, params)
+            result = curs.fetchall()
+        Postgres.connection_putback(conn)
+        if result:
+            subscriptions = [
+                Subscription(source=RSSSource(title=item["title"], key=item["key"])) for item in result
+            ]
+            return subscriptions
+        return []

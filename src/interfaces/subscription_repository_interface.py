@@ -28,3 +28,8 @@ class SubscriptionRepositoryInterface(RepositoryInterface):
     @abc.abstractmethod
     def check_subscription_exist(cls, model: Subscription) -> bool:
         pass
+
+    @classmethod
+    @abc.abstractmethod
+    def get_user_subscriptions_list(cls, user_id: int, offset: int = 0, limit: int = 10) -> List[Subscription]:
+        pass
