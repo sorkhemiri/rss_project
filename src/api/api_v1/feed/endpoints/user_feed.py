@@ -14,8 +14,8 @@ router = APIRouter()
 auth_check = CheckAuthentication(user_repository=UserRepository, user_auth_repository=UserAuthRepository)
 
 
-@router.get("/user/feed/", tags=["rss-list", "feed"])
-def rss_list(request: Request, offset: int = 0, limit: int = 10, user: User = Depends(auth_check)):
+@router.get("/user/feed/", tags=["user-feed", "feed"])
+def user_feed(request: Request, offset: int = 0, limit: int = 10, user: User = Depends(auth_check)):
     request_data = {"offset": offset, "limit": limit, "user": user}
     use_case = UserFeedUseCase(validator=RSSListValidator,
                                rss_repository=RSSRepository,

@@ -4,7 +4,7 @@ from starlette.responses import JSONResponse
 
 from entities import User
 from repositories.postgres import UserRepository, SubscriptionRepository
-from repositories.redis import UserAuthRepository, FeedManagerRepository
+from repositories.redis import UserAuthRepository
 from usecase.feed.implementation import UserSubscriptionsListUseCase
 from dependencies import CheckAuthentication
 from validators.feed import UserSubscriptionsListValidator
