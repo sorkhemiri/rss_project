@@ -10,9 +10,6 @@ from repositories.redis import FeedMemoryRepository, FeedManagerRepository
 from decorators import retry
 from celery_app import celery_app
 
-
-import datetime
-
 from datetime import datetime
 from typing import List, Type
 

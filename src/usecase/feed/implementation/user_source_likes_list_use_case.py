@@ -8,7 +8,7 @@ from interfaces.rss_source_repository_interface import RSSSourceRepositoryInterf
 from interfaces.validator import ValidatorInterface
 from usecase.interface import UseCaseInterface
 
-from exceptions import UseCaseException, error_status
+from exceptions import UseCaseException
 
 
 class UserSourceLikesListUseCase(UseCaseInterface):

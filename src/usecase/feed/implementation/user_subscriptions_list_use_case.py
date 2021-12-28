@@ -7,7 +7,7 @@ from interfaces.subscription_repository_interface import SubscriptionRepositoryI
 from interfaces.validator import ValidatorInterface
 from usecase.interface import UseCaseInterface
 
-from exceptions import UseCaseException, error_status
+from exceptions import UseCaseException
 
 
 class UserSubscriptionsListUseCase(UseCaseInterface):

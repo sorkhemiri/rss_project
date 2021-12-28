@@ -1,16 +1,11 @@
-from uuid import uuid4
 from typing import Type
 
 import json
-import jwt
 from pydantic import ValidationError
-from starlette.responses import JSONResponse
-from starlette.status import HTTP_200_OK
 
 from interfaces.user_auth_repository_interface import UserAuthRepositoryInterface
 from interfaces.user_repository_interface import UserRepositoryInterface
 from interfaces.validator import ValidatorInterface
-from settings import env_config
 from usecase.interface import UseCaseInterface
 
 from exceptions import UseCaseException, error_status

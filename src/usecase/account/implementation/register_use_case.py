@@ -4,8 +4,6 @@ import json
 from typing import Type
 
 from pydantic import ValidationError
-from starlette.responses import JSONResponse
-from starlette.status import HTTP_200_OK
 
 from entities import User
 from interfaces.validator import ValidatorInterface

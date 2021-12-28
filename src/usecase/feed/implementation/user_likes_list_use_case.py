@@ -7,7 +7,7 @@ from interfaces.like_repository_interface import LikeRepositoryInterface
 from interfaces.validator import ValidatorInterface
 from usecase.interface import UseCaseInterface
 
-from exceptions import UseCaseException, error_status
+from exceptions import UseCaseException
 
 
 class UserLikesListUseCase(UseCaseInterface):

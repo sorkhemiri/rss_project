@@ -2,15 +2,12 @@ import json
 from typing import Type
 
 from pydantic import ValidationError
-from starlette.responses import JSONResponse
-from starlette.status import HTTP_200_OK
 
 from interfaces.rss_source_repository_interface import RSSSourceRepositoryInterface
 from interfaces.validator import ValidatorInterface
-from repositories.postgres import RSSSourceRepository
 from usecase.interface import UseCaseInterface
 
-from exceptions import UseCaseException, error_status
+from exceptions import UseCaseException
 
 
 class RSSSourceListUseCase(UseCaseInterface):
