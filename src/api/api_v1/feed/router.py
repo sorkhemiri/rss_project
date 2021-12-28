@@ -10,6 +10,7 @@ from api.api_v1.feed.endpoints.delete_rss_source import router as delete_rss_sou
 from api.api_v1.feed.endpoints.source_feed import router as source_feed_router
 from api.api_v1.feed.endpoints.user_subscriptions import router as user_subscriptions_router
 from api.api_v1.feed.endpoints.all_user_likes import router as all_user_likes_router
+from api.api_v1.feed.endpoints.user_source_likes import router as user_source_likes_router
 
 
 router = APIRouter()
@@ -25,3 +26,4 @@ router.include_router(unlike_rss_router)
 router.include_router(source_feed_router)
 router.include_router(user_subscriptions_router)
 router.include_router(all_user_likes_router)
+router.include_router(user_source_likes_router)

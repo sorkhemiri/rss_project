@@ -9,3 +9,4 @@ from .rss_source_list_validator import RSSSourceListValidator
 from .get_rss_source_feed_validator import GetRSSSourceFeedValidator
 from .user_subscriptions_list_validator import UserSubscriptionsListValidator
 from .user_likes_list_validator import UserLikesListValidator
+from .user_source_likes_list_validator import UserSourceLikesListValidator

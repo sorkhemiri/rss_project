@@ -84,3 +84,24 @@ class LikeRepository(LikeRepositoryInterface):
             ]
             return likes
         return []
+
+    @classmethod
+    def get_user_source_likes_list(cls, user_id: int, source_id: int, offset: int = 0, limit: int = 10)-> List[Like]:
+        query = """
+                            select r.title as title, r.id as id
+                            from public.RSS as r
+                            left join public.Like as l on r.id = l.rss_id
+                            where l.user_id = %s and r.source_id = %s limit %s offset %s
+                        """
+        params = (user_id, source_id, limit, offset)
+        conn = Postgres.get_connection()
+        with conn.cursor(cursor_factory=DictCursor) as curs:
+            curs.execute(query, params)
+            result = curs.fetchall()
+        Postgres.connection_putback(conn)
+        if result:
+            likes = [
+                Like(rss=RSS(title=item["title"], id=item["id"])) for item in result
+            ]
+            return likes
+        return []
