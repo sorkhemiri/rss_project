@@ -1,4 +1,3 @@
-from uuid import uuid4
 from typing import Type
 
 import json

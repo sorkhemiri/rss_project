@@ -2,11 +2,9 @@ from typing import Optional
 from uuid import uuid4, UUID
 
 from psycopg2.extras import DictCursor
-from pony import orm
 
 from entities import User
 from interfaces.user_repository_interface import UserRepositoryInterface
-from models import User as db
 from settings.connections import Postgres
 from utils import make_password
 from exceptions import RepositoryException

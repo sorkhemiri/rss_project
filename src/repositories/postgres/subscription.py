@@ -1,16 +1,9 @@
 from typing import List
 
-from pony import orm
-from pony.orm import raw_sql
 from psycopg2.extras import DictCursor
 
 from entities import Subscription, User, RSSSource
 from interfaces.subscription_repository_interface import SubscriptionRepositoryInterface
-from models import (
-    Subscription as SubscriptionDB,
-    RSSSource as RSSSourceDB,
-    User as UserDB,
-)
 from exceptions import RepositoryException, error_status
 from settings.connections import Postgres
 
@@ -51,12 +44,12 @@ class SubscriptionRepository(SubscriptionRepositoryInterface):
         if not model.user or not model.user.id:
             raise RepositoryException(
                 message="user id must be provided",
-                error_code=status.DOES_NOT_EXIST_ERROR,
+                error_code=error_status.DOES_NOT_EXIST_ERROR,
             )
         if not model.source or not model.source.id:
             raise RepositoryException(
                 message="source id must be provided",
-                error_code=status.DOES_NOT_EXIST_ERROR,
+                error_code=error_status.DOES_NOT_EXIST_ERROR,
             )
         source_id = model.source.id
         user_id = model.user.id

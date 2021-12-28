@@ -1,11 +1,9 @@
 from typing import List
 
-from pony import orm
 from psycopg2.extras import DictCursor
 
 from entities import RSS, RSSSource
 from interfaces.rss_repository_interface import RSSRepositoryInterface
-from models import RSS as RSSDB, RSSSource as RSSSourceDB
 from exceptions import RepositoryException, error_status
 from settings.connections import Postgres
 

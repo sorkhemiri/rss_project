@@ -1,10 +1,8 @@
 from typing import List, Optional
 
-from pony import orm
 from psycopg2.extras import DictCursor
 
 from entities import RSSSource
-from exceptions import RepositoryException
 from interfaces.rss_source_repository_interface import RSSSourceRepositoryInterface
 from settings.connections import Postgres
 
@@ -104,20 +102,6 @@ class RSSSourceRepository(RSSSourceRepositoryInterface):
         if result:
             return True
         return False
-
-    @classmethod
-    def get_sources_key(cls, source_id: int) -> str:
-        with orm.db_session:
-            rss_source_keys = db.select(
-                "select key from RSSSource where"
-                " id = $source_id "
-                "and (is_deleted is null or is_deleted = FALSE) limit 1"
-            )
-            if rss_source_keys:
-                rss_source_key = rss_source_keys[0]
-                return rss_source_key
-            else:
-                raise RepositoryException(message="source not found")
 
     @classmethod
     def get_sources_id_by_key(cls, source_key: str) -> Optional[int]:

@@ -1,4 +1,3 @@
-from datetime import datetime
 from typing import List
 
 from interfaces.feed_manager_repository_interface import FeedManagerRepositoryInterface

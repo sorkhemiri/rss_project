@@ -1,6 +1,5 @@
 from typing import List
 
-from pony import orm
 from psycopg2.extras import DictCursor
 
 from entities import Like, RSS
