@@ -19,8 +19,9 @@ def logout(request: Request):
         request_data = {"auth_token": auth_token}
     else:
         request_data = None
-    use_case = LogoutUseCase(validator=LogoutValidator,
-                             user_auth_repository=UserAuthRepository)
+    use_case = LogoutUseCase(
+        validator=LogoutValidator, user_auth_repository=UserAuthRepository
+    )
 
     data = use_case.execute(request_model=request_data or {})
     status = data["http_status_code"]

@@ -22,8 +22,9 @@ class RequestData(BaseModel):
 @router.post("/register", tags=["user_register", "auth"])
 def register(request: Request, request_data: RequestData):
     request_data = request_data.dict()
-    use_case = RegisterUseCase(validator=RegisterValidator,
-                               user_repository=UserRepository)
+    use_case = RegisterUseCase(
+        validator=RegisterValidator, user_repository=UserRepository
+    )
     data = use_case.execute(request_model=request_data or {})
     status = data["http_status_code"]
     del data["http_status_code"]

@@ -11,17 +11,17 @@ from validators.feed import LikeRSSValidator
 
 router = APIRouter()
 
-auth_check = CheckAuthentication(user_repository=UserRepository, user_auth_repository=UserAuthRepository)
+auth_check = CheckAuthentication(
+    user_repository=UserRepository, user_auth_repository=UserAuthRepository
+)
 
 
 @router.post("/rss/{rss_id}/like/", tags=["like-rss", "feed"])
 def rss_like(request: Request, rss_id: int, user: User = Depends(auth_check)):
-    request_data = {
-        "rss_id": rss_id,
-        "user": user
-    }
-    use_case = LikeRSSUseCase(validator=LikeRSSValidator,
-                              like_repository=LikeRepository)
+    request_data = {"rss_id": rss_id, "user": user}
+    use_case = LikeRSSUseCase(
+        validator=LikeRSSValidator, like_repository=LikeRepository
+    )
     data = use_case.execute(request_model=request_data or {})
     status = data["http_status_code"]
     del data["http_status_code"]

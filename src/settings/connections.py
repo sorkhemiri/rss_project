@@ -9,6 +9,7 @@ class RedisConnection:
     """
     redis connection manager.
     """
+
     _connection: Optional[StrictRedis] = None
     pool = BlockingConnectionPool(
         max_connections=5,
@@ -126,6 +127,7 @@ class Postgres:
     """
     postgres connection manager.
     """
+
     keepalive_kwargs = {
         "keepalives": 1,
         "keepalives_idle": 5,
@@ -133,14 +135,15 @@ class Postgres:
         "keepalives_count": 5,
     }
     _pool = SimpleConnectionPool(
-                user=env_config.postgres_user,
-                password=env_config.postgres_password,
-                host=env_config.postgres_host,
-                port=env_config.postgres_port,
-                database=env_config.postgres_db,
-                minconn=1,
-                maxconn=env_config.postgres_max_connections,
-                **keepalive_kwargs)
+        user=env_config.postgres_user,
+        password=env_config.postgres_password,
+        host=env_config.postgres_host,
+        port=env_config.postgres_port,
+        database=env_config.postgres_db,
+        minconn=1,
+        maxconn=env_config.postgres_max_connections,
+        **keepalive_kwargs
+    )
 
     @classmethod
     def get_connection(cls):

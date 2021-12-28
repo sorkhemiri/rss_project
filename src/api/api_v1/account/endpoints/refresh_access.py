@@ -20,8 +20,9 @@ class RequestData(BaseModel):
 @router.post("/refresh", tags=["refresh-access", "auth"])
 def refresh_access(request: Request, request_data: RequestData):
     request_data = request_data.dict()
-    use_case = RefreshAccessUseCase(validator=RefreshAccessValidator,
-                                    user_auth_repository=UserAuthRepository)
+    use_case = RefreshAccessUseCase(
+        validator=RefreshAccessValidator, user_auth_repository=UserAuthRepository
+    )
 
     data = use_case.execute(request_model=request_data or {})
     status = data["http_status_code"]

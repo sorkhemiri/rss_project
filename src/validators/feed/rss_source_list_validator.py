@@ -7,7 +7,7 @@ class RSSSourceListValidator(ValidatorInterface):
     limit: int = 10
     offset: int = 0
 
-    @validator('limit')
+    @validator("limit")
     def limit_normalizer(cls, v):
         if v > 100:
             v = 100

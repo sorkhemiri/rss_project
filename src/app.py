@@ -9,10 +9,7 @@ http.cookies._is_legal_key = lambda _: True
 
 app = FastAPI(title=env_config.app_title)
 app.add_middleware(
-    CORSMiddleware,
-    allow_origins=['*'],
-    allow_methods=['*'],
-    allow_headers=['*']
+    CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"]
 )
 
 app.include_router(main_router)

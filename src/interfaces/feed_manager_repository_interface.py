@@ -5,7 +5,6 @@ from .repository import RepositoryInterface
 
 
 class FeedManagerRepositoryInterface(RepositoryInterface):
-
     @classmethod
     @abc.abstractmethod
     def add_to_feed(cls, user_id: int, feed: List[tuple]):

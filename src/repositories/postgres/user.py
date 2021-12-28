@@ -36,8 +36,8 @@ class UserRepository(UserRepositoryInterface):
         model.password = make_password(password=model.password)
         username = model.username
         password = model.password
-        first_name = model.first_name if model.first_name else ''
-        last_name = model.last_name if model.last_name else ''
+        first_name = model.first_name if model.first_name else ""
+        last_name = model.last_name if model.last_name else ""
         uid = uuid4()
         query = """
         INSERT INTO public.User (username, password, first_name, last_name, uid)

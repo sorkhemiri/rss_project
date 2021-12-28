@@ -18,5 +18,7 @@ def retry(times, wait):
                         time.sleep(wait)
                 else:
                     return result
+
         return wrapper
+
     return retry_it

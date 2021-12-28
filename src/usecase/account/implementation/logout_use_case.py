@@ -12,9 +12,9 @@ from exceptions import UseCaseException
 
 class LogoutUseCase(UseCaseInterface):
     def __init__(
-            self,
-            validator: Type[ValidatorInterface],
-            user_auth_repository: Type[UserAuthRepositoryInterface],
+        self,
+        validator: Type[ValidatorInterface],
+        user_auth_repository: Type[UserAuthRepositoryInterface],
     ):
         self.validator = validator
         self.user_auth_repository = user_auth_repository
@@ -23,14 +23,18 @@ class LogoutUseCase(UseCaseInterface):
         try:
             request_data = self.validator(**request_dict)
             if request_data.auth_token:
-                uid = self.user_auth_repository.authenticated(access_token=request_data.auth_token)
+                uid = self.user_auth_repository.authenticated(
+                    access_token=request_data.auth_token
+                )
                 if uid:
                     uid = str(uid)
                     self.user_auth_repository.logout(uid=uid)
             response_data = {
                 "result": "User logout successfully",
-                "http_status_code": 200
+                "http_status_code": 200,
             }
             return response_data
         except ValidationError as err:
-            raise UseCaseException(loads(err.json()), error_code=error_status.VALIDATION_ERROR)
+            raise UseCaseException(
+                loads(err.json()), error_code=error_status.VALIDATION_ERROR
+            )

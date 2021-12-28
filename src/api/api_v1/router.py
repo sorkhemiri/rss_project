@@ -4,5 +4,5 @@ from api.api_v1.feed import router as feed_router
 
 
 router = APIRouter()
-router.include_router(account_router, prefix='/account')
-router.include_router(feed_router, prefix='/feed')
+router.include_router(account_router, prefix="/account")
+router.include_router(feed_router, prefix="/feed")

@@ -14,6 +14,7 @@ class RSSRepository(RSSRepositoryInterface):
     """
     RSS table related functionality
     """
+
     @classmethod
     def create(cls, model: RSS) -> RSS:
         query = """
@@ -21,12 +22,16 @@ class RSSRepository(RSSRepositoryInterface):
                 VALUES (%s, %s, %s, %s, %s) RETURNING ID;
                 """
         if not (model.source and model.source.id):
-            raise RepositoryException("Source id must be provided", error_code=error_status.VALIDATION_ERROR)
+            raise RepositoryException(
+                "Source id must be provided", error_code=error_status.VALIDATION_ERROR
+            )
         title = model.title
-        description = model.description if model.description else ''
+        description = model.description if model.description else ""
         link = model.link
         source_id = model.source.id
-        pub_date = model.pub_date.strftime("%Y-%m-%d %H:%M:%S.%f") if model.pub_date else None
+        pub_date = (
+            model.pub_date.strftime("%Y-%m-%d %H:%M:%S.%f") if model.pub_date else None
+        )
         params = (title, description, link, source_id, pub_date)
         conn = Postgres.get_connection()
         with conn.cursor(cursor_factory=DictCursor) as curs:
@@ -58,10 +63,9 @@ class RSSRepository(RSSRepositoryInterface):
                     link=item["link"],
                     description=item["description"],
                     source=RSSSource(id=item["source_id"]),
-                    pub_date=item["pub_date"]
+                    pub_date=item["pub_date"],
                 )
-                for item in
-                result
+                for item in result
             ]
             return rss_list
         return []

@@ -12,9 +12,9 @@ from exceptions import UseCaseException, error_status
 
 class UserLikesListUseCase(UseCaseInterface):
     def __init__(
-            self,
-            validator: Type[ValidatorInterface],
-            like_repository: Type[LikeRepositoryInterface],
+        self,
+        validator: Type[ValidatorInterface],
+        like_repository: Type[LikeRepositoryInterface],
     ):
         self.validator = validator
         self.like_repository = like_repository
@@ -25,7 +25,9 @@ class UserLikesListUseCase(UseCaseInterface):
             user = data.user
             offset = data.offset
             limit = data.limit
-            likes_data = self.like_repository.get_user_likes_list(user_id=user.id, offset=offset, limit=limit)
+            likes_data = self.like_repository.get_user_likes_list(
+                user_id=user.id, offset=offset, limit=limit
+            )
             likes_list = [item.dict(exclude_defaults=True) for item in likes_data]
             return {"likes": likes_list, "http_status_code": 200}
         except ValidationError as err:

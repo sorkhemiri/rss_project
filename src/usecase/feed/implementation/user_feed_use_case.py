@@ -15,10 +15,10 @@ from exceptions import UseCaseException, error_status
 
 class UserFeedUseCase(UseCaseInterface):
     def __init__(
-            self,
-            validator: Type[ValidatorInterface],
-            rss_repository: Type[RSSRepositoryInterface],
-            feed_manager_repository: Type[FeedManagerRepositoryInterface]
+        self,
+        validator: Type[ValidatorInterface],
+        rss_repository: Type[RSSRepositoryInterface],
+        feed_manager_repository: Type[FeedManagerRepositoryInterface],
     ):
         self.validator = validator
         self.rss_repository = rss_repository
@@ -30,17 +30,25 @@ class UserFeedUseCase(UseCaseInterface):
             user = data.user
             page = data.page
             limit = data.limit
-            user_feed = self.feed_manager_repository.get_feed(user_id=user.id, page=page, limit=limit)
+            user_feed = self.feed_manager_repository.get_feed(
+                user_id=user.id, page=page, limit=limit
+            )
             unseen_feed = self.feed_manager_repository.get_unseen(user_id=user.id)
             rss_ids = [int(item[0]) for item in user_feed]
             just_seen_posts = [item for item in unseen_feed if int(item) in rss_ids]
-            self.feed_manager_repository.remove_from_unseen(user_id=user.id, post_ids=just_seen_posts)
+            self.feed_manager_repository.remove_from_unseen(
+                user_id=user.id, post_ids=just_seen_posts
+            )
             rss_list = self.rss_repository.get_list(rss_ids=rss_ids)
             rss_list_data = []
             for item in rss_list:
                 item_data = item.dict(exclude_defaults=True)
                 rss_list_data.append(item_data)
-            return {"rss": rss_list_data, "unseen_rss": unseen_feed, "http_status_code": 200}
+            return {
+                "rss": rss_list_data,
+                "unseen_rss": unseen_feed,
+                "http_status_code": 200,
+            }
         except ValidationError as err:
             raise UseCaseException(json.loads(err.json()), error_code=2)
         except UseCaseException as err:

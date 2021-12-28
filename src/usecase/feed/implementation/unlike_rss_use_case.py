@@ -17,9 +17,9 @@ from validators.feed import UnlikeRSSValidator
 
 class UnlikeRSSUseCase(UseCaseInterface):
     def __init__(
-            self,
-            validator: Type[ValidatorInterface],
-            like_repository: Type[LikeRepositoryInterface],
+        self,
+        validator: Type[ValidatorInterface],
+        like_repository: Type[LikeRepositoryInterface],
     ):
         self.validator = validator
         self.like_repository = like_repository

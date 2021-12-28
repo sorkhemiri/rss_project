@@ -27,10 +27,14 @@ class LikeRepositoryInterface(RepositoryInterface):
 
     @classmethod
     @abc.abstractmethod
-    def get_user_likes_list(cls, user_id: int, offset: int = 0, limit: int = 10) -> List[Like]:
+    def get_user_likes_list(
+        cls, user_id: int, offset: int = 0, limit: int = 10
+    ) -> List[Like]:
         pass
 
     @classmethod
     @abc.abstractmethod
-    def get_user_source_likes_list(cls, user_id: int, source_id: int, offset: int = 0, limit: int = 1)-> List[Like]:
+    def get_user_source_likes_list(
+        cls, user_id: int, source_id: int, offset: int = 0, limit: int = 1
+    ) -> List[Like]:
         pass

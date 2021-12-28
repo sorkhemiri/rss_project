@@ -15,9 +15,9 @@ from exceptions import UseCaseException, error_status
 
 class RSSSourceListUseCase(UseCaseInterface):
     def __init__(
-            self,
-            validator: Type[ValidatorInterface],
-            rss_source_repository: Type[RSSSourceRepositoryInterface],
+        self,
+        validator: Type[ValidatorInterface],
+        rss_source_repository: Type[RSSSourceRepositoryInterface],
     ):
         self.validator = validator
         self.rss_source_repository = rss_source_repository
@@ -27,7 +27,9 @@ class RSSSourceListUseCase(UseCaseInterface):
             data = self.validator(**request_dict)
             offset = data.offset
             limit = data.limit
-            rss_sources = self.rss_source_repository.get_list(offset=offset, limit=limit)
+            rss_sources = self.rss_source_repository.get_list(
+                offset=offset, limit=limit
+            )
             rss_source_data = [item.dict(exclude_defaults=True) for item in rss_sources]
             return {"rss_sources": rss_source_data, "http_status_code": 200}
         except ValidationError as err:

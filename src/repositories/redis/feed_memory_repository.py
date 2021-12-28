@@ -16,7 +16,9 @@ class FeedMemoryRepository(FeedMemoryRepositoryInterface):
     @classmethod
     def add_to_memory(cls, key: str, post_ids: list, date: datetime):
         user_feed_prefix = cls.PREFIX + f"{key}:{date.strftime('%Y-%m-%d')}"
-        RedisConnection.push_values(key=user_feed_prefix, values=post_ids, exp=FEED_STORE_TIME_OUT)
+        RedisConnection.push_values(
+            key=user_feed_prefix, values=post_ids, exp=FEED_STORE_TIME_OUT
+        )
 
     @classmethod
     def get_memory(cls, key: str, date: datetime, days: int = 1):

@@ -2,7 +2,6 @@ import abc
 
 
 class MigrationInterface(metaclass=abc.ABCMeta):
-
     @classmethod
     @abc.abstractmethod
     def up(cls):

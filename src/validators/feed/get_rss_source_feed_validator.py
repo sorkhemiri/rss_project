@@ -8,7 +8,7 @@ class GetRSSSourceFeedValidator(ValidatorInterface):
     page: int = 1
     limit: int = 10
 
-    @validator('limit')
+    @validator("limit")
     def limit_normalizer(cls, v):
         if v > 100:
             v = 100

@@ -22,14 +22,19 @@ class RequestData(BaseModel):
     link: str
 
 
-auth_check = CheckAdminStatus(user_repository=UserRepository, user_auth_repository=UserAuthRepository)
+auth_check = CheckAdminStatus(
+    user_repository=UserRepository, user_auth_repository=UserAuthRepository
+)
 
 
 @router.post("/source/create/", tags=["create-source", "feed"])
-def create_rss_source(request: Request, request_data: RequestData, user: User = Depends(auth_check)):
+def create_rss_source(
+    request: Request, request_data: RequestData, user: User = Depends(auth_check)
+):
     request_data = request_data.dict()
-    use_case = CreateRSSSourceUseCase(validator=CreateRSSSourceValidator,
-                                      rss_source_repository=RSSSourceRepository)
+    use_case = CreateRSSSourceUseCase(
+        validator=CreateRSSSourceValidator, rss_source_repository=RSSSourceRepository
+    )
     data = use_case.execute(request_model=request_data or {})
     status = data["http_status_code"]
     del data["http_status_code"]

@@ -19,9 +19,9 @@ from exceptions import UseCaseException, error_status
 
 class CreateRSSSourceUseCase(UseCaseInterface):
     def __init__(
-            self,
-            validator: Type[ValidatorInterface],
-            rss_source_repository: Type[RSSSourceRepositoryInterface],
+        self,
+        validator: Type[ValidatorInterface],
+        rss_source_repository: Type[RSSSourceRepositoryInterface],
     ):
         self.validator = validator
         self.rss_source_repository = rss_source_repository
@@ -36,9 +36,15 @@ class CreateRSSSourceUseCase(UseCaseInterface):
                 link=data.link,
             )
             if self.rss_source_repository.check_source_key_exists(key=source.key):
-                raise UseCaseException(message="Source key already exists", error_code=error_status.VALIDATION_ERROR)
+                raise UseCaseException(
+                    message="Source key already exists",
+                    error_code=error_status.VALIDATION_ERROR,
+                )
             self.rss_source_repository.create(model=source)
-            return {"source": source.dict(exclude_defaults=True), "http_status_code": 200}
+            return {
+                "source": source.dict(exclude_defaults=True),
+                "http_status_code": 200,
+            }
         except ValidationError as err:
             raise UseCaseException(json.loads(err.json()), error_code=2)
         except UseCaseException as err:

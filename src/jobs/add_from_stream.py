@@ -19,7 +19,11 @@ from typing import List, Type
 from repositories.postgres.subscription import SubscriptionRepository
 
 
-def fan_out(key: str, rss_ids: List[int], feed_manager_repository: Type[FeedManagerRepositoryInterface]):
+def fan_out(
+    key: str,
+    rss_ids: List[int],
+    feed_manager_repository: Type[FeedManagerRepositoryInterface],
+):
     now_time = datetime.now()
     data_values = []
     for post_id in rss_ids:
@@ -28,8 +32,12 @@ def fan_out(key: str, rss_ids: List[int], feed_manager_repository: Type[FeedMana
     feed_manager_repository.add_to_channel(key=key, feed=data_values)
     subscribers = SubscriptionRepository.get_channel_subscriber_by_key(key=key)
     for subscriber in subscribers:
-        feed_manager_repository.add_to_feed(user_id=subscriber.user.id, feed=data_values)
-        feed_manager_repository.add_to_unseen(user_id=subscriber.user.id, post_ids=rss_ids)
+        feed_manager_repository.add_to_feed(
+            user_id=subscriber.user.id, feed=data_values
+        )
+        feed_manager_repository.add_to_unseen(
+            user_id=subscriber.user.id, post_ids=rss_ids
+        )
 
 
 @celery_app.task
@@ -62,7 +70,14 @@ def add_from_stream():
             stored_db_ids.append(created_rss.id)
             logging.info(f"rss_id --{rss_id}-- saved")
             stored_rss_ids.append(rss_id)
-        fan_out(key=source.key, rss_ids=stored_db_ids, feed_manager_repository=FeedManagerRepository)
-        FeedMemoryRepository.add_to_memory(key=source.key, post_ids=stored_rss_ids, date=datetime.now())
+        fan_out(
+            key=source.key,
+            rss_ids=stored_db_ids,
+            feed_manager_repository=FeedManagerRepository,
+        )
+        FeedMemoryRepository.add_to_memory(
+            key=source.key, post_ids=stored_rss_ids, date=datetime.now()
+        )
+
 
 add_from_stream()

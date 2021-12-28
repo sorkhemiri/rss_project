@@ -15,7 +15,7 @@ async def generate_schemas():
                     "port": env_config.postgres_port,
                     "user": env_config.postgres_user,
                     "maxsize": env_config.postgres_max_connections,
-                }
+                },
             }
         },
         "apps": {
@@ -28,5 +28,6 @@ async def generate_schemas():
     print(db_config)
     await Tortoise.init(config=db_config)
     await Tortoise.generate_schemas()
+
 
 run_async(generate_schemas())

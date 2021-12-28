@@ -17,9 +17,11 @@ def source_feed(request: Request, source_key: str, page: int = 1, limit: int = 1
         "page": page,
         "limit": limit,
     }
-    use_case = GetRSSSourceFeedUseCase(validator=GetRSSSourceFeedValidator,
-                                       rss_repository=RSSRepository,
-                                       feed_manager_repository=FeedManagerRepository)
+    use_case = GetRSSSourceFeedUseCase(
+        validator=GetRSSSourceFeedValidator,
+        rss_repository=RSSRepository,
+        feed_manager_repository=FeedManagerRepository,
+    )
     data = use_case.execute(request_model=request_data or {})
     status = data["http_status_code"]
     del data["http_status_code"]

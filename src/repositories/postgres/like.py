@@ -13,12 +13,19 @@ class LikeRepository(LikeRepositoryInterface):
     """
     Like table related functionality
     """
+
     @classmethod
     def user_like_exist(cls, model: Like) -> bool:
         if not model.user and not model.user.id:
-            raise RepositoryException(message="user id must be provided", error_code=error_status.DOES_NOT_EXIST_ERROR)
+            raise RepositoryException(
+                message="user id must be provided",
+                error_code=error_status.DOES_NOT_EXIST_ERROR,
+            )
         if not model.rss and not model.rss.id:
-            RepositoryException(message="rss id must be provided", error_code=error_status.DOES_NOT_EXIST_ERROR)
+            RepositoryException(
+                message="rss id must be provided",
+                error_code=error_status.DOES_NOT_EXIST_ERROR,
+            )
         rss_id = model.rss.id
         user_id = model.user.id
         query = """select id from public.Like where rss_id=%s and user_id=%s"""
@@ -50,9 +57,15 @@ class LikeRepository(LikeRepositoryInterface):
     @classmethod
     def delete(cls, model: Like):
         if not model.user and not model.user.id:
-            raise RepositoryException(message="user id must be provided", error_code=error_status.DOES_NOT_EXIST_ERROR)
+            raise RepositoryException(
+                message="user id must be provided",
+                error_code=error_status.DOES_NOT_EXIST_ERROR,
+            )
         if not model.rss and not model.rss.id:
-            RepositoryException(message="rss id must be provided", error_code=error_status.DOES_NOT_EXIST_ERROR)
+            RepositoryException(
+                message="rss id must be provided",
+                error_code=error_status.DOES_NOT_EXIST_ERROR,
+            )
         rss_id = model.rss.id
         user_id = model.user.id
         query = """
@@ -65,7 +78,9 @@ class LikeRepository(LikeRepositoryInterface):
         Postgres.connection_putback(conn)
 
     @classmethod
-    def get_user_likes_list(cls, user_id: int, offset: int = 0, limit: int = 10) -> List[Like]:
+    def get_user_likes_list(
+        cls, user_id: int, offset: int = 0, limit: int = 10
+    ) -> List[Like]:
         query = """
                     select r.title as title, r.id as id
                     from public.RSS as r
@@ -86,7 +101,9 @@ class LikeRepository(LikeRepositoryInterface):
         return []
 
     @classmethod
-    def get_user_source_likes_list(cls, user_id: int, source_id: int, offset: int = 0, limit: int = 10)-> List[Like]:
+    def get_user_source_likes_list(
+        cls, user_id: int, source_id: int, offset: int = 0, limit: int = 10
+    ) -> List[Like]:
         query = """
                             select r.title as title, r.id as id
                             from public.RSS as r

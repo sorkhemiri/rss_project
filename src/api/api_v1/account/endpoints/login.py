@@ -21,9 +21,11 @@ class RequestData(BaseModel):
 @router.post("/login", tags=["user_login", "auth"])
 def login(request: Request, request_data: RequestData):
     request_data = request_data.dict()
-    use_case = LoginUseCase(validator=LoginValidator,
-                            user_auth_repository=UserAuthRepository,
-                            user_repository=UserRepository)
+    use_case = LoginUseCase(
+        validator=LoginValidator,
+        user_auth_repository=UserAuthRepository,
+        user_repository=UserRepository,
+    )
 
     data = use_case.execute(request_model=request_data or {})
     status = data["http_status_code"]

@@ -13,10 +13,11 @@ class CheckAuthentication:
     """
     Authentication Check Dependency.
     """
+
     def __init__(
-            self,
-            user_repository: Type[UserRepositoryInterface],
-            user_auth_repository: Type[UserAuthRepositoryInterface]
+        self,
+        user_repository: Type[UserRepositoryInterface],
+        user_auth_repository: Type[UserAuthRepositoryInterface],
     ):
         self.user_repository = user_repository
         self.user_auth_repository = user_auth_repository
@@ -29,16 +30,18 @@ class CheckAuthentication:
             if uid:
                 if not self.user_repository.check_user_exist(uid=uid):
                     raise HTTPException(
-                        status_code=HTTP_401_UNAUTHORIZED,
-                        detail="User Data Not Valid")
+                        status_code=HTTP_401_UNAUTHORIZED, detail="User Data Not Valid"
+                    )
                 user_id = self.user_repository.get_user_id_by_uid(uid=uid)
                 user = User(id=user_id, uid=uid)
             else:
                 raise HTTPException(
                     status_code=HTTP_401_UNAUTHORIZED,
-                    detail="Authorization Token Not Valid")
+                    detail="Authorization Token Not Valid",
+                )
         else:
             raise HTTPException(
                 status_code=HTTP_401_UNAUTHORIZED,
-                detail="Authorization Token Not Found")
+                detail="Authorization Token Not Found",
+            )
         return user

@@ -15,10 +15,10 @@ from exceptions import UseCaseException, error_status
 
 class GetRSSSourceFeedUseCase(UseCaseInterface):
     def __init__(
-            self,
-            validator: Type[ValidatorInterface],
-            rss_repository: Type[RSSRepositoryInterface],
-            feed_manager_repository: Type[FeedManagerRepositoryInterface]
+        self,
+        validator: Type[ValidatorInterface],
+        rss_repository: Type[RSSRepositoryInterface],
+        feed_manager_repository: Type[FeedManagerRepositoryInterface],
     ):
         self.validator = validator
         self.rss_repository = rss_repository
@@ -30,7 +30,9 @@ class GetRSSSourceFeedUseCase(UseCaseInterface):
             source_key = data.source_key
             page = data.page
             limit = data.limit
-            source_feed = self.feed_manager_repository.get_channel(key=source_key, page=page, limit=limit)
+            source_feed = self.feed_manager_repository.get_channel(
+                key=source_key, page=page, limit=limit
+            )
             rss_ids = [int(item[0]) for item in source_feed]
             rss_list = self.rss_repository.get_list(rss_ids=rss_ids)
             rss_list_data = []

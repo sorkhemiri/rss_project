@@ -18,10 +18,10 @@ from exceptions import UseCaseException, error_status
 
 class LoginUseCase(UseCaseInterface):
     def __init__(
-            self,
-            validator: Type[ValidatorInterface],
-            user_auth_repository: Type[UserAuthRepositoryInterface],
-            user_repository: Type[UserRepositoryInterface],
+        self,
+        validator: Type[ValidatorInterface],
+        user_auth_repository: Type[UserAuthRepositoryInterface],
+        user_repository: Type[UserRepositoryInterface],
     ):
         self.validator = validator
         self.user_auth_repository = user_auth_repository
@@ -33,9 +33,17 @@ class LoginUseCase(UseCaseInterface):
             username = data.username
             password = data.password
             if not self.user_repository.check_username_exist(username=username):
-                raise UseCaseException(message="User not found", error_code=error_status.DOES_NOT_EXIST_ERROR)
-            if not self.user_repository.check_password(username=username, password=password):
-                raise UseCaseException(message="Password incorrect", error_code=error_status.DOES_NOT_EXIST_ERROR)
+                raise UseCaseException(
+                    message="User not found",
+                    error_code=error_status.DOES_NOT_EXIST_ERROR,
+                )
+            if not self.user_repository.check_password(
+                username=username, password=password
+            ):
+                raise UseCaseException(
+                    message="Password incorrect",
+                    error_code=error_status.DOES_NOT_EXIST_ERROR,
+                )
             user_id = self.user_repository.get_uid_by_username(username=username)
             result = self.user_auth_repository.login(uid=user_id)
             return {"result": result, "http_status_code": 200}

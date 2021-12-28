@@ -3,8 +3,12 @@ from uuid import UUID
 
 from interfaces.user_auth_repository_interface import UserAuthRepositoryInterface
 from settings.connections import RedisConnection
-from settings.constants import ACCESS_TOKEN_EXPIRATION_INTERVAL, ACCESS_TOKEN_LENGTH, REFRESH_TOKEN_LENGTH, \
-    REFRESH_TOKEN_EXPIRATION_INTERVAL
+from settings.constants import (
+    ACCESS_TOKEN_EXPIRATION_INTERVAL,
+    ACCESS_TOKEN_LENGTH,
+    REFRESH_TOKEN_LENGTH,
+    REFRESH_TOKEN_EXPIRATION_INTERVAL,
+)
 from utils import make_random_hex, calculate_expiration_interval
 
 
@@ -12,6 +16,7 @@ class UserAuthRepository(UserAuthRepositoryInterface):
     """
     User Authentication related functionality
     """
+
     PREFIX = "user:auth:"
     ACCESS_PREFIX = PREFIX + "access:"
     REFRESH_PREFIX = PREFIX + "refresh:"
@@ -35,21 +40,33 @@ class UserAuthRepository(UserAuthRepositoryInterface):
         refresh_token_key = refresh_token_prefix + refresh_token
         refresh_user_key = refresh_user_prefix + uid
 
-        RedisConnection.set_value(access_token_key, uid, exp=ACCESS_TOKEN_EXPIRATION_INTERVAL)
-        RedisConnection.set_value(refresh_token_key, uid, exp=REFRESH_TOKEN_EXPIRATION_INTERVAL)
+        RedisConnection.set_value(
+            access_token_key, uid, exp=ACCESS_TOKEN_EXPIRATION_INTERVAL
+        )
+        RedisConnection.set_value(
+            refresh_token_key, uid, exp=REFRESH_TOKEN_EXPIRATION_INTERVAL
+        )
 
-        RedisConnection.set_value(access_user_key, access_token, exp=ACCESS_TOKEN_EXPIRATION_INTERVAL)
-        RedisConnection.set_value(refresh_user_key, refresh_token, exp=REFRESH_TOKEN_EXPIRATION_INTERVAL)
+        RedisConnection.set_value(
+            access_user_key, access_token, exp=ACCESS_TOKEN_EXPIRATION_INTERVAL
+        )
+        RedisConnection.set_value(
+            refresh_user_key, refresh_token, exp=REFRESH_TOKEN_EXPIRATION_INTERVAL
+        )
 
         token_data = {
-            'access': {
-                'token': access_token,
-                'expire': calculate_expiration_interval(ACCESS_TOKEN_EXPIRATION_INTERVAL),
+            "access": {
+                "token": access_token,
+                "expire": calculate_expiration_interval(
+                    ACCESS_TOKEN_EXPIRATION_INTERVAL
+                ),
             },
-            'refresh': {
-                'token': refresh_token,
-                'expire': calculate_expiration_interval(REFRESH_TOKEN_EXPIRATION_INTERVAL),
-            }
+            "refresh": {
+                "token": refresh_token,
+                "expire": calculate_expiration_interval(
+                    REFRESH_TOKEN_EXPIRATION_INTERVAL
+                ),
+            },
         }
         return token_data
 
@@ -103,14 +120,14 @@ class UserAuthRepository(UserAuthRepositoryInterface):
         refresh_token_ttl = RedisConnection.get_expire_time(key=refresh_user_key)
 
         token_data = {
-            'access': {
-                'token': access_token,
-                'expire': calculate_expiration_interval(access_token_ttl),
+            "access": {
+                "token": access_token,
+                "expire": calculate_expiration_interval(access_token_ttl),
             },
-            'refresh': {
-                'token': refresh_token,
-                'expire': calculate_expiration_interval(refresh_token_ttl),
-            }
+            "refresh": {
+                "token": refresh_token,
+                "expire": calculate_expiration_interval(refresh_token_ttl),
+            },
         }
         return token_data
 

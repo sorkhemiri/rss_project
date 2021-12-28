@@ -16,7 +16,11 @@ class GeneralException(Exception, metaclass=abc.ABCMeta):
         self.exception_data = self.load_response()
 
     def load_response(self):
-        exception = self.CODE_REFERENCE[self.error_code] if self.error_code in self.CODE_REFERENCE else self.CODE_REFERENCE[error_status.GENERAL_ERROR]
+        exception = (
+            self.CODE_REFERENCE[self.error_code]
+            if self.error_code in self.CODE_REFERENCE
+            else self.CODE_REFERENCE[error_status.GENERAL_ERROR]
+        )
         exception_data = {
             "message": self.message,
             "type": exception.message,

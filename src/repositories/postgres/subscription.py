@@ -6,7 +6,11 @@ from psycopg2.extras import DictCursor
 
 from entities import Subscription, User, RSSSource
 from interfaces.subscription_repository_interface import SubscriptionRepositoryInterface
-from models import Subscription as SubscriptionDB, RSSSource as RSSSourceDB, User as UserDB
+from models import (
+    Subscription as SubscriptionDB,
+    RSSSource as RSSSourceDB,
+    User as UserDB,
+)
 from exceptions import RepositoryException, error_status
 from settings.connections import Postgres
 
@@ -15,12 +19,19 @@ class SubscriptionRepository(SubscriptionRepositoryInterface):
     """
     Subscription table related functionality
     """
+
     @classmethod
     def create(cls, model: Subscription) -> Subscription:
         if not (model.source and model.source.id):
-            raise RepositoryException(message="Source id must be provided", error_code=error_status.DOES_NOT_EXIST_ERROR)
-        if not(model.user and model.user.id):
-            raise RepositoryException(message="user id must be provided", error_code=error_status.DOES_NOT_EXIST_ERROR)
+            raise RepositoryException(
+                message="Source id must be provided",
+                error_code=error_status.DOES_NOT_EXIST_ERROR,
+            )
+        if not (model.user and model.user.id):
+            raise RepositoryException(
+                message="user id must be provided",
+                error_code=error_status.DOES_NOT_EXIST_ERROR,
+            )
 
         query = """
                 INSERT INTO public.Subscription (user_id, source_id)
@@ -38,9 +49,15 @@ class SubscriptionRepository(SubscriptionRepositoryInterface):
     @classmethod
     def delete(cls, model: Subscription):
         if not model.user or not model.user.id:
-            raise RepositoryException(message="user id must be provided", error_code=status.DOES_NOT_EXIST_ERROR)
+            raise RepositoryException(
+                message="user id must be provided",
+                error_code=status.DOES_NOT_EXIST_ERROR,
+            )
         if not model.source or not model.source.id:
-            raise RepositoryException(message="source id must be provided", error_code=status.DOES_NOT_EXIST_ERROR)
+            raise RepositoryException(
+                message="source id must be provided",
+                error_code=status.DOES_NOT_EXIST_ERROR,
+            )
         source_id = model.source.id
         user_id = model.user.id
         query = """
@@ -77,9 +94,15 @@ class SubscriptionRepository(SubscriptionRepositoryInterface):
     @classmethod
     def check_subscription_exist(cls, model: Subscription) -> bool:
         if not model.user or not model.user.id:
-            raise RepositoryException(message="user id must be provided", error_code=error_status.DOES_NOT_EXIST_ERROR)
+            raise RepositoryException(
+                message="user id must be provided",
+                error_code=error_status.DOES_NOT_EXIST_ERROR,
+            )
         if not model.source or not model.source.id:
-            raise RepositoryException(message="source id must be provided", error_code=error_status.DOES_NOT_EXIST_ERROR)
+            raise RepositoryException(
+                message="source id must be provided",
+                error_code=error_status.DOES_NOT_EXIST_ERROR,
+            )
         query = """select id from public.Subscription
                    where source_id=%s and user_id=%s"""
         params = (model.source.id, model.user.id)
@@ -93,7 +116,9 @@ class SubscriptionRepository(SubscriptionRepositoryInterface):
         return False
 
     @classmethod
-    def get_user_subscriptions_list(cls, user_id: int, offset: int = 0, limit: int = 10) -> List[Subscription]:
+    def get_user_subscriptions_list(
+        cls, user_id: int, offset: int = 0, limit: int = 10
+    ) -> List[Subscription]:
         query = """
                     select rs.title as title, rs.key as key
                     from Subscription as s
@@ -108,7 +133,8 @@ class SubscriptionRepository(SubscriptionRepositoryInterface):
         Postgres.connection_putback(conn)
         if result:
             subscriptions = [
-                Subscription(source=RSSSource(title=item["title"], key=item["key"])) for item in result
+                Subscription(source=RSSSource(title=item["title"], key=item["key"]))
+                for item in result
             ]
             return subscriptions
         return []

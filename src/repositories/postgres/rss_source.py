@@ -22,7 +22,7 @@ class RSSSourceRepository(RSSSourceRepositoryInterface):
         """
         key = model.key
         title = model.title
-        description = model.description if model.description else ''
+        description = model.description if model.description else ""
         link = model.link
         params = (key, title, description, link)
         conn = Postgres.get_connection()
@@ -55,12 +55,13 @@ class RSSSourceRepository(RSSSourceRepositoryInterface):
         if rss_source_data:
             rss_source_entities = [
                 RSSSource(
-                          title=item["title"],
-                          key=item["key"],
-                          description=item["description"],
-                          link=item["link"]
-                          ) for item in rss_source_data
-                                   ]
+                    title=item["title"],
+                    key=item["key"],
+                    description=item["description"],
+                    link=item["link"],
+                )
+                for item in rss_source_data
+            ]
             return rss_source_entities
         return []
 
@@ -81,8 +82,9 @@ class RSSSourceRepository(RSSSourceRepositoryInterface):
                     title=item["title"],
                     key=item["key"],
                     description=item["description"],
-                    link=item["link"]
-                ) for item in rss_source_data
+                    link=item["link"],
+                )
+                for item in rss_source_data
             ]
             return rss_source_entities
         return []
@@ -106,9 +108,11 @@ class RSSSourceRepository(RSSSourceRepositoryInterface):
     @classmethod
     def get_sources_key(cls, source_id: int) -> str:
         with orm.db_session:
-            rss_source_keys = db.select("select key from RSSSource where"
-                                       " id = $source_id "
-                                       "and (is_deleted is null or is_deleted = FALSE) limit 1")
+            rss_source_keys = db.select(
+                "select key from RSSSource where"
+                " id = $source_id "
+                "and (is_deleted is null or is_deleted = FALSE) limit 1"
+            )
             if rss_source_keys:
                 rss_source_key = rss_source_keys[0]
                 return rss_source_key
