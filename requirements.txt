@@ -27,3 +27,4 @@ typing-extensions==3.10.0.2
 uvicorn==0.15.0
 vine==5.0.0
 wcwidth==0.2.5
+tortoise-orm==0.18.0
