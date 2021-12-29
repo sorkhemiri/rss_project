@@ -71,7 +71,8 @@ class UserAuthRepository(UserAuthRepositoryInterface):
         return token_data
 
     @classmethod
-    def logout(cls, uid: str) -> None:
+    def logout(cls, uid: UUID) -> None:
+        uid = str(uid)
         access_user_prefix = cls.ACCESS_PREFIX + "user:"
         refresh_user_prefix = cls.REFRESH_PREFIX + "user:"
 

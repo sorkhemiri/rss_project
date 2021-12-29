@@ -27,7 +27,6 @@ class LogoutUseCase(UseCaseInterface):
                     access_token=request_data.auth_token
                 )
                 if uid:
-                    uid = str(uid)
                     self.user_auth_repository.logout(uid=uid)
             response_data = {
                 "result": "User logout successfully",

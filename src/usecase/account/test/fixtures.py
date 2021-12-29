@@ -138,7 +138,7 @@ def get_auth_data_patch(monkeypatch):
 
 @pytest.fixture
 def refresh_token_valid_patch(monkeypatch):
-    def always_none(refresh_token):
+    def fake_access(refresh_token):
         return {
                 "result": {
                     "access": {
@@ -152,4 +152,12 @@ def refresh_token_valid_patch(monkeypatch):
                 }
             }
 
-    monkeypatch.setattr(UserAuthRepository, "refresh_access", always_none)
+    monkeypatch.setattr(UserAuthRepository, "refresh_access", fake_access)
+
+
+@pytest.fixture
+def logout_patch(monkeypatch):
+    def always_none(uid):
+        return None
+
+    monkeypatch.setattr(UserAuthRepository, "logout", always_none)

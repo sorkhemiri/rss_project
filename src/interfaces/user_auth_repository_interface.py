@@ -17,7 +17,7 @@ class UserAuthRepositoryInterface(RepositoryInterface):
 
     @classmethod
     @abc.abstractmethod
-    def logout(cls, uid: str) -> None:
+    def logout(cls, uid: UUID) -> None:
         pass
 
     @classmethod
