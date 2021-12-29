@@ -5,6 +5,7 @@ import pytest
 
 from entities import User
 from repositories.postgres import UserRepository
+from repositories.redis import UserAuthRepository
 
 
 @pytest.fixture
@@ -47,3 +48,46 @@ def create_user_patch(monkeypatch):
         return model
 
     monkeypatch.setattr(UserRepository, "create", user_patch)
+
+
+@pytest.fixture
+def password_incorrect_patch(monkeypatch):
+    def always_false(username, password):
+        return False
+
+    monkeypatch.setattr(UserRepository, "check_password", always_false)
+
+
+@pytest.fixture
+def password_correct_patch(monkeypatch):
+    def always_true(username, password):
+        return True
+
+    monkeypatch.setattr(UserRepository, "check_password", always_true)
+
+
+@pytest.fixture
+def uid_by_username_patch(monkeypatch):
+    def uid_provider(username):
+        return UUID("bd9213db-8d4c-4da4-9c77-e8e92172fa88")
+
+    monkeypatch.setattr(UserRepository, "get_uid_by_username", uid_provider)
+
+
+@pytest.fixture
+def login_patch(monkeypatch):
+    def login_data_patch(uid):
+        return {
+                "result": {
+                    "access": {
+                        "token": "cca4eb1fa7a244d42895e1f1dd7f89253928b0e65db7d99e692e8f253778c3af",
+                        "expire": "2021-12-29T10:24:35"
+                    },
+                    "refresh": {
+                        "token": "f2301ecdc55a568264d9d7b32c0f1cf36719d1c72a409e1488090bd9fae6b180",
+                        "expire": "2021-12-29T18:14:35"
+                    }
+                }
+            }
+
+    monkeypatch.setattr(UserAuthRepository, "login", login_data_patch)

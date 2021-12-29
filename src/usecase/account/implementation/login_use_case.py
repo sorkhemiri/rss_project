@@ -37,7 +37,7 @@ class LoginUseCase(UseCaseInterface):
             ):
                 raise UseCaseException(
                     message="Password incorrect",
-                    error_code=error_status.DOES_NOT_EXIST_ERROR,
+                    error_code=error_status.VALIDATION_ERROR,
                 )
             user_id = self.user_repository.get_uid_by_username(username=username)
             result = self.user_auth_repository.login(uid=user_id)

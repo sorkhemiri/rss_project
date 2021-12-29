@@ -1,4 +1,5 @@
 import abc
+from typing import Optional
 from uuid import UUID
 
 from entities import User
@@ -27,7 +28,7 @@ class UserRepositoryInterface(RepositoryInterface):
 
     @classmethod
     @abc.abstractmethod
-    def get_uid_by_username(cls, username: str) -> int:
+    def get_uid_by_username(cls, username: str) -> Optional[UUID]:
         pass
 
     @classmethod
