@@ -1,3 +1,4 @@
+from re import fullmatch
 from typing import Type
 
 import json
@@ -23,17 +24,28 @@ class CreateRSSSourceUseCase(UseCaseInterface):
     def process_request(self, request_dict: dict):
         try:
             data = self.validator(**request_dict)
-            source = RSSSource(
-                key=data.key,
-                title=data.title,
-                description=data.description,
-                link=data.link,
-            )
-            if self.rss_source_repository.check_source_key_exists(key=source.key):
+            key = data.key
+            title = data.title
+            description = data.description
+            link = data.link
+            if not fullmatch(pattern="[a-zA-Z0-9_]{3,}", string=key):
+                raise UseCaseException(
+                    message="key not valid",
+                    error_code=error_status.VALIDATION_ERROR,
+                )
+
+            key = key.lower()
+            if self.rss_source_repository.check_source_key_exists(key=key):
                 raise UseCaseException(
                     message="Source key already exists",
                     error_code=error_status.VALIDATION_ERROR,
                 )
+            source = RSSSource(
+                key=key,
+                title=title,
+                description=description,
+                link=link,
+            )
             self.rss_source_repository.create(model=source)
             return {
                 "source": source.dict(exclude_defaults=True),

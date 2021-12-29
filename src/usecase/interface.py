@@ -4,6 +4,7 @@ from exceptions import (
     UseCaseException,
     RepositoryException,
     EntityException,
+    ValidatorException,
 )
 
 
@@ -16,6 +17,7 @@ class UseCaseInterface(metaclass=abc.ABCMeta):
             UseCaseException,
             RepositoryException,
             EntityException,
+            ValidatorException,
         ) as ex:
             return ex.response()
         except Exception as ex:
