@@ -8,6 +8,7 @@ from pydantic import ValidationError
 from entities import User
 from interfaces.validator import ValidatorInterface
 from interfaces.user_repository_interface import UserRepositoryInterface
+from settings.constants import MINIMUM_PASSWORD_CHARACTERS
 from usecase.interface import UseCaseInterface
 
 from exceptions import UseCaseException, error_status
@@ -39,8 +40,13 @@ class RegisterUseCase(UseCaseInterface):
                     message="username not valid",
                     error_code=error_status.VALIDATION_ERROR,
                 )
+            if len(password) < MINIMUM_PASSWORD_CHARACTERS:
+                raise UseCaseException(
+                    message="password too short",
+                    error_code=error_status.VALIDATION_ERROR,
+                )
             user = User()
-            user.username = username
+            user.username = username.lower()
             user.first_name = first_name
             user.last_name = last_name
             user.password = password
