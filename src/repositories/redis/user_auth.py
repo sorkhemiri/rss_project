@@ -104,10 +104,10 @@ class UserAuthRepository(UserAuthRepositoryInterface):
         return None
 
     @classmethod
-    def get_authentication_data(cls, uid: str) -> Optional[dict]:
+    def get_authentication_data(cls, uid: UUID) -> Optional[dict]:
         access_user_prefix = cls.ACCESS_PREFIX + "user:"
         refresh_user_prefix = cls.REFRESH_PREFIX + "user:"
-
+        uid = str(uid)
         access_user_key = access_user_prefix + uid
         refresh_user_key = refresh_user_prefix + uid
 

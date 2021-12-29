@@ -91,3 +91,65 @@ def login_patch(monkeypatch):
             }
 
     monkeypatch.setattr(UserAuthRepository, "login", login_data_patch)
+
+
+@pytest.fixture
+def access_token_not_valid_patch(monkeypatch):
+    def always_none(access_token):
+        return None
+
+    monkeypatch.setattr(UserAuthRepository, "authenticated", always_none)
+
+
+@pytest.fixture
+def access_token_valid_patch(monkeypatch):
+    def fake_uuid(access_token):
+        return UUID("bd9213db-8d4c-4da4-9c77-e8e92172fa88")
+
+    monkeypatch.setattr(UserAuthRepository, "authenticated", fake_uuid)
+
+
+@pytest.fixture
+def refresh_token_not_valid_patch(monkeypatch):
+    def always_none(refresh_token):
+        return None
+
+    monkeypatch.setattr(UserAuthRepository, "refresh_access", always_none)
+
+
+@pytest.fixture
+def get_auth_data_patch(monkeypatch):
+    def fake_access(uid):
+        return {
+                "result": {
+                    "access": {
+                        "token": "cca4eb1fa7a244d42895e1f1dd7f89253928b0e65db7d99e692e8f253778c3af",
+                        "expire": "2021-12-29T10:24:35"
+                    },
+                    "refresh": {
+                        "token": "f2301ecdc55a568264d9d7b32c0f1cf36719d1c72a409e1488090bd9fae6b180",
+                        "expire": "2021-12-29T18:14:35"
+                    }
+                }
+            }
+
+    monkeypatch.setattr(UserAuthRepository, "get_authentication_data", fake_access)
+
+
+@pytest.fixture
+def refresh_token_valid_patch(monkeypatch):
+    def always_none(refresh_token):
+        return {
+                "result": {
+                    "access": {
+                        "token": "cca4eb1fa7a244d42895e1f1dd7f89253928b0e65db7d99e692e8f253778c3af",
+                        "expire": "2021-12-29T10:24:35"
+                    },
+                    "refresh": {
+                        "token": "f2301ecdc55a568264d9d7b32c0f1cf36719d1c72a409e1488090bd9fae6b180",
+                        "expire": "2021-12-29T18:14:35"
+                    }
+                }
+            }
+
+    monkeypatch.setattr(UserAuthRepository, "refresh_access", always_none)

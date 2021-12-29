@@ -27,7 +27,7 @@ class UserAuthRepositoryInterface(RepositoryInterface):
 
     @classmethod
     @abc.abstractmethod
-    def get_authentication_data(cls, uid: str) -> Optional[dict]:
+    def get_authentication_data(cls, uid: UUID) -> Optional[dict]:
         pass
 
     @classmethod
