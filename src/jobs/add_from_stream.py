@@ -1,5 +1,6 @@
 import logging
 import re
+from multiprocessing.pool import ThreadPool
 
 import feedparser
 
@@ -14,6 +15,7 @@ from datetime import datetime
 from typing import List, Type
 
 from repositories.postgres.subscription import SubscriptionRepository
+from settings.constants import JOB_CONCURRENCY, SOURCES_CHUNK_LIMIT
 
 
 def fan_out(
@@ -36,45 +38,60 @@ def fan_out(
             user_id=subscriber.user.id, post_ids=rss_ids
         )
 
+def inner_function(source):
+    feed = feedparser.parse(source.link)
+    rss_ids = FeedMemoryRepository.get_memory(key=source.key, date=datetime.now())
+    stored_rss_ids = []
+    stored_db_ids = []
+    for item in feed["entries"]:
+        logging.info(f"source with key {source.key} init")
+        link = item.link
+        rss_id_patterns = re.findall(pattern="/[0-9]+/", string=link)
+        rss_id = rss_id_patterns.pop().replace("/", "") if rss_id_patterns else None
+        logging.info(f"rss_id --{rss_id}-- got in stream")
+        if rss_id in rss_ids:
+            logging.info(f"rss_id --{rss_id}-- abort")
+            continue
+        rss = RSS()
+        rss.link = item.link
+        rss.title = item.title
+        rss.source = source
+        rss.description = item.summary
+        pub_date_str = item.published
+        pub_date = datetime.strptime(pub_date_str, "%Y-%m-%dT%H:%M:%S")
+        rss.pub_date = pub_date
+        created_rss = RSSRepository.create(model=rss)
+        stored_db_ids.append(created_rss.id)
+        logging.info(f"rss_id --{rss_id}-- saved")
+        stored_rss_ids.append(rss_id)
+    fan_out(
+        key=source.key,
+        rss_ids=stored_db_ids,
+        feed_manager_repository=FeedManagerRepository,
+    )
+    FeedMemoryRepository.add_to_memory(
+        key=source.key, post_ids=stored_rss_ids, date=datetime.now()
+    )
+
 
 @celery_app.task
 @retry(times=3, wait=5)
 def add_from_stream():
-    sources = RSSSourceRepository.get_sources()
-    for source in sources:
-        feed = feedparser.parse(source.link)
-        rss_ids = FeedMemoryRepository.get_memory(key=source.key, date=datetime.now())
-        stored_rss_ids = []
-        stored_db_ids = []
-        for item in feed["entries"]:
-            logging.info(f"source with key {source.key} init")
-            link = item.link
-            rss_id_patterns = re.findall(pattern="/[0-9]+/", string=link)
-            rss_id = rss_id_patterns.pop().replace("/", "") if rss_id_patterns else None
-            logging.info(f"rss_id --{rss_id}-- got in stream")
-            if rss_id in rss_ids:
-                logging.info(f"rss_id --{rss_id}-- abort")
-                continue
-            rss = RSS()
-            rss.link = item.link
-            rss.title = item.title
-            rss.source = source
-            rss.description = item.summary
-            pub_date_str = item.published
-            pub_date = datetime.strptime(pub_date_str, "%Y-%m-%dT%H:%M:%S")
-            rss.pub_date = pub_date
-            created_rss = RSSRepository.create(model=rss)
-            stored_db_ids.append(created_rss.id)
-            logging.info(f"rss_id --{rss_id}-- saved")
-            stored_rss_ids.append(rss_id)
-        fan_out(
-            key=source.key,
-            rss_ids=stored_db_ids,
-            feed_manager_repository=FeedManagerRepository,
-        )
-        FeedMemoryRepository.add_to_memory(
-            key=source.key, post_ids=stored_rss_ids, date=datetime.now()
-        )
+    chunks = []
+    last_offset = 0
+    while True:
+        sources = RSSSourceRepository.get_sources(limit=SOURCES_CHUNK_LIMIT, offset=last_offset)
+        last_offset += SOURCES_CHUNK_LIMIT
+        if sources:
+            chunks.append(sources)
+        else:
+            break
 
+    for chunk in chunks:
+        with ThreadPool(
+            processes=JOB_CONCURRENCY
+        ) as thread_pool:
+            result = thread_pool.map_async(inner_function, chunk)
+            result.get()
 
-add_from_stream()
+# add_from_stream()
