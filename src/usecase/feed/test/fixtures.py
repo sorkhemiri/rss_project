@@ -30,3 +30,11 @@ def create_source_patch(monkeypatch):
         return model
 
     monkeypatch.setattr(RSSSourceRepository, "create", rss_source_patch)
+
+
+@pytest.fixture
+def delete_source_patch(monkeypatch):
+    def always_none(key):
+        return None
+
+    monkeypatch.setattr(RSSSourceRepository, "delete", always_none)
