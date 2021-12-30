@@ -33,10 +33,6 @@ class UserFeedUseCase(UseCaseInterface):
             )
             unseen_feed = self.feed_manager_repository.get_unseen(user_id=user.id)
             rss_ids = [int(item[0]) for item in user_feed]
-            just_seen_posts = [item for item in unseen_feed if int(item) in rss_ids]
-            self.feed_manager_repository.remove_from_unseen(
-                user_id=user.id, post_ids=just_seen_posts
-            )
             rss_list = self.rss_repository.get_list(rss_ids=rss_ids)
             rss_list_data = []
             for item in rss_list:
