@@ -40,7 +40,12 @@ class GetRSSSourceFeedUseCase(UseCaseInterface):
             for item in rss_list:
                 item_data = item.dict(exclude_defaults=True)
                 rss_list_data.append(item_data)
-            return {"rss": rss_list_data, "unseen": unseen_rss_list, "http_status_code": 200}
+
+            unseen_rss_data = []
+            for item in unseen_rss_list:
+                item_data = item.dict(exclude_defaults=True)
+                unseen_rss_data.append(item_data)
+            return {"rss": rss_list_data, "unseen": unseen_rss_data, "http_status_code": 200}
         except ValidationError as err:
             raise UseCaseException(json.loads(err.json()), error_code=2)
         except UseCaseException as err:
