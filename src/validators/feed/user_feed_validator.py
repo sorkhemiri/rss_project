@@ -4,7 +4,7 @@ from entities import User
 from interfaces.validator import ValidatorInterface
 
 
-class RSSListValidator(ValidatorInterface):
+class UserFeedValidator(ValidatorInterface):
     user: User
     page: int = 1
     limit: int = 10

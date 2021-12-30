@@ -7,7 +7,7 @@ from repositories.postgres import UserRepository, RSSRepository
 from repositories.redis import UserAuthRepository, FeedManagerRepository
 from usecase.feed.implementation import UserFeedUseCase
 from dependencies import CheckAuthentication
-from validators.feed import RSSListValidator
+from validators.feed import UserFeedValidator
 
 router = APIRouter()
 
@@ -22,7 +22,7 @@ def user_feed(
 ):
     request_data = {"offset": offset, "limit": limit, "user": user}
     use_case = UserFeedUseCase(
-        validator=RSSListValidator,
+        validator=UserFeedValidator,
         rss_repository=RSSRepository,
         feed_manager_repository=FeedManagerRepository,
     )
