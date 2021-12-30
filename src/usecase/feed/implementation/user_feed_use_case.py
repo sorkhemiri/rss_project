@@ -31,7 +31,8 @@ class UserFeedUseCase(UseCaseInterface):
             user_feed = self.feed_manager_repository.get_feed(
                 user_id=user.id, page=page, limit=limit
             )
-            unseen_feed = self.feed_manager_repository.get_unseen(user_id=user.id)
+            unseen_feed_ids = self.feed_manager_repository.get_unseen(user_id=user.id)
+            unseen_feed = self.rss_repository.get_list(rss_ids=unseen_feed_ids)
             rss_ids = [int(item[0]) for item in user_feed]
             rss_list = self.rss_repository.get_list(rss_ids=rss_ids)
             rss_list_data = []
