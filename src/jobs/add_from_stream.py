@@ -37,6 +37,10 @@ def fan_out(
         feed_manager_repository.add_to_unseen(
             user_id=subscriber.user.id, post_ids=rss_ids
         )
+        feed_manager_repository.add_to_source_unseen(
+            user_id=subscriber.user.id, source_key=key, post_ids=rss_ids
+        )
+
 
 def inner_function(source):
     feed = feedparser.parse(source.link)
