@@ -1,3 +1,4 @@
+from entities import User
 from repositories.postgres import RSSRepository
 from repositories.redis import FeedManagerRepository
 from usecase.feed.implementation import GetRSSSourceFeedUseCase
@@ -14,7 +15,13 @@ class GetRSSSourceFeedUseCaseTestCase:
             feed_manager_repository=FeedManagerRepository,
         )
 
-        request_data = {}
+        request_data = {"user": User()}
+
+        data = use_case.execute(request_model=request_data or {})
+        assert data["http_status_code"] == 400
+        assert data["type"] == "VALIDATION ERROR"
+
+        request_data = {"source_key": "some_key"}
 
         data = use_case.execute(request_model=request_data or {})
         assert data["http_status_code"] == 400
