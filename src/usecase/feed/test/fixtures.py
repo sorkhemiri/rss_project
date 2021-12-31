@@ -186,3 +186,19 @@ def delete_from_feed(monkeypatch):
     def always_none(user_id, values):
         return None
     monkeypatch.setattr(FeedManagerRepository, "delete_from_feed", always_none)
+
+
+@pytest.fixture
+def user_feed_patch(monkeypatch):
+    def fake_feed(user_id, page, limit):
+        return [("1", "1111111"), ("2", "22222222")]
+
+    monkeypatch.setattr(FeedManagerRepository, "get_feed", fake_feed)
+
+
+@pytest.fixture
+def unseen_rss_ids_patch(monkeypatch):
+    def fake_ids(user_id):
+        return ["1", "2"]
+
+    monkeypatch.setattr(FeedManagerRepository, "get_unseen", fake_ids)

@@ -39,9 +39,14 @@ class UserFeedUseCase(UseCaseInterface):
             for item in rss_list:
                 item_data = item.dict(exclude_defaults=True)
                 rss_list_data.append(item_data)
+
+            unseen_rss_list_data = []
+            for item in unseen_feed:
+                item_data = item.dict(exclude_defaults=True)
+                unseen_rss_list_data.append(item_data)
             return {
                 "rss": rss_list_data,
-                "unseen_rss": unseen_feed,
+                "unseen_rss": unseen_rss_list_data,
                 "http_status_code": 200,
             }
         except ValidationError as err:
