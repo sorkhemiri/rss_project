@@ -7,11 +7,11 @@ from validators.feed import CreateRSSSourceValidator
 
 
 class CreateRSSSourceUseCaseTestCase:
-
     @staticmethod
     def test_input():
         use_case = CreateRSSSourceUseCase(
-            validator=CreateRSSSourceValidator, rss_source_repository=RSSSourceRepository
+            validator=CreateRSSSourceValidator,
+            rss_source_repository=RSSSourceRepository,
         )
 
         request_data = {"title": "some_title", "link": "some_link"}
@@ -45,10 +45,15 @@ class CreateRSSSourceUseCaseTestCase:
     @staticmethod
     def test_key_not_valid():
         use_case = CreateRSSSourceUseCase(
-            validator=CreateRSSSourceValidator, rss_source_repository=RSSSourceRepository
+            validator=CreateRSSSourceValidator,
+            rss_source_repository=RSSSourceRepository,
         )
 
-        request_data = {"key": "invalid*key", "title": "some_title", "link": "some_link"}
+        request_data = {
+            "key": "invalid*key",
+            "title": "some_title",
+            "link": "some_link",
+        }
 
         data = use_case.execute(request_model=request_data or {})
         assert data["http_status_code"] == 400
@@ -58,7 +63,8 @@ class CreateRSSSourceUseCaseTestCase:
     @staticmethod
     def test_key_already_exist(key_exist_patch):
         use_case = CreateRSSSourceUseCase(
-            validator=CreateRSSSourceValidator, rss_source_repository=RSSSourceRepository
+            validator=CreateRSSSourceValidator,
+            rss_source_repository=RSSSourceRepository,
         )
 
         request_data = {"key": "valid_key", "title": "some_title", "link": "some_link"}
@@ -71,7 +77,8 @@ class CreateRSSSourceUseCaseTestCase:
     @staticmethod
     def test_outcome(key_not_exist_patch, create_source_patch):
         use_case = CreateRSSSourceUseCase(
-            validator=CreateRSSSourceValidator, rss_source_repository=RSSSourceRepository
+            validator=CreateRSSSourceValidator,
+            rss_source_repository=RSSSourceRepository,
         )
 
         request_data = {"key": "ValidKey", "title": "some_title", "link": "some_link"}
@@ -79,5 +86,7 @@ class CreateRSSSourceUseCaseTestCase:
         data = use_case.execute(request_model=request_data or {})
         assert data["http_status_code"] == 200
         assert data["source"] == {
-            "key": "validkey", "title": "some_title", "link": "some_link"
+            "key": "validkey",
+            "title": "some_title",
+            "link": "some_link",
         }

@@ -4,11 +4,11 @@ from validators.feed import DeleteRSSSourceValidator
 
 
 class DeleteRSSSourceUseCaseTestCase:
-
     @staticmethod
     def test_input():
         use_case = DeleteRSSSourceUseCase(
-            validator=DeleteRSSSourceValidator, rss_source_repository=RSSSourceRepository
+            validator=DeleteRSSSourceValidator,
+            rss_source_repository=RSSSourceRepository,
         )
 
         request_data = {}
@@ -20,7 +20,8 @@ class DeleteRSSSourceUseCaseTestCase:
     @staticmethod
     def test_key_not_exist(key_not_exist_patch):
         use_case = DeleteRSSSourceUseCase(
-            validator=DeleteRSSSourceValidator, rss_source_repository=RSSSourceRepository
+            validator=DeleteRSSSourceValidator,
+            rss_source_repository=RSSSourceRepository,
         )
 
         request_data = {"key": "some_key"}
@@ -33,7 +34,8 @@ class DeleteRSSSourceUseCaseTestCase:
     @staticmethod
     def test_outcome(key_exist_patch, delete_source_patch):
         use_case = DeleteRSSSourceUseCase(
-            validator=DeleteRSSSourceValidator, rss_source_repository=RSSSourceRepository
+            validator=DeleteRSSSourceValidator,
+            rss_source_repository=RSSSourceRepository,
         )
 
         request_data = {"key": "some_key"}

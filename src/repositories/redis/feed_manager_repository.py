@@ -32,7 +32,14 @@ class FeedManagerRepository(FeedManagerRepositoryInterface):
 
     @classmethod
     def add_to_source_unseen(cls, user_id: int, source_key: str, post_ids: list):
-        source_unseen_prefix = cls.PREFIX + "source-unseen:" + f"{source_key}" + "user:" + f"{user_id}:" + "unseen"
+        source_unseen_prefix = (
+            cls.PREFIX
+            + "source-unseen:"
+            + f"{source_key}"
+            + "user:"
+            + f"{user_id}:"
+            + "unseen"
+        )
         RedisConnection.push_values(key=source_unseen_prefix, values=post_ids)
 
     @classmethod
@@ -85,7 +92,14 @@ class FeedManagerRepository(FeedManagerRepositoryInterface):
 
     @classmethod
     def get_source_unseen(cls, user_id: int, source_key: str):
-        source_unseen_prefix = cls.PREFIX + "source-unseen:" + f"{source_key}" + "user:" + f"{user_id}:" + "unseen"
+        source_unseen_prefix = (
+            cls.PREFIX
+            + "source-unseen:"
+            + f"{source_key}"
+            + "user:"
+            + f"{user_id}:"
+            + "unseen"
+        )
         values = RedisConnection.get_all_list_values(key=source_unseen_prefix)
         return values
 
@@ -96,5 +110,14 @@ class FeedManagerRepository(FeedManagerRepositoryInterface):
 
     @classmethod
     def remove_source_from_unseen(cls, user_id: int, source_key: str, post_ids: list):
-        source_unseen_prefix = cls.PREFIX + "source-unseen:" + f"{source_key}" + "user:" + f"{user_id}:" + "unseen"
-        RedisConnection.remove_values_from_list(key=source_unseen_prefix, values=post_ids)
+        source_unseen_prefix = (
+            cls.PREFIX
+            + "source-unseen:"
+            + f"{source_key}"
+            + "user:"
+            + f"{user_id}:"
+            + "unseen"
+        )
+        RedisConnection.remove_values_from_list(
+            key=source_unseen_prefix, values=post_ids
+        )

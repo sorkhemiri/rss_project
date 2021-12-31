@@ -5,7 +5,6 @@ from validators.feed import UserSourceLikesListValidator
 
 
 class UserSourceLikesListUseCaseTestCase:
-
     @staticmethod
     def test_input():
         use_case = UserSourceLikesListUseCase(

@@ -4,7 +4,6 @@ from validators.feed import UserSubscriptionsListValidator
 
 
 class UserSubscriptionsListUseCaseTestCase:
-
     @staticmethod
     def test_input():
         use_case = UserSubscriptionsListUseCase(

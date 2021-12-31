@@ -5,7 +5,12 @@ from uuid import UUID
 import pytest
 
 from entities import User, RSSSource, RSS
-from repositories.postgres import RSSSourceRepository, RSSRepository, LikeRepository, SubscriptionRepository
+from repositories.postgres import (
+    RSSSourceRepository,
+    RSSRepository,
+    LikeRepository,
+    SubscriptionRepository,
+)
 from repositories.redis import UserAuthRepository, FeedManagerRepository
 
 
@@ -59,14 +64,16 @@ def get_rss_list_patch(monkeypatch):
                 link="test_link1",
                 description="test description1",
                 source=RSSSource(id=1),
-                pub_date=datetime(year=2021, month=1, day=1)),
+                pub_date=datetime(year=2021, month=1, day=1),
+            ),
             RSS(
                 id=2,
                 title="test_title2",
                 link="test_link2",
                 description="test description2",
                 source=RSSSource(id=2),
-                pub_date=datetime(year=2021, month=1, day=2)),
+                pub_date=datetime(year=2021, month=1, day=2),
+            ),
         ]
 
     monkeypatch.setattr(RSSRepository, "get_list", fake_rss)
@@ -112,13 +119,13 @@ def rss_source_list_patch(monkeypatch):
                 title="test_title1",
                 key="test_key1",
                 description="test_description1",
-                link="test_link1"
+                link="test_link1",
             ),
             RSSSource(
                 title="test_title2",
                 key="test_key2",
                 description="test_description2",
-                link="test_link2"
+                link="test_link2",
             ),
         ]
 
@@ -146,7 +153,9 @@ def subscription_not_exist_patch(monkeypatch):
     def always_false(model):
         return False
 
-    monkeypatch.setattr(SubscriptionRepository, "check_subscription_exist", always_false)
+    monkeypatch.setattr(
+        SubscriptionRepository, "check_subscription_exist", always_false
+    )
 
 
 @pytest.fixture
@@ -185,6 +194,7 @@ def get_channel_all_patch(monkeypatch):
 def delete_from_feed(monkeypatch):
     def always_none(user_id, values):
         return None
+
     monkeypatch.setattr(FeedManagerRepository, "delete_from_feed", always_none)
 
 

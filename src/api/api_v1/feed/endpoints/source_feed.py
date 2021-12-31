@@ -17,7 +17,13 @@ auth_check = CheckAuthentication(
 
 
 @router.get("/source/{source_key}/feed/", tags=["source-feed", "feed"])
-def source_feed(request: Request, source_key: str, page: int = 1, limit: int = 10, user: User = Depends(auth_check)):
+def source_feed(
+    request: Request,
+    source_key: str,
+    page: int = 1,
+    limit: int = 10,
+    user: User = Depends(auth_check),
+):
     request_data = {
         "source_key": source_key,
         "page": page,

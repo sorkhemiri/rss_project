@@ -6,7 +6,6 @@ from validators.feed import UnsubscribeRSSSourceValidator
 
 
 class UnsubscribeRSSSourceUseCaseTestCase:
-
     @staticmethod
     def test_input():
         use_case = UnsubscribeRSSSourceUseCase(
@@ -45,8 +44,13 @@ class UnsubscribeRSSSourceUseCaseTestCase:
         assert data["message"] == "Source not found"
 
     @staticmethod
-    def test_outcome(key_exist_patch, source_id_by_key_patch, delete_subscription_patch,
-                     get_channel_all_patch, delete_from_feed):
+    def test_outcome(
+        key_exist_patch,
+        source_id_by_key_patch,
+        delete_subscription_patch,
+        get_channel_all_patch,
+        delete_from_feed,
+    ):
         use_case = UnsubscribeRSSSourceUseCase(
             validator=UnsubscribeRSSSourceValidator,
             rss_source_repository=RSSSourceRepository,

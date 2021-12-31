@@ -5,7 +5,6 @@ from validators.feed import LikeRSSValidator
 
 
 class LikeRSSUseCaseTestCase:
-
     @staticmethod
     def test_input():
         use_case = LikeRSSUseCase(

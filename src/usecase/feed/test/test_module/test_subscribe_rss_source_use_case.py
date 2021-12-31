@@ -6,7 +6,6 @@ from validators.feed import SubscribeRSSSourceValidator
 
 
 class SubscribeRSSSourceUseCaseTestCase:
-
     @staticmethod
     def test_input():
         use_case = SubscribeRSSSourceUseCase(
@@ -45,7 +44,9 @@ class SubscribeRSSSourceUseCaseTestCase:
         assert data["message"] == "Source not found"
 
     @staticmethod
-    def test_subscription_exist(key_exist_patch, source_id_by_key_patch, subscription_exist_patch):
+    def test_subscription_exist(
+        key_exist_patch, source_id_by_key_patch, subscription_exist_patch
+    ):
         use_case = SubscribeRSSSourceUseCase(
             validator=SubscribeRSSSourceValidator,
             rss_source_repository=RSSSourceRepository,
@@ -60,10 +61,12 @@ class SubscribeRSSSourceUseCaseTestCase:
         assert data["result"] == "User subscribed successfully"
 
     @staticmethod
-    def test_subscription_not_exist(key_exist_patch,
-                                    source_id_by_key_patch,
-                                    subscription_not_exist_patch,
-                                    subscription_create_patch):
+    def test_subscription_not_exist(
+        key_exist_patch,
+        source_id_by_key_patch,
+        subscription_not_exist_patch,
+        subscription_create_patch,
+    ):
         use_case = SubscribeRSSSourceUseCase(
             validator=SubscribeRSSSourceValidator,
             rss_source_repository=RSSSourceRepository,

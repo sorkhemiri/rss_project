@@ -84,7 +84,9 @@ def add_from_stream():
     chunks = []
     last_offset = 0
     while True:
-        sources = RSSSourceRepository.get_sources(limit=SOURCES_CHUNK_LIMIT, offset=last_offset)
+        sources = RSSSourceRepository.get_sources(
+            limit=SOURCES_CHUNK_LIMIT, offset=last_offset
+        )
         last_offset += SOURCES_CHUNK_LIMIT
         if sources:
             chunks.append(sources)
@@ -92,10 +94,9 @@ def add_from_stream():
             break
 
     for chunk in chunks:
-        with ThreadPool(
-            processes=JOB_CONCURRENCY
-        ) as thread_pool:
+        with ThreadPool(processes=JOB_CONCURRENCY) as thread_pool:
             result = thread_pool.map_async(inner_function, chunk)
             result.get()
+
 
 # add_from_stream()

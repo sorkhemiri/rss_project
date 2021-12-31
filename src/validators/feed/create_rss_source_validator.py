@@ -15,11 +15,17 @@ class CreateRSSSourceValidator(ValidatorInterface):
     @validator("title")
     def empty_title(cls, v):
         if v == "":
-            raise ValidatorException(message="title must not be empty", error_code=error_status.VALIDATION_ERROR)
+            raise ValidatorException(
+                message="title must not be empty",
+                error_code=error_status.VALIDATION_ERROR,
+            )
         return v
 
     @validator("link")
     def empty_link(cls, v):
         if v == "":
-            raise ValidatorException(message="link must not be empty", error_code=error_status.VALIDATION_ERROR)
+            raise ValidatorException(
+                message="link must not be empty",
+                error_code=error_status.VALIDATION_ERROR,
+            )
         return v

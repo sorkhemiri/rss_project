@@ -1,4 +1,3 @@
-
 from repositories.postgres import UserRepository
 from usecase.account.implementation import RegisterUseCase
 from validators.account import RegisterValidator
@@ -72,11 +71,15 @@ class RegisterUseCaseTestCase:
         data = use_case.execute(request_model=request_data or {})
         assert data["http_status_code"] == 200
         assert data["user"] == {
-                                    "uid": "bd9213db-8d4c-4da4-9c77-e8e92172fa88",
-                                    "username": "johndoe"
-                                }
+            "uid": "bd9213db-8d4c-4da4-9c77-e8e92172fa88",
+            "username": "johndoe",
+        }
 
-        request_data = {"username": "JohnDoe", "password": "VeryStrongPass", "first_name": "John"}
+        request_data = {
+            "username": "JohnDoe",
+            "password": "VeryStrongPass",
+            "first_name": "John",
+        }
 
         data = use_case.execute(request_model=request_data or {})
         assert data["http_status_code"] == 200
@@ -86,7 +89,12 @@ class RegisterUseCaseTestCase:
             "first_name": "John",
         }
 
-        request_data = {"username": "JohnDoe", "password": "VeryStrongPass", "first_name": "John", "last_name": "Doe"}
+        request_data = {
+            "username": "JohnDoe",
+            "password": "VeryStrongPass",
+            "first_name": "John",
+            "last_name": "Doe",
+        }
 
         data = use_case.execute(request_model=request_data or {})
         assert data["http_status_code"] == 200
@@ -94,5 +102,5 @@ class RegisterUseCaseTestCase:
             "uid": "bd9213db-8d4c-4da4-9c77-e8e92172fa88",
             "username": "johndoe",
             "first_name": "John",
-            "last_name": "Doe"
+            "last_name": "Doe",
         }

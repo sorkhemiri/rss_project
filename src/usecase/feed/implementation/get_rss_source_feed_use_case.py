@@ -34,7 +34,9 @@ class GetRSSSourceFeedUseCase(UseCaseInterface):
             )
             rss_ids = [int(item[0]) for item in source_feed]
             rss_list = self.rss_repository.get_list(rss_ids=rss_ids)
-            unseen_rss_ids = self.feed_manager_repository.get_source_unseen(user_id=user.id, source_key=source_key)
+            unseen_rss_ids = self.feed_manager_repository.get_source_unseen(
+                user_id=user.id, source_key=source_key
+            )
             unseen_rss_list = self.rss_repository.get_list(rss_ids=unseen_rss_ids)
             rss_list_data = []
             for item in rss_list:
@@ -45,7 +47,11 @@ class GetRSSSourceFeedUseCase(UseCaseInterface):
             for item in unseen_rss_list:
                 item_data = item.dict(exclude_defaults=True)
                 unseen_rss_data.append(item_data)
-            return {"rss": rss_list_data, "unseen": unseen_rss_data, "http_status_code": 200}
+            return {
+                "rss": rss_list_data,
+                "unseen": unseen_rss_data,
+                "http_status_code": 200,
+            }
         except ValidationError as err:
             raise UseCaseException(json.loads(err.json()), error_code=2)
         except UseCaseException as err:

@@ -36,7 +36,10 @@ class RefreshAccessUseCase(UseCaseInterface):
                     refresh_token=request_data.refresh_token
                 )
                 if not authentication_data:
-                    raise UseCaseException(message="refresh token invalid or expired", error_code=error_status.VALIDATION_ERROR)
+                    raise UseCaseException(
+                        message="refresh token invalid or expired",
+                        error_code=error_status.VALIDATION_ERROR,
+                    )
                 else:
                     response_data = {
                         "result": authentication_data,

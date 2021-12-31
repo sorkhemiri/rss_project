@@ -78,17 +78,17 @@ def uid_by_username_patch(monkeypatch):
 def login_patch(monkeypatch):
     def login_data_patch(uid):
         return {
-                "result": {
-                    "access": {
-                        "token": "cca4eb1fa7a244d42895e1f1dd7f89253928b0e65db7d99e692e8f253778c3af",
-                        "expire": "2021-12-29T10:24:35"
-                    },
-                    "refresh": {
-                        "token": "f2301ecdc55a568264d9d7b32c0f1cf36719d1c72a409e1488090bd9fae6b180",
-                        "expire": "2021-12-29T18:14:35"
-                    }
-                }
+            "result": {
+                "access": {
+                    "token": "cca4eb1fa7a244d42895e1f1dd7f89253928b0e65db7d99e692e8f253778c3af",
+                    "expire": "2021-12-29T10:24:35",
+                },
+                "refresh": {
+                    "token": "f2301ecdc55a568264d9d7b32c0f1cf36719d1c72a409e1488090bd9fae6b180",
+                    "expire": "2021-12-29T18:14:35",
+                },
             }
+        }
 
     monkeypatch.setattr(UserAuthRepository, "login", login_data_patch)
 
@@ -121,17 +121,17 @@ def refresh_token_not_valid_patch(monkeypatch):
 def get_auth_data_patch(monkeypatch):
     def fake_access(uid):
         return {
-                "result": {
-                    "access": {
-                        "token": "cca4eb1fa7a244d42895e1f1dd7f89253928b0e65db7d99e692e8f253778c3af",
-                        "expire": "2021-12-29T10:24:35"
-                    },
-                    "refresh": {
-                        "token": "f2301ecdc55a568264d9d7b32c0f1cf36719d1c72a409e1488090bd9fae6b180",
-                        "expire": "2021-12-29T18:14:35"
-                    }
-                }
+            "result": {
+                "access": {
+                    "token": "cca4eb1fa7a244d42895e1f1dd7f89253928b0e65db7d99e692e8f253778c3af",
+                    "expire": "2021-12-29T10:24:35",
+                },
+                "refresh": {
+                    "token": "f2301ecdc55a568264d9d7b32c0f1cf36719d1c72a409e1488090bd9fae6b180",
+                    "expire": "2021-12-29T18:14:35",
+                },
             }
+        }
 
     monkeypatch.setattr(UserAuthRepository, "get_authentication_data", fake_access)
 
@@ -140,17 +140,17 @@ def get_auth_data_patch(monkeypatch):
 def refresh_token_valid_patch(monkeypatch):
     def fake_access(refresh_token):
         return {
-                "result": {
-                    "access": {
-                        "token": "cca4eb1fa7a244d42895e1f1dd7f89253928b0e65db7d99e692e8f253778c3af",
-                        "expire": "2021-12-29T10:24:35"
-                    },
-                    "refresh": {
-                        "token": "f2301ecdc55a568264d9d7b32c0f1cf36719d1c72a409e1488090bd9fae6b180",
-                        "expire": "2021-12-29T18:14:35"
-                    }
-                }
+            "result": {
+                "access": {
+                    "token": "cca4eb1fa7a244d42895e1f1dd7f89253928b0e65db7d99e692e8f253778c3af",
+                    "expire": "2021-12-29T10:24:35",
+                },
+                "refresh": {
+                    "token": "f2301ecdc55a568264d9d7b32c0f1cf36719d1c72a409e1488090bd9fae6b180",
+                    "expire": "2021-12-29T18:14:35",
+                },
             }
+        }
 
     monkeypatch.setattr(UserAuthRepository, "refresh_access", fake_access)
 
