@@ -62,5 +62,5 @@ class FeedManagerRepositoryInterface(RepositoryInterface):
 
     @classmethod
     @abc.abstractmethod
-    def remove_source_from_unseen(cls, user_id: int, source_key: str, post_ids: list):
+    def remove_from_source_unseen(cls, user_id: int, source_key: str, post_ids: list):
         pass

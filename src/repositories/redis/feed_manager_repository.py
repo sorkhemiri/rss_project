@@ -109,7 +109,7 @@ class FeedManagerRepository(FeedManagerRepositoryInterface):
         RedisConnection.remove_values_from_list(key=user_unseen_prefix, values=post_ids)
 
     @classmethod
-    def remove_source_from_unseen(cls, user_id: int, source_key: str, post_ids: list):
+    def remove_from_source_unseen(cls, user_id: int, source_key: str, post_ids: list):
         source_unseen_prefix = (
             cls.PREFIX
             + "source-unseen:"

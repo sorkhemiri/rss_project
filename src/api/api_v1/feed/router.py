@@ -23,6 +23,7 @@ from api.api_v1.feed.endpoints.all_user_likes import router as all_user_likes_ro
 from api.api_v1.feed.endpoints.user_source_likes import (
     router as user_source_likes_router,
 )
+from api.api_v1.feed.endpoints.rss_seen import router as rss_seen_router
 
 
 router = APIRouter()
@@ -39,3 +40,4 @@ router.include_router(source_feed_router)
 router.include_router(user_subscriptions_router)
 router.include_router(all_user_likes_router)
 router.include_router(user_source_likes_router)
+router.include_router(rss_seen_router)
