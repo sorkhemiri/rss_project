@@ -155,3 +155,11 @@ def subscription_create_patch(monkeypatch):
         return None
 
     monkeypatch.setattr(SubscriptionRepository, "create", fake_create)
+
+
+@pytest.fixture
+def delete_like_patch(monkeypatch):
+    def fake_delete(model):
+        return None
+
+    monkeypatch.setattr(LikeRepository, "delete", fake_delete)
