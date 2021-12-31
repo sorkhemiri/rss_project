@@ -4,7 +4,7 @@ from uuid import UUID
 
 import pytest
 
-from entities import User, RSSSource, RSS, Like
+from entities import User, RSSSource, RSS, Like, Subscription
 from repositories.postgres import (
     RSSSourceRepository,
     RSSRepository,
@@ -234,3 +234,16 @@ def source_like_list_patch(monkeypatch):
         ]
 
     monkeypatch.setattr(LikeRepository, "get_user_source_likes_list", fake_like_list)
+
+
+@pytest.fixture
+def subscription_list_patch(monkeypatch):
+    def fake_subscriptions_list(user_id, offset, limit):
+        return [
+            Subscription(source=RSSSource(title="test_title1", key="test_key1")),
+            Subscription(source=RSSSource(title="test_title2", key="test_key2")),
+        ]
+
+    monkeypatch.setattr(
+        SubscriptionRepository, "get_user_subscriptions_list", fake_subscriptions_list
+    )
