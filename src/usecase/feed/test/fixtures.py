@@ -223,3 +223,14 @@ def like_list_patch(monkeypatch):
         ]
 
     monkeypatch.setattr(LikeRepository, "get_user_likes_list", fake_like_list)
+
+
+@pytest.fixture
+def source_like_list_patch(monkeypatch):
+    def fake_like_list(user_id, source_id, offset, limit):
+        return [
+            Like(rss=RSS(id=1, title="test_title1")),
+            Like(rss=RSS(id=2, title="test_title2")),
+        ]
+
+    monkeypatch.setattr(LikeRepository, "get_user_source_likes_list", fake_like_list)

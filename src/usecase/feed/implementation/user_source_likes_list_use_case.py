@@ -8,7 +8,7 @@ from interfaces.rss_source_repository_interface import RSSSourceRepositoryInterf
 from interfaces.validator import ValidatorInterface
 from usecase.interface import UseCaseInterface
 
-from exceptions import UseCaseException
+from exceptions import UseCaseException, error_status
 
 
 class UserSourceLikesListUseCase(UseCaseInterface):
@@ -29,6 +29,12 @@ class UserSourceLikesListUseCase(UseCaseInterface):
             offset = data.offset
             limit = data.limit
             source_key = data.source_key
+            if not self.rss_source_repository.check_source_key_exists(key=source_key):
+                raise UseCaseException(
+                    message="Source not found",
+                    error_code=error_status.DOES_NOT_EXIST_ERROR,
+                )
+
             source_id = self.rss_source_repository.get_sources_id_by_key(
                 source_key=source_key
             )
