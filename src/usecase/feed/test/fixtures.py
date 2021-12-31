@@ -102,3 +102,24 @@ def like_create_patch(monkeypatch):
         return None
 
     monkeypatch.setattr(LikeRepository, "create", fake_like_create)
+
+
+@pytest.fixture
+def rss_source_list_patch(monkeypatch):
+    def fake_rss_source_list(offset, limit):
+        return [
+            RSSSource(
+                title="test_title1",
+                key="test_key1",
+                description="test_description1",
+                link="test_link1"
+            ),
+            RSSSource(
+                title="test_title2",
+                key="test_key2",
+                description="test_description2",
+                link="test_link2"
+            ),
+        ]
+
+    monkeypatch.setattr(RSSSourceRepository, "get_list", fake_rss_source_list)
