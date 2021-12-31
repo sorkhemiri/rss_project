@@ -163,3 +163,26 @@ def delete_like_patch(monkeypatch):
         return None
 
     monkeypatch.setattr(LikeRepository, "delete", fake_delete)
+
+
+@pytest.fixture
+def delete_subscription_patch(monkeypatch):
+    def fake_delete(model):
+        return None
+
+    monkeypatch.setattr(SubscriptionRepository, "delete", fake_delete)
+
+
+@pytest.fixture
+def get_channel_all_patch(monkeypatch):
+    def fake_get(key):
+        return [("1", "1111111"), ("2", "22222222")]
+
+    monkeypatch.setattr(FeedManagerRepository, "get_channel_all", fake_get)
+
+
+@pytest.fixture
+def delete_from_feed(monkeypatch):
+    def always_none(user_id, values):
+        return None
+    monkeypatch.setattr(FeedManagerRepository, "delete_from_feed", always_none)

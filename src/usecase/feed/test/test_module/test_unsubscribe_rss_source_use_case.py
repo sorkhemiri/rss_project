@@ -27,3 +27,35 @@ class UnsubscribeRSSSourceUseCaseTestCase:
         data = use_case.execute(request_model=request_data or {})
         assert data["http_status_code"] == 400
         assert data["type"] == "VALIDATION ERROR"
+
+    @staticmethod
+    def test_source_not_found(key_not_exist_patch):
+        use_case = UnsubscribeRSSSourceUseCase(
+            validator=UnsubscribeRSSSourceValidator,
+            rss_source_repository=RSSSourceRepository,
+            subscription_repository=SubscriptionRepository,
+            feed_manager_repository=FeedManagerRepository,
+        )
+
+        request_data = {"user": User(), "source_key": "some_source"}
+
+        data = use_case.execute(request_model=request_data or {})
+        assert data["http_status_code"] == 404
+        assert data["type"] == "DOES NOT EXIST ERROR"
+        assert data["message"] == "Source not found"
+
+    @staticmethod
+    def test_outcome(key_exist_patch, source_id_by_key_patch, delete_subscription_patch,
+                     get_channel_all_patch, delete_from_feed):
+        use_case = UnsubscribeRSSSourceUseCase(
+            validator=UnsubscribeRSSSourceValidator,
+            rss_source_repository=RSSSourceRepository,
+            subscription_repository=SubscriptionRepository,
+            feed_manager_repository=FeedManagerRepository,
+        )
+
+        request_data = {"user": User(), "source_key": "some_source"}
+
+        data = use_case.execute(request_model=request_data or {})
+        assert data["http_status_code"] == 200
+        assert data["result"] == "User unsubscribed successfully"
