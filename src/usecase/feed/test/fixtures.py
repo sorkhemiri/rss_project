@@ -5,7 +5,7 @@ from uuid import UUID
 import pytest
 
 from entities import User, RSSSource, RSS
-from repositories.postgres import RSSSourceRepository, RSSRepository, LikeRepository
+from repositories.postgres import RSSSourceRepository, RSSRepository, LikeRepository, SubscriptionRepository
 from repositories.redis import UserAuthRepository, FeedManagerRepository
 
 
@@ -123,3 +123,35 @@ def rss_source_list_patch(monkeypatch):
         ]
 
     monkeypatch.setattr(RSSSourceRepository, "get_list", fake_rss_source_list)
+
+
+@pytest.fixture
+def source_id_by_key_patch(monkeypatch):
+    def fake_id(source_key):
+        return 1
+
+    monkeypatch.setattr(RSSSourceRepository, "get_sources_id_by_key", fake_id)
+
+
+@pytest.fixture
+def subscription_exist_patch(monkeypatch):
+    def always_true(model):
+        return True
+
+    monkeypatch.setattr(SubscriptionRepository, "check_subscription_exist", always_true)
+
+
+@pytest.fixture
+def subscription_not_exist_patch(monkeypatch):
+    def always_false(model):
+        return False
+
+    monkeypatch.setattr(SubscriptionRepository, "check_subscription_exist", always_false)
+
+
+@pytest.fixture
+def subscription_create_patch(monkeypatch):
+    def fake_create(model):
+        return None
+
+    monkeypatch.setattr(SubscriptionRepository, "create", fake_create)

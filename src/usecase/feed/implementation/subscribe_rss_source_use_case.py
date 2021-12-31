@@ -34,7 +34,7 @@ class SubscribeRSSSourceUseCase(UseCaseInterface):
             user = data.user
             if not self.rss_source_repository.check_source_key_exists(key=source_key):
                 raise UseCaseException(
-                    message="source not found",
+                    message="Source not found",
                     error_code=error_status.DOES_NOT_EXIST_ERROR,
                 )
             source_id = self.rss_source_repository.get_sources_id_by_key(
@@ -51,7 +51,7 @@ class SubscribeRSSSourceUseCase(UseCaseInterface):
                     key=source_key, page=1, limit=OLD_RSS_ADD_TO_FEED_WINDOW
                 )
                 self.feed_manager_repository.add_to_feed(user_id=user.uid, feed=values)
-            return {"result": "user subscribed successfully", "http_status_code": 200}
+            return {"result": "User subscribed successfully", "http_status_code": 200}
         except ValidationError as err:
             raise UseCaseException(json.loads(err.json()), error_code=2)
         except UseCaseException as err:
