@@ -4,7 +4,7 @@ from uuid import UUID
 
 import pytest
 
-from entities import User, RSSSource, RSS
+from entities import User, RSSSource, RSS, Like
 from repositories.postgres import (
     RSSSourceRepository,
     RSSRepository,
@@ -212,3 +212,14 @@ def unseen_rss_ids_patch(monkeypatch):
         return ["1", "2"]
 
     monkeypatch.setattr(FeedManagerRepository, "get_unseen", fake_ids)
+
+
+@pytest.fixture
+def like_list_patch(monkeypatch):
+    def fake_like_list(user_id, offset, limit):
+        return [
+            Like(rss=RSS(id=1, title="test_title1")),
+            Like(rss=RSS(id=2, title="test_title2")),
+        ]
+
+    monkeypatch.setattr(LikeRepository, "get_user_likes_list", fake_like_list)
