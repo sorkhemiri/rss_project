@@ -28,12 +28,12 @@ class RemoveFromUnseenUseCase(UseCaseInterface):
             all_rss_ids = []
             for item in rss_data:
                 self.feed_manager_repository.remove_from_source_unseen(
-                    user_id=user.id,
-                    post_ids=item.rss_ids,
-                    source_key=item.source_key
+                    user_id=user.id, post_ids=item.rss_ids, source_key=item.source_key
                 )
                 all_rss_ids.extend(item.rss_ids)
-            self.feed_manager_repository.remove_from_unseen(user_id=user.id, post_ids=all_rss_ids)
+            self.feed_manager_repository.remove_from_unseen(
+                user_id=user.id, post_ids=all_rss_ids
+            )
             return {"result": "Items seen", "http_status_code": 200}
         except ValidationError as err:
             raise UseCaseException(json.loads(err.json()), error_code=2)

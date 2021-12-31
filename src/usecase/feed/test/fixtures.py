@@ -247,3 +247,19 @@ def subscription_list_patch(monkeypatch):
     monkeypatch.setattr(
         SubscriptionRepository, "get_user_subscriptions_list", fake_subscriptions_list
     )
+
+
+@pytest.fixture
+def remove_from_unseen_patch(monkeypatch):
+    def fake_remove(user_id, post_ids):
+        return None
+
+    monkeypatch.setattr(FeedManagerRepository, "remove_from_unseen", fake_remove)
+
+
+@pytest.fixture
+def remove_from_source_unseen_patch(monkeypatch):
+    def fake_remove(user_id, post_ids, source_key):
+        return None
+
+    monkeypatch.setattr(FeedManagerRepository, "remove_from_source_unseen", fake_remove)

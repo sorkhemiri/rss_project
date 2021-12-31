@@ -35,7 +35,8 @@ def user_seen(
     request_data = request_data.dict()
     request_data.update({"user": user})
     use_case = RemoveFromUnseenUseCase(
-        validator=RemoveFromUnseenValidator, feed_manager_repository=FeedManagerRepository
+        validator=RemoveFromUnseenValidator,
+        feed_manager_repository=FeedManagerRepository,
     )
     data = use_case.execute(request_model=request_data or {})
     status = data["http_status_code"]
