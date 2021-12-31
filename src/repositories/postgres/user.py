@@ -136,3 +136,14 @@ class UserRepository(UserRepositoryInterface):
             if db_id:
                 return True
         return False
+
+    @classmethod
+    def make_admin(cls, username: str) -> bool:
+        query = """
+        update public.User set is_admin = TRUE where username = %s
+        """
+        params = (username,)
+        conn = Postgres.get_connection()
+        with conn.cursor(cursor_factory=DictCursor) as curs:
+            curs.execute(query, params)
+        Postgres.connection_putback(conn)
