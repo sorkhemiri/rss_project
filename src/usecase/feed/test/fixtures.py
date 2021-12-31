@@ -5,7 +5,7 @@ from uuid import UUID
 import pytest
 
 from entities import User, RSSSource, RSS
-from repositories.postgres import RSSSourceRepository, RSSRepository
+from repositories.postgres import RSSSourceRepository, RSSRepository, LikeRepository
 from repositories.redis import UserAuthRepository, FeedManagerRepository
 
 
@@ -78,3 +78,27 @@ def source_unseen_patch(monkeypatch):
         return ["1", "2"]
 
     monkeypatch.setattr(FeedManagerRepository, "get_source_unseen", fake_ids)
+
+
+@pytest.fixture
+def like_exist_patch(monkeypatch):
+    def always_true(model):
+        return True
+
+    monkeypatch.setattr(LikeRepository, "user_like_exist", always_true)
+
+
+@pytest.fixture
+def like_not_exist_patch(monkeypatch):
+    def always_false(model):
+        return False
+
+    monkeypatch.setattr(LikeRepository, "user_like_exist", always_false)
+
+
+@pytest.fixture
+def like_create_patch(monkeypatch):
+    def fake_like_create(model):
+        return None
+
+    monkeypatch.setattr(LikeRepository, "create", fake_like_create)
