@@ -20,10 +20,10 @@ CELERY_CONFIG = {
     "redis_retry_on_timeout": True,
     "accept_content": ["pickle", "json", "msgpack", "yaml"],
     "task_serializer": "pickle",
-    "beat_schedule": {
-        "stream-job": {
-            "task": "utils.jobs.add_from_stream.add_from_stream",
-            "schedule": 60 * 2,
-        },
-    },
+    # "beat_schedule": {
+    #     "stream-job": {
+    #         "task": "utils.jobs.add_from_stream.add_from_stream",
+    #         "schedule": 60 * 2,
+    #     },
+    # },
 }

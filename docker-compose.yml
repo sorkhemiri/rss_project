@@ -29,9 +29,9 @@ services:
         volumes:
             - ./postgres_data:/var/lib/postgresql/data/
         environment:
-            - POSTGRES_USER=db
-            - POSTGRES_PASSWORD=somanylies
-            - POSTGRES_DB=db
+            - POSTGRES_USER=${postgres_user}
+            - POSTGRES_PASSWORD=${postgres_password}
+            - POSTGRES_DB=${postgres_db}
         ports:
           - 5432:5432
 
