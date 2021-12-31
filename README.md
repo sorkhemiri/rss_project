@@ -1,6 +1,5 @@
 # RSS Management APP
 
-### best RSS management application
 
 ```
 ما در پیاله عکس رخ یار دیده‌ایم
@@ -17,28 +16,34 @@ Technologies and databases:
 
 `Redis 6`
 
+## Requirements
+
+* [Docker](https://www.docker.com/).
+* [Docker Compose](https://docs.docker.com/compose/install/).
+
 
 ### Getting started
 
-For simplifying the running the project, use the `Makefile` which is included in the project root folder:
-Prepare the project's requirements on the server:
+First, create a `.env` file and put it inside the root folder of the project.  
+The `.env` file is the one that contains all your configurations, api keys, etc.
+You can copy/paste the contents from `.env.example` to your `.env` file.  
+then, run the command below:
+```
+docker-compose up --build -d
+```
+`Note:` if it's the **first time** to run the project, please execute the commands below to create the tables in the database.
+```
+$ cd path/to/project/directory
+$ chmod +x generate_db.sh
+$ ./generate_db.sh
+```
+**Note**: The first time you start your stack, it might take a few minutes for it to be ready. While the backend configures everything. You can check the logs to monitor it.
 
-`make build`
+To check the logs, run:
 
-Prepare the project's requirements locally:
-
-`make build_local`
-
-Starting the project after successful preparation:
-
-`make docker_build`
-
-### Running the tests
-
-To run the tests in the project's root folder run this command:
-
-`make test`
-
+```bash
+docker-compose logs
+```
 ### Contributing in this project
 
-If you want to contribute in this project, make sure to read the `CONTRIBUTING.md` first.
+If you want to contribute in this project, make sure to read the [CONTRIBUTING.md](CONTRIBUTING.md) first.
