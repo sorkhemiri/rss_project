@@ -66,6 +66,8 @@ class SubscribeRSSSourceUseCaseTestCase:
         source_id_by_key_patch,
         subscription_not_exist_patch,
         subscription_create_patch,
+        get_channel_patch,
+        add_to_feed_patch,
     ):
         use_case = SubscribeRSSSourceUseCase(
             validator=SubscribeRSSSourceValidator,

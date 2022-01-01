@@ -263,3 +263,11 @@ def remove_from_source_unseen_patch(monkeypatch):
         return None
 
     monkeypatch.setattr(FeedManagerRepository, "remove_from_source_unseen", fake_remove)
+
+
+@pytest.fixture
+def add_to_feed_patch(monkeypatch):
+    def fake_add_to_feed(user_id, feed):
+        return None
+
+    monkeypatch.setattr(FeedManagerRepository, "add_to_feed", fake_add_to_feed)
