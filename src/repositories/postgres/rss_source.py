@@ -119,3 +119,27 @@ class RSSSourceRepository(RSSSourceRepositoryInterface):
             source_id = result.get("id")
             return source_id
         return None
+
+    @classmethod
+    def make_update_need(cls, source_key: str):
+        query = """
+                       update public.RSSSource set need_update = TRUE where
+                       key = %s
+                    """
+        params = (source_key,)
+        conn = Postgres.get_connection()
+        with conn.cursor(cursor_factory=DictCursor) as curs:
+            curs.execute(query, params)
+        Postgres.connection_putback(conn)
+
+    @classmethod
+    def unmake_update_need(cls, source_key: str):
+        query = """
+                       update public.RSSSource set need_update = FALSE where
+                       key = %s
+                    """
+        params = (source_key,)
+        conn = Postgres.get_connection()
+        with conn.cursor(cursor_factory=DictCursor) as curs:
+            curs.execute(query, params)
+        Postgres.connection_putback(conn)
