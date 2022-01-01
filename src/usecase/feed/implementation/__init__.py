@@ -11,3 +11,4 @@ from .user_subscriptions_list_use_case import UserSubscriptionsListUseCase
 from .user_likes_list_use_case import UserLikesListUseCase
 from .user_source_likes_list_use_case import UserSourceLikesListUseCase
 from .remove_from_unseen_use_case import RemoveFromUnseenUseCase
+from .force_update_feed_use_case import ForceUpdateFeedUseCase

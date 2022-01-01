@@ -143,3 +143,25 @@ class RSSSourceRepository(RSSSourceRepositoryInterface):
         with conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute(query, params)
         Postgres.connection_putback(conn)
+
+    @classmethod
+    def get_source_by_key(cls, source_key: str):
+        query = """
+                        select title, key, description, link, id
+                        from public.RSSSource where key = %s limit 1"""
+        params = (source_key,)
+        conn = Postgres.get_connection()
+        with conn.cursor(cursor_factory=DictCursor) as curs:
+            curs.execute(query, params)
+            rss_source_data = curs.fetchone()
+        Postgres.connection_putback(conn)
+        if rss_source_data:
+            source = RSSSource(
+                    id=rss_source_data["id"],
+                    title=rss_source_data["title"],
+                    key=rss_source_data["key"],
+                    description=rss_source_data["description"],
+                    link=rss_source_data["link"],
+            )
+            return source
+        return None

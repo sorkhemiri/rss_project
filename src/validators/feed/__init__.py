@@ -11,3 +11,4 @@ from .user_subscriptions_list_validator import UserSubscriptionsListValidator
 from .user_likes_list_validator import UserLikesListValidator
 from .user_source_likes_list_validator import UserSourceLikesListValidator
 from .remove_from_unseen_validator import RemoveFromUnseenValidator
+from .force_update_feed_validator import ForceUpdateFeedValidator

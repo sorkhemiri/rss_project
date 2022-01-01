@@ -44,3 +44,8 @@ class RSSSourceRepositoryInterface(RepositoryInterface):
     @abc.abstractmethod
     def unmake_update_need(cls, source_key: str):
         pass
+
+    @classmethod
+    @abc.abstractmethod
+    def get_source_by_key(cls, source_key: str):
+        pass
