@@ -90,7 +90,6 @@ def inner_function(source):
 
 
 @celery_app.task
-@retry(times=3, wait=5)
 def add_from_stream():
     chunks = []
     last_offset = 0
