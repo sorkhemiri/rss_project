@@ -19,6 +19,14 @@ from repositories.postgres.subscription import SubscriptionRepository
 from settings import env_config
 from settings.constants import JOB_CONCURRENCY, SOURCES_CHUNK_LIMIT
 
+DAYS_OF_WEEK = [
+    "Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"
+]
+
+MONTHS_OF_YEAR = [
+    ("Jan", 1), ("Feb", 2), ("Mar", 3), ("Apr", 4), ("May", 5), ("Jun", 6), ("Jul", 7), ("Aug", 8), ("Sept", 9), ("Oct", 10), ("Nov", 11), ("Dec", 12)
+]
+
 
 def fan_out(
     key: str,
@@ -67,7 +75,23 @@ def inner_function(source):
                 rss.source = source
                 rss.description = item.summary
                 pub_date_str = item.published
-                pub_date = datetime.strptime(pub_date_str, "%Y-%m-%dT%H:%M:%S")
+                try:
+                    pub_date = datetime.strptime(pub_date_str, "%Y-%m-%dT%H:%M:%S")
+                except Exception as err:
+                    'Sat, 01 Jan 2022 21:13:38 +0100'
+                    for item in DAYS_OF_WEEK:
+                        if item in pub_date_str:
+                            pub_date_str = pub_date_str.replace(item+",", "").strip()
+                            break
+                    for item in MONTHS_OF_YEAR:
+                        if item[0] in pub_date_str:
+                            pub_date_str = pub_date_str.replace(item[0], str(item[1]))
+                            break
+                    if "+" in pub_date_str:
+                        pub_date_str = pub_date_str.split("+")[0].strip()
+                    if "GMT" in pub_date_str:
+                        pub_date_str = pub_date_str.replace("GMT", "").strip()
+                    pub_date = datetime.strptime(pub_date_str, "%d %m %Y %H:%M:%S")
                 rss.pub_date = pub_date
                 created_rss = RSSRepository.create(model=rss)
                 stored_db_ids.append(created_rss.id)
@@ -109,4 +133,3 @@ def add_from_stream():
             result.get()
 
 
-# add_from_stream()
