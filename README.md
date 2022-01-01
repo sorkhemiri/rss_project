@@ -37,6 +37,12 @@ $ cd path/to/project/directory
 $ chmod +x generate_db.sh
 $ ./generate_db.sh
 ```
+`Note:` create and delete rss sources need admin permission so if register a user and run lines below to make it admin:
+```
+$ cd path/to/project/directory
+$ chmod +x make_admin.sh
+$ ./make_admin.sh username
+```
 **Note**: The first time you start your stack, it might take a few minutes for it to be ready. While the backend configures everything. You can check the logs to monitor it.
 
 To check the logs, run:
