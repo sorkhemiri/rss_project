@@ -22,7 +22,7 @@ auth_check = CheckAdminStatus(
 )
 
 
-@router.post("/force_update/", tags=["force-update", "feed"])
+@router.post("/force-update/", tags=["force-update", "feed"])
 def force_update_feed(
     request: Request, request_data: RequestData, user: User = Depends(auth_check)
 ):

@@ -9,7 +9,6 @@ from entities import RSS
 from interfaces.feed_manager_repository_interface import FeedManagerRepositoryInterface
 from repositories.postgres import RSSSourceRepository, RSSRepository
 from repositories.redis import FeedMemoryRepository, FeedManagerRepository
-from decorators import retry
 from celery_app import celery_app
 
 from datetime import datetime
@@ -78,7 +77,6 @@ def inner_function(source):
                 try:
                     pub_date = datetime.strptime(pub_date_str, "%Y-%m-%dT%H:%M:%S")
                 except Exception as err:
-                    'Sat, 01 Jan 2022 21:13:38 +0100'
                     for item in DAYS_OF_WEEK:
                         if item in pub_date_str:
                             pub_date_str = pub_date_str.replace(item+",", "").strip()
@@ -105,9 +103,11 @@ def inner_function(source):
             FeedMemoryRepository.add_to_memory(
                 key=source.key, post_ids=stored_rss_ids, date=datetime.now()
             )
+            return True
         except Exception as ex:
             if retry_nums > env_config.retry_count:
                 RSSSourceRepository.make_update_need(source_key=source.key)
+                return False
             else:
                 retry_nums += 1
                 time.sleep(env_config.retry_duration)
