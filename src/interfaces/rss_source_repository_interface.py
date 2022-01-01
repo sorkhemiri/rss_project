@@ -34,3 +34,13 @@ class RSSSourceRepositoryInterface(RepositoryInterface):
     @abc.abstractmethod
     def get_sources_id_by_key(cls, source_key: str) -> int:
         pass
+
+    @classmethod
+    @abc.abstractmethod
+    def make_update_need(cls, source_key: str):
+        pass
+
+    @classmethod
+    @abc.abstractmethod
+    def unmake_update_need(cls, source_key: str):
+        pass
