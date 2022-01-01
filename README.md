@@ -43,6 +43,12 @@ $ cd path/to/project/directory
 $ chmod +x make_admin.sh
 $ ./make_admin.sh username
 ```
+for running the tests, run the command below:
+```
+$ cd path/to/project/directory
+$ chmod +x run_test.sh
+$ ./run_test.sh
+```
 **Note**: The first time you start your stack, it might take a few minutes for it to be ready. While the backend configures everything. You can check the logs to monitor it.
 
 To check the logs, run:
